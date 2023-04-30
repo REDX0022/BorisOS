@@ -43,7 +43,7 @@ So we boot the bootloader
     Doesn't have syscalls
     Has only rudementary debug 
 
-    **Late loader**
+    *Late loader*
     Has sys calls
     -we have executables and dll's
 
