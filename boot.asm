@@ -167,15 +167,7 @@ unreal:
         add edx, 1 ;;increment dx
         ;----------------------------------------------------------------------------------------
         no_new_sector:
-        cmp byte [bx],0
-        je skip
-        pusha
-        mov ah, [bx]
-        mov al, [bx+1]
-        push ax
-        call hprint
-        popa
-        skip:
+        
         
         
         
