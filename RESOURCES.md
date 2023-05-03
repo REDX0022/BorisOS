@@ -39,6 +39,7 @@ https://en.wikipedia.org/wiki/Master_boot_record#PTE
 So we boot the bootloader
     -first we have the boot man 
     -then the loader
+    - we load the loader into the memory beginning
     **Early loader**
     Doesn't have syscalls
     Has only rudementary debug 

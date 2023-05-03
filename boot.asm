@@ -2,6 +2,8 @@
 
 
 
+
+
 global start
 
 ;;========================Variables for the FAT16 file system==========================
@@ -37,11 +39,16 @@ global start
 %assign volume_start hidden_sectors
 %assign FAT_start volume_start + reserved_sectors 
 %assign root_dir FAT_start+num_of_FATs*sectors_per_FAT
-%assign root_dir_size (num_of_root_dir*32)/512
+%assign root_dir_size (num_of_root_dir*32)/bytes_per_sector
+%assign data_start root_dir+root_dir_size
 ;;--------------------------------------------------------
 ;;assign where to put the sectors
 %assign search_sector_address 0x7E00
 %assign disk_packet_struct 0x8000
+;;--------------------------------------------------------
+;;we assign where the loader will be
+%assign loader_memory_address 0x500
+
 ;;============================================================
 ;;now we define the bytes for the file system
 ;;jump point
@@ -84,8 +91,9 @@ start:
 
     xor ax,ax
     mov ds, ax
-    mov ss,ax
-    mov sp, 0x9c00 ; this is arbitrary and the stack could be whatever it wants??
+    mov ax, 0x2000
+    mov ss, ax ; this can grow to 0x10000
+    mov sp, 0 ; this is arbitrary and the stack could be whatever it wants??
     
     
     cli 
@@ -142,23 +150,15 @@ unreal:
         ;-----------------------------we have to load the new sector--------------------------------
 
         
-        mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
-        mov byte [disk_packet_struct+1],0 ; always 0
-        mov word [disk_packet_struct+2],1 ; number of sectors to transfer
+        
+        
         mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
         mov word [disk_packet_struct+6], 0 ;segment of placement
         mov dword [disk_packet_struct+8] , edx ; this is in sectors
-        mov dword [disk_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
-
+       
+            
             ;----------------------We call int 13h-----------------------------
-            pusha
-            mov dl, 0x80 ;;TODO make this flexible
-            xor ax, ax
-            mov ds, ax
-            mov ah, 0x42
-            mov si, disk_packet_struct
-            int 0x13
-            popa
+            call load_sector
             ;---------------------------------------------------------
             
         
@@ -168,20 +168,25 @@ unreal:
         ;----------------------------------------------------------------------------------------
         no_new_sector:
         
-        
-        
-        
-
-
-
-        jmp is_loader
+        jmp is_loader ;; here we check if its LOADER.SYS
 
 
         found_loader: ; congrats we have found the loader
-            ;;load it into memory;;TODO
-            jmp load_loader
+            
+            mov ax, word [bx+0x1A] ;; we move the starting cluster into ax
+            mov ebx, loader_memory_address
+            call load_loader_cluster
+                
+            ;------------------Call the loader------------------------------
+                ;the stack is already set up, we have one os stack
+               
+                
+                call 0x500 ;TODO make this call more flexible if there is space
 
-        no_loader_found:
+            ;-----------------------------------------------------------------
+            jmp $
+
+        no_loader_found_here:
         
         add bx,32
 
@@ -193,94 +198,166 @@ unreal:
     ;we shall unroll the code for space reasons
     mov al, 'N'
     int 10h
-    mov al, 'O'
-    int 10h
     mov al, 'L'
     int 10h
-    mov al, 'O'
-    int 10h
-    mov al, 'A'
-    int 10h
-    mov al, 'D'
-    int 10h
-    mov al, 'E'
-    int 10h
-    mov al, 'R'
-    int 10h
-
+    
 
 jmp $
 
-load_loader:
- 
-jmp $
 
+;;=========================Load loader=============================
+;; two arguments
+;; ax : the starting cluster number
+;; ebx : cluster memory offset
+load_loader_cluster:
+    ;-----------Load the cluster--------------------
+        mov ecx, ebx
+        and cx , 0x0000000F ; mod 16
+        mov edx, ebx
+        shr edx, 4 ; /16
+
+       
+        
+        mov word [disk_packet_struct+4], cx ;offset of placement
+        mov word [disk_packet_struct+6], dx ;dx ;segment of placement
+        
+        add ax,  (data_start-2) ; this is the formula idk why
+        and eax, 0x0000FFFF ; we clear the upper word of eax
+        mov dword [disk_packet_struct+8] , eax ; this is in sectors ; the cluster which to load 
+        sub ax,  (data_start-2)
+        
+      
+        
+
+        call load_sector
+        
+                
+
+    add ebx , bytes_per_sector ; change the memory offset
+
+    push ebx ; we need to preserve bx
+    ;-----------------------------------------------
+    ;------------Look up fat for the next one------------
+        ;;load the FAT portion which we need
+
+        shl ax, 1 ; multiply by 2 because FAT entry has 2 bytes
+        
+        
+        mov bx, ax ; bx stores the offset of the cluster in the loaded search sector
+        and bx, 111111111b ; mod 512
+
+        shr ax, 9 ; divide by bytes_per_sector to get which sector to read for fat
+        add ax, FAT_start
+
+
+        and eax, 0xFFFF
+        mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
+        mov word [disk_packet_struct+6], 0 ;segment of placement
+        mov dword [disk_packet_struct+8] , eax ; this is in sectors
+
+        call load_sector
+
+    
+        ;;now we look inside the search sector
+        add bx, search_sector_address
+
+
+        cmp word [bx], 0xFFF8
+        jb .continue_loading
+        pop ebx
+        ret; we have reached end of file
+        .continue_loading:
+        mov ax, word [bx]
+        
+        pop ebx
+
+        call load_loader_cluster
+        
+;-----------------------------------------------
+ret;;TODO
+;;=============================================================
+
+;---------------------We check if its the loader directory entry------------
 ;;we have it in memory at bx
 is_loader:
     cmp byte [bx],'L'
-    jne no_loader_found
+    jne no_loader_found_here
 
-    cmp byte [bx+1],'O'
-    jne no_loader_found
+    ;cmp byte [bx+1],'O'
+    ;jne no_loader_found_here
 
-    cmp byte [bx+2],'A'
-    jne no_loader_found
+    ;cmp byte [bx+2],'A'
+    ;jne no_loader_found_here
 
-    cmp byte [bx+3],'D'
-    jne no_loader_found
+    ;cmp byte [bx+3],'D'
+    ;jne no_loader_found_here
 
-    cmp byte [bx+4],'E'
-    jne no_loader_found
+    ;cmp byte [bx+4],'E'
+    ;jne no_loader_found_here
 
-    cmp byte [bx+5],'R'
-    jne no_loader_found
+    ;cmp byte [bx+5],'R'
+    ;jne no_loader_found_here
 
-    cmp byte [bx+6],' '
-    jne no_loader_found
+    ;cmp byte [bx+6],' '
+    ;jne no_loader_found_here
 
-    cmp byte [bx+7],' '
-    jne no_loader_found
+    ;cmp byte [bx+7],' '
+    ;jne no_loader_found_here
 
-    cmp byte [bx+8],'S'
-    jne no_loader_found
+    ;cmp byte [bx+8],'S'
+    ;jne no_loader_found_here
 
-    cmp byte [bx+9],'Y'
-    jne no_loader_found
+    ;cmp byte [bx+9],'Y'
+    ;jne no_loader_found_here
 
-    cmp byte [bx+10],'S'
-    jne no_loader_found
+    ;cmp byte [bx+10],'S'
+    ;jne no_loader_found_here
 
     jmp found_loader
 
+;--------------------------------------------------------------------
 
-;we go here if int 13 ext is not supported
+;---------------------No int 13h extention support message-----------
 no_int13_ext:
     mov ah, 0x0E
 	mov bh, 0x00
 
     ;we shall unroll the code for space reasons
-    mov al, 'O'
-	int 10h
-    mov al, 'N'
-	int 10h
-	mov al, 'I'
-	int 10h
-    mov al, 'N'
-	int 10h
-    mov al, 'T'
-	int 10h
-    mov al, '1'
-	int 10h
-    mov al, '3'
-	int 10h
+    
     mov al, 'E'
-	int 10h
-    mov al, 'X'
-	int 10h
-    mov al, 'T'
 	int 10h
 
 jmp $;; TODO Make this say press enter to continue 
+;-------------------------------------------------------------
+
+;;========================Load the search sector=============================
+;;for whatever it may be
+;;arguments shall be passed through memory
+;;@ location search_sector_address
+;;some params should be specified before calling
+;;note the commented code in the procedure
+;;we dont need to move the stack because we are not using it
+
+load_sector:
+    mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
+    mov byte [disk_packet_struct+1],0 ; always 0
+    mov word [disk_packet_struct+2],1 ; number of sectors to transfer
+    ;mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
+    ;mov word [disk_packet_struct+6], 0 ;segment of placement
+    ;mov dword [disk_packet_struct+8] , edx ; this is in sectors
+    mov dword [disk_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
+    ;--------------------------call int 13h-----------------------
+        pusha
+        mov dl, 0x80 ;;TODO make this flexible
+        xor ax, ax
+        mov ds, ax
+        mov ah, 0x42
+        mov si, disk_packet_struct
+        int 0x13
+        
+        popa
+    ;----------------------------------------------------------
+ret
 
 hprint:
     push bp,
@@ -321,6 +398,8 @@ hprint:
 
     pop bp
 ret 2
+
+;;==================================================================================
 
 gdtinfo:
    dw gdt_end - gdt - 1   ;last byte in table
