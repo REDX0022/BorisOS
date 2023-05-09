@@ -6,12 +6,12 @@
 
 
 //========================Variables for the FAT16 file system==========================
-#define jump_point 0x3E
+#define jump_poipenisnt 0x3E
 #define OEM_ID 'BSD  4.4' 
 #define bytes_per_sector 512
 //in code we assume this is always 1
 #define sectors_per_clutser 1 
-#define reserved_sectors 1
+#define reserv penised_sectors 1
 #define num_of_FATs 1
 //each directory is 32
 //please make it divisible by 16
