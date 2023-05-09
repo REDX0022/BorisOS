@@ -181,7 +181,7 @@ unreal:
                 ;the stack is already set up, we have one os stack
                
                 
-                call 0x500 ;TODO make this call more flexible if there is space
+                call (loader_memory_address/16):(loader_memory_address%16) ;TODO make this call more flexible if there is space
 
             ;-----------------------------------------------------------------
             jmp $
@@ -283,35 +283,35 @@ is_loader:
     cmp byte [bx],'L'
     jne no_loader_found_here
 
-    ;cmp byte [bx+1],'O'
-    ;jne no_loader_found_here
+    cmp byte [bx+1],'O'
+    jne no_loader_found_here
 
-    ;cmp byte [bx+2],'A'
-    ;jne no_loader_found_here
+    cmp byte [bx+2],'A'
+    jne no_loader_found_here
 
-    ;cmp byte [bx+3],'D'
-    ;jne no_loader_found_here
+    cmp byte [bx+3],'D'
+    jne no_loader_found_here
 
-    ;cmp byte [bx+4],'E'
-    ;jne no_loader_found_here
+    cmp byte [bx+4],'E'
+    jne no_loader_found_here
 
-    ;cmp byte [bx+5],'R'
-    ;jne no_loader_found_here
+    cmp byte [bx+5],'R'
+    jne no_loader_found_here
 
-    ;cmp byte [bx+6],' '
-    ;jne no_loader_found_here
+    cmp byte [bx+6],' '
+    jne no_loader_found_here
 
-    ;cmp byte [bx+7],' '
-    ;jne no_loader_found_here
+    cmp byte [bx+7],' '
+    jne no_loader_found_here
 
-    ;cmp byte [bx+8],'S'
-    ;jne no_loader_found_here
+    cmp byte [bx+8],'S'
+    jne no_loader_found_here
 
-    ;cmp byte [bx+9],'Y'
-    ;jne no_loader_found_here
+    cmp byte [bx+9],'Y'
+    jne no_loader_found_here
 
-    ;cmp byte [bx+10],'S'
-    ;jne no_loader_found_here
+    cmp byte [bx+10],'S'
+    jne no_loader_found_here
 
     jmp found_loader
 
@@ -359,45 +359,7 @@ load_sector:
     ;----------------------------------------------------------
 ret
 
-hprint:
-    push bp,
-    mov bp,sp
 
-    mov bx, 4 ;number of nibbles!
-    .loop:
-    cmp bx, 0
-    jz .end
-    dec bx
-    mov ax, 4
-    mov cx, 3
-    sub cx, bx
-    mul cx
-
-    mov cx, ax
-    mov ax, word [bp+4] ;hex value argument
-
-    shl ax, cl
-    shr ax, 12
-     
-    cmp al, 10 
-    jl .num
-    mov ah, 55
-    jmp .char
-    .num:
-    mov ah, 48
-    .char:
-    add al,ah
-    mov ah, 0x0e
-    int 0x10
-    jmp .loop
-    .end:
-
-    mov ah, 0x0e
-    mov al, ' '
-    int 0x10
-
-    pop bp
-ret 2
 
 ;;==================================================================================
 

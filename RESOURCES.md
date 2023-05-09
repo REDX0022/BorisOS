@@ -34,6 +34,10 @@ http://www.maverick-os.dk/FileSystemFormats/FAT16_FileSystem.html
 ref10: Apperantly to get a working drive you need a partition table man wth
 https://en.wikipedia.org/wiki/Master_boot_record#PTE
 
+ref 11: Triple fault error
+https://wiki.osdev.org/Triple_Fault
+
+
 ## HOW SHOULD AN OS BE DESIGNED ##
 
 So we boot the bootloader
@@ -43,7 +47,7 @@ So we boot the bootloader
     **Early loader**
     Doesn't have syscalls
     Has only rudementary debug 
-
+    Can only load files from the root directory
     *Late loader*
     Has sys calls
     -we have executables and dll's
