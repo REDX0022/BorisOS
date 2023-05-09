@@ -1,7 +1,8 @@
 ## Here we have the memory map at boot##
 
-0x0500-0x4500; Loader (16kb in size)
-
+0x0500-0x4500; Loader (16kb in size) ** Will probabbly be a lot more **
+    0x4000-0x4199 Loaded shared library list
+    0x4200-0x4500 Loaded shared library function list
 
 
 

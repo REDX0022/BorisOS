@@ -3,7 +3,7 @@
 //it should load the memory manager
 // the loader should have a basic loader to load from path
 #include "stdint.h"
-#include "stdbool.h"
+
 
 //========================Variables for the FAT16 file system==========================
 #define jump_point 0x3E
@@ -47,9 +47,12 @@
 //--------------------------------------------------------
 //we assign where the loader will be
 #define loader_memory_address 0x500
+#define shared_library_address 0x4000
+#define shared_library_function_address 0x4200
 
 
-typedef struct disk_packet{
+//============================Structures=======================================
+ struct disk_packet{
     int8_t size;
     int8_t padding; 
     int16_t num_of_sectors;
@@ -59,7 +62,7 @@ typedef struct disk_packet{
     int32_t rest;
 };
 
-typedef struct directory{
+ struct directory{
     char name[11]; //the ext is also here 
     int8_t attribute;
     int8_t NT_reserved;
@@ -74,22 +77,62 @@ typedef struct directory{
     int16_t file_size_in_bytes; //
 };
 
-typedef struct MZ{
+
+
+struct MZext_header{
+    char MZ[2]; //this should be MZ always
+    uint16_t last_sector_bytes;
+    uint16_t sector_num;
+    uint16_t no_of_rel; //not used
+    uint16_t header_size; //in 16-byte paragraphs, should be edited to accomodate library names
+    uint16_t min_alloc;
+    uint16_t max_alloc;
+    int16_t ss_reg;
+    uint16_t sp_reg;
+    uint16_t checksum; //usually 0
+    uint16_t ip_reg;
+    uint16_t cs_reg;
+    uint16_t reloc_offset; // not used
+    uint16_t overlay_num; //usually unused
+    char *lib_name[16]; //only the first 11 characers are used
     
-};
+}
+
+//==============================================================================================
 
 
-struct directory search_sector[16]; //this needs to change with bytes_per_sector
+//=============================Global variables=========================================
+char temp_sector[bytes_per_sector];
+char temp_sector_2[bytes_per_sector];
 
-int16_t FAT_search_sector[256]; //bytes_per_sector
+uint16_t shared_lib_offset = 0;
+uint16_t shared_func_offset  = 0;
+//=====================================================================================
 
-int load_sector(int sector_pos,int memory_pos){
+
+/// @brief A rudementary memcpy
+/// @param src 
+/// @param dest 
+/// @param n 
+void memcpy(void *src,void *dest,size_t n){
+    char *csrc = (char *)src;
+    char *cdest = (char *)dest;
+
+    for(int i =0;i<n;i++){
+        cdest[i] = csrc[i];
+    }
+
+}
+
+
+
+int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good here
 
    struct disk_packet dp;
    dp.size = 0x10;
    dp.padding = 0;
    dp.num_of_sectors = 1;
-   dp.offset = memory_pos%16;
+   dp.offset = ( (int)memory_pos )%16;
    dp.segment = memory_pos/16;
    dp.sector = sector_pos;
    dp.rest =0;
@@ -125,16 +168,19 @@ void load_sector_helper(struct disk_packet *ptr){
         "shr esi, 28 ;"
         "int 0x13 ;"
         "pop ds ;"
-        "popad;"
+        "popad ;"
     //----------------------------------------------------------
     );
 
 }
 
-
-bool cmp_name(char str1[11], char *str2){
+/// @brief rudementary file name comparison
+/// @param str1 the name in the directory
+/// @param str2 the name in the path(string)
+/// @return 
+int cmp_name(char str1[11], char *str2){
     //the first is len 11 the second is terminated by / or null
-    bool string_ended =0;
+    int string_ended =0;
     int j =0;
     for(int i =0;i<8;i++){
         if(str2[j]=='.'){
@@ -156,13 +202,14 @@ bool cmp_name(char str1[11], char *str2){
 /// @param path null terminated string with path to the file
 /// @param pos the position in memory
 /// @return 0 if sucessful, otherwise not
-int load_file(char* file_name,int pos){
+int load_file(char* file_name,void *pos){
+    struct directory *search_sector = &temp_sector;
     //we need to search for the directory
     //this early loader loads only from root dir
     int16_t next_cluster = -1;
     for(int i =0;i<root_dir_size;i++){
 
-        load_sector(root_dir+i,&search_sector);
+        load_sector(root_dir+i,search_sector);
         for(int j =0;j<16;j++){ //bytes_per_sector
 
             if(cmp_name(search_sector[j].name,file_name)){
@@ -176,12 +223,14 @@ int load_file(char* file_name,int pos){
         return 1;
     }
     
+
+    int16_t *FAT_search_sector = &temp_sector;
     
-    
-    while(true){
+    //follow the FAT table
+    while(1){
         load_sector(data_start+(next_cluster-2),pos); // load the file sector
 
-        load_sector((next_cluster*2)/bytes_per_sector,&FAT_search_sector); //load the fat search sector
+        load_sector((next_cluster*2)/bytes_per_sector,FAT_search_sector); //load the fat search sector
 
         next_cluster = FAT_search_sector[(next_cluster*2)%bytes_per_sector]; //look for the next cluster
        
@@ -195,9 +244,43 @@ int load_file(char* file_name,int pos){
 
 
 
+
+
+
+//TODO: Pass something to the programm at start
+typedef void (* init) (); 
+
+/// @brief Starts a kernel space programm
+/// @param start memory loaction of the programm
+/// @return success
+int start_kernel_programm(int start){
+    if(!start){return -1;} //null pointer exeption
+    struct MZext_header mz;
+    mz = *((struct *MZext_header) start);
+    
+    //here we dont read the libraries needed because that is predefned??
+
+    init execution_start = (init) start+mz.header_size*16+mz.cs_reg*16+mz.ip_reg; 
+
+    //but we do need to find the libraries that it provides
+
+    init(); //for now we use a global stack for the entire os 
+
+}
+
+int load_map(char* name){
+    load_file(name,(void *)&temp_sector_2)
+
+    
+}
+
+
 int __start__(){
 
 
 
 }
 
+void init_loader(){
+
+}
