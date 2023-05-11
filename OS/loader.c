@@ -6,12 +6,12 @@
 
 
 //========================Variables for the FAT16 file system==========================
-#define jump_poipenisnt 0x3E
+#define jump_point 0x3E
 #define OEM_ID 'BSD  4.4' 
 #define bytes_per_sector 512
 //in code we assume this is always 1
 #define sectors_per_clutser 1 
-#define reserv penised_sectors 1
+#define reserved_sectors 1
 #define num_of_FATs 1
 //each directory is 32
 //please make it divisible by 16
@@ -96,7 +96,7 @@ struct MZext_header{
     uint16_t overlay_num; //usually unused
     char *lib_name[16]; //only the first 11 characers are used
     
-}
+};
 
 //==============================================================================================
 
@@ -107,6 +107,8 @@ char temp_sector_2[bytes_per_sector];
 
 uint16_t shared_lib_offset = 0;
 uint16_t shared_func_offset  = 0;
+
+
 //=====================================================================================
 
 
@@ -133,7 +135,7 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dp.padding = 0;
    dp.num_of_sectors = 1;
    dp.offset = ( (int)memory_pos )%16;
-   dp.segment = memory_pos/16;
+   dp.segment = ((int)memory_pos)/16;
    dp.sector = sector_pos;
    dp.rest =0;
    load_sector_helper(&dp);
@@ -269,9 +271,8 @@ int start_kernel_programm(int start){
 }
 
 int load_map(char* name){
-    load_file(name,(void *)&temp_sector_2)
-
-    
+    load_file(name,(void *)&temp_sector_2);
+    uint16_t map_size = 
 }
 
 
