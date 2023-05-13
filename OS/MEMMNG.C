@@ -1,21 +1,104 @@
-//here we have the memory manager
-//it wont be alligned but it will have an option to allign it to the 
+//here we have the memory manager, it is very simple, too simple
+#include "stdint.h"
+#include "stddef.h"
 
 #define max_memory_sectors 1000
-
-memory_sector memory[max_memory_sectors];
-
-
-typedef struct memory_sector
-{
-    bool available;
-    int begin;
-    int length;
-    int prev_index;
-    int next_index;
-
+#define user_space_memory_begin 0x8000 //TODO: I have no clue what value to put here rn
+#define user_space_memory_len 0x80000 //TODO: -||-
+struct alloc_segment{
+    uint32_t begin;
+    size_t len;
 };
 
+/// @brief this is a very simple strucuter, segments of len 0 are illegal, the last segment has len 0 and is the stop segment
+struct alloc_segment memory[max_memory_sectors];
+
+/// @brief initalizes the memory manager
+/// @return success
+int init_memory_manager(){
+    //TODO: change this to the actual memory map which is used
+    memory[0].begin = user_space_memory_begin; 
+    memory[0].len = (size_t)user_space_memory_len; //the whole memory space is available at the beggining 
+    memory[1].begin = user_space_memory_len+user_space_memory_begin;
+    memory[1].len = (size_t)0;
+    return 0;
+}
+
+/// @brief Allocates memory, the user is responsible for deallocating it
+/// @param size the size of memory to be allocated
+/// @return pointer to the location of available memory
+void* malloc(size_t size){
+    for(int i = 0;memory[i].len & i < max_memory_sectors;i++){
+        size_t cur_available = memory[i+1].begin-memory[i].begin-memory[i].len;
+        if(cur_available>size){ //we have found the available space
+            return (void*) memory[i].begin+memory[i].len;
+            memory[i].len+=size;
+        }
+        else if(cur_available==size && memory[i+1].len){ //we have found the available space but we need to merge the segments
+            memory[i].len+=size;
+            memory[i].len+=memory[i+1].len;
+            for(int j = i+1;memory[j].len & j < max_memory_sectors;j++){//we shift the rest of the array one to the left
+                memory[j] = memory[j+1];
+                
+            }
+        }
+    }
+    return NULL; //no memory slot found
+}
+
+//TODO this doesnt work for sure, we'll pretend it does, we'll never need it anyways
+void dalloc(uint32_t begin, size_t size){
+    //we can have 3 cases here
+    // - given segment is completly within another
+    // - given segment messes with the part of another
+    // - given segment spans multiple allocated segments
+
+    int removed_sectors_begin =-1;
+    int removed_sectors_end = -1;
+    for(int i = 0;memory[i].len & i < max_memory_sectors;i++){
+        if(memory[i].begin < begin && memory[i].begin + memory[i].len > begin + size){ //we need to split the sector in 2
+
+            struct alloc_segment temp;
+            for(int j = max_memory_sectors; j > i+1; j--){
+                memory[j-1] = memory[j];
+            }
+
+            temp = memory[i+1];
+
+            memory[i+1].begin = begin+size+1;
+            memory[i+1].len = memory[i].len + (begin - memory[i].begin);
+            
+            memory[i].len = begin-memory[i].begin;
+            return; //we are done with the dalloc
+        }
+        if(memory[i].begin>=begin+size){
+            break;
+        }
+        if(memory[i].begin < begin+size && begin+size < memory[i].begin+memory[i].len){
+            memory[i].begin = begin+size;
+            break;
+        }
+        if(memory[i].begin+memory[i].len>begin){
+            memory[i].len = begin-memory[i].begin;
+        }
+
+        if(memory[i].begin>=begin && removed_sectors_begin == -1){ //this segment is not nececary
+            
+            removed_sectors_begin = i;
+            
+        }
+        
+
+        removed_sectors_end = i;
+    }
+    if(removed_sectors_begin==-1){return;} //this shouldnt happen, should throw an error here maybe
+
+    int offset = removed_sectors_end-removed_sectors_end;
+    for(int i = removed_sectors_begin;memory[i].len & i+offset < max_memory_sectors;i++){
+        memory[i] = memory[i+offset];
+    }
+
+}
 
 
 

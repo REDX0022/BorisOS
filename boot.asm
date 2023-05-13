@@ -46,8 +46,8 @@ global start
 %assign search_sector_address 0x7E00
 %assign disk_packet_struct 0x8000
 ;;--------------------------------------------------------
-;;we assign where the loader will be
-%assign loader_memory_address 0x500
+;;we assign where the loader will be, needs to be 16 bytes alligned
+%assign loader_memory_address 0x500 
 
 ;;============================================================
 ;;now we define the bytes for the file system
@@ -81,7 +81,7 @@ db file_system_type
 
 
 
-;
+
 start:
 
   
@@ -93,7 +93,7 @@ start:
     mov ds, ax
     mov ax, 0x2000
     mov ss, ax ; this can grow to 0x10000
-    mov sp, 0 ; this is arbitrary and the stack could be whatever it wants??
+    mov sp, 0xFFFF ; this is arbitrary and the stack could be whatever it wants??
     
     
     cli 
@@ -180,9 +180,7 @@ unreal:
             ;------------------Call the loader------------------------------
                 ;the stack is already set up, we have one os stack
                
-                
-                call (loader_memory_address/16):(loader_memory_address%16) ;TODO make this call more flexible if there is space
-
+                call word (loader_memory_address/16) : word 20. ;;TODO make this more flexible
             ;-----------------------------------------------------------------
             jmp $
 

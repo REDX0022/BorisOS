@@ -3,7 +3,7 @@
 //it should load the memory manager
 // the loader should have a basic loader to load from path
 #include "stdint.h"
-
+#include "stddef.h"
 
 //========================Variables for the FAT16 file system==========================
 #define jump_point 0x3E
@@ -45,11 +45,10 @@
 #define search_sector_address 0x7E00
 #define disk_packet_struct 0x8000
 //--------------------------------------------------------
-//we assign where the loader will be
+//we assign where the loader will be, why dont i let it be he can manage his own memory man
 #define loader_memory_address 0x500
-#define shared_library_address 0x4000
-#define shared_library_function_address 0x4200
-
+#define max_loaded_shared_libs 64
+#define max_loaded_shared_func 256
 
 //============================Structures=======================================
  struct disk_packet{
@@ -98,6 +97,18 @@ struct MZext_header{
     
 };
 
+
+struct shared_lib_map{
+    uint16_t size;
+    uint16_t *offsets;
+};
+
+struct shared_lib{
+    char name[11];
+    uint16_t *funs_ptr;
+    uint16_t count;
+};
+
 //==============================================================================================
 
 
@@ -105,8 +116,13 @@ struct MZext_header{
 char temp_sector[bytes_per_sector];
 char temp_sector_2[bytes_per_sector];
 
-uint16_t shared_lib_offset = 0;
-uint16_t shared_func_offset  = 0;
+
+struct shared_lib shared_libs[max_loaded_shared_libs];
+uint16_t shared_func[max_loaded_shared_func];
+
+char (*shared_libs_ptr)[11] = &shared_libs[0]; //the pointer to the next available space//idk if the compiler supports this !!!!
+uint16_t *shared_func_ptr = &shared_func[0]; //pointer to the available space
+
 
 
 //=====================================================================================
@@ -158,19 +174,19 @@ void load_sector_helper(struct disk_packet *ptr){
     //mov dword [disk_packet_struct+8] , edx ; this is in sectors
     //mov dword [disk_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
     //--------------------------call int 13h-----------------------
-        "pushad ;"
-        "push ds ;"
-        "mov dl, 0x80 ; TODO make this flexible;"
-        "xor ax, ax ;"
-        "mov ds, ax ;"
-        "mov ah, 0x42 ;"
-        "mov esi, [bp+38] ; +4 for esp, +32 for pushad, +2 for ds"
-        "ror esi, 4 ; "
-        "mov ds, si ; "
-        "shr esi, 28 ;"
-        "int 0x13 ;"
-        "pop ds ;"
-        "popad ;"
+        "pushad \n"
+        "push ds \n"
+        "mov dl, 0x80  ; TODO make this flexible; \n"
+        "xor ax, ax  \n "
+        "mov ds, ax  \n "
+        "mov ah, 0x42 \n "
+        "mov esi, [bp+38] ; +4 for esp, +32 for pushad, +2 for ds \n"
+        "ror esi, 4 \n "
+        "mov ds, si \n "
+        "shr esi, 28 \n "
+        "int 0x13 \n "
+        "pop ds \n "
+        "popad \n "
     //----------------------------------------------------------
     );
 
@@ -255,33 +271,61 @@ typedef void (* init) ();
 /// @brief Starts a kernel space programm
 /// @param start memory loaction of the programm
 /// @return success
-int start_kernel_programm(int start){
+int start_kernel_programm(void *start){
     if(!start){return -1;} //null pointer exeption
-    struct MZext_header mz;
-    mz = *((struct *MZext_header) start);
-    
+    struct MZext_header* mz;
+    mz = ((struct MZext_header*) start); //there might need to be changes if there i
+       
     //here we dont read the libraries needed because that is predefned??
 
-    init execution_start = (init) start+mz.header_size*16+mz.cs_reg*16+mz.ip_reg; 
+    init execution_start = (init) start+ mz->header_size*16+mz->cs_reg*16+mz->ip_reg; 
 
     //but we do need to find the libraries that it provides
 
-    init(); //for now we use a global stack for the entire os 
+    execution_start(); //for now we use a global stack for the entire os 
 
 }
 
 int load_map(char* name){
-    load_file(name,(void *)&temp_sector_2);
-    uint16_t map_size = 
+
+    if(load_file(name,(void *)&temp_sector_2)){
+        return 1;
+    }
+
+    struct shared_lib_map* map =  (struct shared_lib_map*)(&temp_sector_2); //znas da si nesto sjebo kad double kastujes pointere
+
+    memcpy((void*)name,&shared_libs->name,11); //11 is a file system constant
+
+    memcpy((void*)&map->offsets,shared_func_ptr,(size_t)2*map->size); // this is part of the map spec
+
+    shared_func_ptr += map->size;
 }
+
 
 
 int __start__(){
+    //we load the operating system slowly
+    printf(234);
+    
 
+}
+
+void printf(int n){
+    if(n==0){printch('0');return;}
+    printf(n/10);
+    printch((char) (n%10)+48); //48 is the offset of the char 0
+    n/=10;
+    
 
 
 }
 
-void init_loader(){
-
+void printch(char c){
+    asm("push ax \n"
+        "mov al, [bp+6] ; +2 for ax +4 for ebp \n"
+        "mov ah, 0x0e \n"
+        "int 0x10 \n"
+    );
 }
+
+
