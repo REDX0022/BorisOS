@@ -322,8 +322,8 @@ void printf(int n){
 }
 
 void printch(char c){
-    asm("push ax \n"
-        "mov al, [bp+6] ; +2 for ax +4 for ebp \n"
+    asm("push eax \n"
+        "mov eax, [bp+8] ; +4 for eax +4 for ebp \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
     );
