@@ -220,7 +220,7 @@ int cmp_name(char str1[11], char *str2){
 /// @param path null terminated string with path to the file
 /// @param pos the position in memory
 /// @return 0 if sucessful, otherwise not
-int load_file(char* file_name,void *pos){
+int load_file(char* file_name,char *pos){
     struct directory *search_sector = &temp_sector;
     //we need to search for the directory
     //this early loader loads only from root dir
@@ -269,16 +269,17 @@ int load_file(char* file_name,void *pos){
 typedef void (* init) (); 
 
 /// @brief Starts a kernel space programm
-/// @param start memory loaction of the programm
+/// @param start memory loaction of the programm, should be a void pointer, cant be because of arithmetic
 /// @return success
-int start_kernel_programm(void *start){
+int start_kernel_programm(char *start){
     if(!start){return -1;} //null pointer exeption
     struct MZext_header* mz;
     mz = ((struct MZext_header*) start); //there might need to be changes if there i
        
     //here we dont read the libraries needed because that is predefned??
 
-    init execution_start = (init) start+ mz->header_size*16+mz->cs_reg*16+mz->ip_reg; 
+    init execution_start; 
+    execution_start = (init) (start+ mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
 
     //but we do need to find the libraries that it provides
 

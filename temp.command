@@ -1,6 +1,6 @@
 nasm boot.asm -o boot.o
 
-nasm LOADER.asm -o LOADER.SYS
+
 
 sudo dd if=boot.o of=/dev/disk4
 
