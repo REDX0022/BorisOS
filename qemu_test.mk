@@ -14,3 +14,5 @@ run: $(prereq)
 boot.asm:
 LOADER.SYS:
 MEMMNG.SYS:
+
+p:
