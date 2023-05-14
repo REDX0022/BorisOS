@@ -167,6 +167,7 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
 
 //we are doing this so we can access the disk packet pos via the stack
 void load_sector_helper(struct disk_packet *ptr){
+    printf((int)ptr);
     asm(
     //mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
     //mov byte [disk_packet_struct+1],0 ; always 0
@@ -187,7 +188,7 @@ void load_sector_helper(struct disk_packet *ptr){
         "mov ds, si \n "
         "shr esi, 28 \n "
         "int 0x13 \n "
-        "jnc .skip \n"
+        "jc .skip \n"
         "mov al, 'f' \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
