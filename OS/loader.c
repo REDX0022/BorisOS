@@ -49,6 +49,8 @@
 #define loader_memory_address 0x500
 #define max_loaded_shared_libs 64
 #define max_loaded_shared_func 256
+//-----------------------------------------------------------
+#define memmory_manager_address 0x5000
 
 //============================Structures=======================================
  struct disk_packet{
@@ -308,7 +310,14 @@ int __start__(){
     //we load the operating system slowly
     printf(234);
     
-
+    //we wanna load the memory manager
+    char name[11] = "MEMMNG  SYS";
+    if(load_file(name,memmory_manager_address)){
+        printf(14); //failed to load file
+    }
+    if(start_kernel_programm(memmory_manager_address)){
+        printf(15); //failed to start mem mng
+    }
 }
 
 void printf(int n){

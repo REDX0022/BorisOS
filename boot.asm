@@ -180,7 +180,7 @@ unreal:
             ;------------------Call the loader------------------------------
                 ;the stack is already set up, we have one os stack
                
-                call word (loader_memory_address/16) : word 20. ;;TODO make this more flexible
+                call (loader_memory_address/16):20 ;;TODO make this more flexible
             ;-----------------------------------------------------------------
             jmp $
 

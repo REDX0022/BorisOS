@@ -13,6 +13,11 @@ struct alloc_segment{
 /// @brief this is a very simple strucuter, segments of len 0 are illegal, the last segment has len 0 and is the stop segment
 struct alloc_segment memory[max_memory_sectors];
 
+
+void __start__(){
+    init_memory_manager();
+}
+
 /// @brief initalizes the memory manager
 /// @return success
 int init_memory_manager(){
@@ -21,6 +26,7 @@ int init_memory_manager(){
     memory[0].len = (size_t)user_space_memory_len; //the whole memory space is available at the beggining 
     memory[1].begin = user_space_memory_len+user_space_memory_begin;
     memory[1].len = (size_t)0;
+    printf(1337);
     return 0;
 }
 
@@ -100,7 +106,37 @@ void dalloc(uint32_t begin, size_t size){
 
 }
 
+/// @brief A rudementary memcpy
+/// @param src 
+/// @param dest 
+/// @param n 
+void memcpy(void *src,void *dest,size_t n){
+    char *csrc = (char *)src;
+    char *cdest = (char *)dest;
 
+    for(int i =0;i<n;i++){
+        cdest[i] = csrc[i];
+    }
+
+}
+
+void printf(int n){
+    if(n==0){printch('0');return;}
+    printf(n/10);
+    printch((char) (n%10)+48); //48 is the offset of the char 0
+    n/=10;
+    
+
+
+}
+
+void printch(char c){
+    asm("push eax \n"
+        "mov eax, [bp+8] ; +4 for eax +4 for ebp \n"
+        "mov ah, 0x0e \n"
+        "int 0x10 \n"
+    );
+}
 
 //we need to make a primitive version of a linked list without using linked list because we dont have malloc
 
