@@ -312,11 +312,15 @@ int __start__(){
     
     //we wanna load the memory manager
     char name[11] = "MEMMNG  SYS";
+    char map_name[11] = "MEMMNG  MAP";
     if(load_file(name,memmory_manager_address)){
         printf(14); //failed to load file
     }
     if(start_kernel_programm(memmory_manager_address)){
         printf(15); //failed to start mem mng
+    }
+    if(load_map(map_name)){
+        printf(16);
     }
 }
 
