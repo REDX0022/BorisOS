@@ -1,0 +1,33 @@
+File Ofs  Sym Addr  Sym
+
+          00000020  section .text:
+00000020  00000020  __start
+0000018F  0000018F  ___setup_unreal
+0000020E  0000020E  ___Int0xdIsr
+00000280  00000280  ___Irq5Isr
+00000290  00000290  ___start__
+0000029E  0000029E  _init_memory_manager
+00000317  00000317  _malloc
+00000595  00000595  _dalloc
+00000A5F  00000A5F  _memcpy
+00000ABE  00000ABE  _printf
+00000B2E  00000B2E  _printch
+          00000B5E
+
+          00000B60  section .relod:
+          00000B60  __start__relod
+          00000CB8  __stop__relod
+          00000CB8
+
+          00000CB8  section .relot:
+          00000CB8  __start__relot
+          00000CF4  __stop__relot
+          00000CF4
+
+          00000CF4  section .bss:
+          00000CF4  __start__bss
+00000CF4  00000CF4  ___pOldInt0xdIsr
+00000CFC  00000CFC  _memory
+          00002C3C  __stop__bss
+          00002C3C
+

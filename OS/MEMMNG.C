@@ -37,7 +37,7 @@ void* malloc(size_t size){
     for(int i = 0;memory[i].len & i < max_memory_sectors;i++){
         size_t cur_available = memory[i+1].begin-memory[i].begin-memory[i].len;
         if(cur_available>size){ //we have found the available space
-            return (void*) memory[i].begin+memory[i].len;
+            return (void*) (memory[i].begin+memory[i].len);
             memory[i].len+=size;
         }
         else if(cur_available==size && memory[i+1].len){ //we have found the available space but we need to merge the segments
