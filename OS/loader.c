@@ -187,6 +187,11 @@ void load_sector_helper(struct disk_packet *ptr){
         "mov ds, si \n "
         "shr esi, 28 \n "
         "int 0x13 \n "
+        "jnc .skip \n"
+        "mov al, 'f' \n"
+        "mov ah, 0x0e \n"
+        "int 0x10 \n"
+        ".skip: \n"
         "pop ds \n "
         "popad \n "
     //----------------------------------------------------------
