@@ -334,6 +334,7 @@ int __start__(){
     //we load the operating system slowly
     dmph(&tmp,1);
     
+    while(1){};
 
     //we are not gonna bullshit
     //load_sector(0,0x5000);
