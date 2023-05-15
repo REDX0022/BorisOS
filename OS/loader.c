@@ -158,6 +158,7 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dp.rest =0;
     dmph((char*) &dp,16);
     printch(0xA);
+    printch(0xD);
  //TODO: Make actuall diagonsitcs
    load_sector_helper(&dp);
    return 0;
@@ -241,6 +242,7 @@ int load_file(char* file_name,char *pos){
         load_sector(root_dir+i,(void*)search_sector);
         prints(search_sector[0].name,11);
         printch(0xA);
+        printch(0xD);
         for(int j =0;j<16;j++){ //bytes_per_sector
 
             
