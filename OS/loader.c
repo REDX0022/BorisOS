@@ -237,9 +237,9 @@ int load_file(char* file_name,char *pos){
     for(int i =0;i<root_dir_size;i++){
 
         load_sector(root_dir+i,(void*)search_sector);
+        prints(search_sector[0].name,11);
         for(int j =0;j<16;j++){ //bytes_per_sector
 
-            prints(search_sector[j].name,11);
 
             if(cmp_name(search_sector[j].name,file_name)){
                 next_cluster = search_sector[j].starting_cluster;
