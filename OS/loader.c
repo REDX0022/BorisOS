@@ -333,6 +333,8 @@ char tmp;
 int __start__(){
     //we load the operating system slowly
     tmp = 0xAC;
+
+
     dmph(&tmp,1);
     
     while(1){};
@@ -385,6 +387,7 @@ void prints(char* ptr, size_t len){
 
 char hex[16] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len){
+    printf((int)(*ptr));
     for(int i =0;i<len;i++){
         printch(hex[(*ptr)/16]);
         printch(hex[(*ptr)%16]);
