@@ -171,7 +171,12 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
 
 //we are doing this so we can access the disk packet pos via the stack
 int load_sector_helper(struct disk_packet *ptr){
-    dmph((char*)ptr,4);
+    dmph((char*)&ptr,4);
+     printch(0xA);
+    printch(0xD);
+     dmph((char*) &dp,16);
+    printch(0xA);
+    printch(0xD);
     asm(
     //mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
     //mov byte [disk_packet_struct+1],0 ; always 0
