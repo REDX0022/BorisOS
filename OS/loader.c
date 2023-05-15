@@ -328,10 +328,10 @@ int load_map(char* name){
 }
 
 
+char tmp = 0xAC;
 
 int __start__(){
     //we load the operating system slowly
-    char tmp = 0xAC;
     dmph(&tmp,1);
     
 
