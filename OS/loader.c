@@ -333,7 +333,7 @@ char hex[16] = "0123456789ABCDEF";
 
 int __start__(){
     //we load the operating system slowly
-    printch(hex[2]);
+    printch(hex[11]);
 
 
     while(1){};
