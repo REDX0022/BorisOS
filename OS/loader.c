@@ -145,10 +145,10 @@ void memcpy(void *src,void *dest,size_t n){
 }
 
 
+struct disk_packet dp;
 
 int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good here
 
-   struct disk_packet dp;
    dp.size = 0x10;
    dp.padding = 0;
    dp.num_of_sectors = 1;
