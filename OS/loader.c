@@ -384,7 +384,7 @@ void prints(char* ptr, size_t len){
 
 char hex[16] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len){
-    printf((int)(*ptr));
+    printf((*ptr));
     // for(int i =0;i<len;i++){
         
     //     printch(hex[(*ptr)/16]);
