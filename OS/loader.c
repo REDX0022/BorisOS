@@ -354,8 +354,8 @@ void printch(char c){
 
 
 void prints(char* ptr, size_t len){
-    for(;ptr < ptr+len;ptr++){
-        printch(*ptr);
+    for(int i =0;i<len;i++){
+        printch(ptr++);
     }
 }
 
