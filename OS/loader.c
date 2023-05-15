@@ -172,9 +172,9 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
 //we are doing this so we can access the disk packet pos via the stack
 int load_sector_helper(struct disk_packet *ptr){
     dmph((char*)&ptr,4);
-     printch(0xA);
+    printch(0xA);
     printch(0xD);
-     dmph((char*) &dp,16);
+    dmph((char*) &dp,16);
     printch(0xA);
     printch(0xD);
     asm(
@@ -193,19 +193,22 @@ int load_sector_helper(struct disk_packet *ptr){
         "mov ds, ax  \n "
         "mov ah, 0x42 \n "
         "mov esi, dword [bp+38] ; +4 for esp, +32 for pushad, +2 for ds \n" //@ bp+38 is a dword i think and we are trying to do it not propertly
+        "mov dword [0x6000],esi \n"
+    );
+    dmph(0x6000,4);
         //"ror esi, 4 \n "
         //"mov ds, si \n "
         //"shr esi, 28 \n "
-        "int 0x13 \n "
-        "jnc skip \n"
-        "mov al, 'f' \n"
-        "mov ah, 0x0e \n"
-        "int 0x10 \n"
-        "skip: \n"
-        "pop ds \n "
-        "popad \n "
+        // "int 0x13 \n "
+        // "jnc skip \n"
+        // "mov al, 'f' \n"
+        // "mov ah, 0x0e \n"
+        // "int 0x10 \n"
+        // "skip: \n"
+        // "pop ds \n "
+        // "popad \n "
     //----------------------------------------------------------
-    );
+    //);
 
 }
 
@@ -328,12 +331,14 @@ int load_map(char* name){
 
 int __start__(){
     //we load the operating system slowly
-    printf(234);
+    
     
 
     //we are not gonna bullshit
     load_sector(0,0x5000);
     dmph(0x5000,50);
+     printch(0xA);
+    printch(0xD);
     //we wanna load the memory manager
     /*
     char name[11] = "MEMMNG  SYS";
