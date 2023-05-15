@@ -328,7 +328,7 @@ int load_map(char* name){
 }
 
 
-char c = 0x70;
+char c = 0x90;
 
 int __start__(){
     //we load the operating system slowly
