@@ -328,15 +328,14 @@ int load_map(char* name){
 }
 
 
-char tmp[20];
+
+char hex[16] = "0123456789ABCDEF";
 
 int __start__(){
     //we load the operating system slowly
-    tmp[0] = 0xAC;
+    printch(hex[2]);
 
 
-    dmph(tmp,3);
-    
     while(1){};
 
     //we are not gonna bullshit
@@ -385,9 +384,9 @@ void prints(char* ptr, size_t len){
     }
 }
 
-char hex[16] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len){
     for(int i =0;i<len;i++){
+        
         printch(hex[(*ptr)/16]);
         printch(hex[(*ptr)%16]);
         printch(' ');
