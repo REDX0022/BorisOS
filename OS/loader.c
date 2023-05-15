@@ -349,3 +349,9 @@ void printch(char c){
 }
 
 
+void printf(char* ptr, size_t len){
+    for(;ptr < ptr+len;ptr++){
+        printch(*ptr);
+    }
+}
+
