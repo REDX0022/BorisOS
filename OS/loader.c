@@ -156,8 +156,8 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dp.segment = ((int)memory_pos)/16;
    dp.sector = sector_pos;
    dp.rest =0;
-   load_sector_helper(&dp);
-    return 0; //TODO: Make actuall diagonsitcs
+   return load_sector_helper(&dp);
+ //TODO: Make actuall diagonsitcs
 
 }
 
@@ -166,8 +166,8 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
 
 
 //we are doing this so we can access the disk packet pos via the stack
-void load_sector_helper(struct disk_packet *ptr){
-    printf((int)ptr);
+int load_sector_helper(struct disk_packet *ptr){
+
     asm(
     //mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
     //mov byte [disk_packet_struct+1],0 ; always 0
@@ -183,7 +183,7 @@ void load_sector_helper(struct disk_packet *ptr){
         "xor ax, ax  \n "
         "mov ds, ax  \n "
         "mov ah, 0x42 \n "
-        "mov esi, [bp+38] ; +4 for esp, +32 for pushad, +2 for ds \n" //@ bp+38 is a dword i think and we are trying to do it not propertly
+        "mov esi, dword [bp+36] ; +4 for esp, +32 for pushad, +2 for ds \n" //@ bp+38 is a dword i think and we are trying to do it not propertly
         "ror esi, 4 \n "
         "mov ds, si \n "
         "shr esi, 28 \n "
