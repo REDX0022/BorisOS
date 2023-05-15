@@ -363,8 +363,6 @@ void printf(int n){
     printch((char) (n%10)+48); //48 is the offset of the char 0
     n/=10;
     
-
-
 }
 
 void printch(char c){
@@ -384,7 +382,7 @@ void prints(char* ptr, size_t len){
 
 char hex[16] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len){
-    printf((*ptr));
+    printf(0xCA);
     // for(int i =0;i<len;i++){
         
     //     printch(hex[(*ptr)/16]);
