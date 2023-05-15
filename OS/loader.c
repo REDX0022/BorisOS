@@ -152,12 +152,13 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dp.size = 0x10;
    dp.padding = 0;
    dp.num_of_sectors = 1;
-   dp.offset = ( (int)memory_pos )%16;
-   dp.segment = ((int)memory_pos)/16;
+   dp.offset = ( (uint32_t )memory_pos )%16;
+   dp.segment = ((uint32_t)memory_pos)/16;
    dp.sector = sector_pos;
    dp.rest =0;
-   return load_sector_helper(&dp);
  //TODO: Make actuall diagonsitcs
+   load_sector_helper(&dp);
+   return 0;
 
 }
 
@@ -183,7 +184,7 @@ int load_sector_helper(struct disk_packet *ptr){
         "xor ax, ax  \n "
         "mov ds, ax  \n "
         "mov ah, 0x42 \n "
-        "mov esi, dword [bp+36] ; +4 for esp, +32 for pushad, +2 for ds \n" //@ bp+38 is a dword i think and we are trying to do it not propertly
+        "mov esi, dword [bp+38] ; +4 for esp, +32 for pushad, +2 for ds \n" //@ bp+38 is a dword i think and we are trying to do it not propertly
         "ror esi, 4 \n "
         "mov ds, si \n "
         "shr esi, 28 \n "
@@ -235,8 +236,10 @@ int load_file(char* file_name,char *pos){
     int16_t next_cluster = -1;
     for(int i =0;i<root_dir_size;i++){
 
-        load_sector(root_dir+i,search_sector);
+        load_sector(root_dir+i,(void*)search_sector);
         for(int j =0;j<16;j++){ //bytes_per_sector
+
+            prints(search_sector[j].name,11);
 
             if(cmp_name(search_sector[j].name,file_name)){
                 next_cluster = search_sector[j].starting_cluster;
@@ -318,6 +321,7 @@ int __start__(){
     
     //we wanna load the memory manager
     char name[11] = "MEMMNG  SYS";
+    prints(name,11);
     char map_name[11] = "MEMMNG  MAP";
     if(load_file(name,memmory_manager_address)){
         printf(14); //failed to load file
@@ -349,7 +353,7 @@ void printch(char c){
 }
 
 
-void printf(char* ptr, size_t len){
+void prints(char* ptr, size_t len){
     for(;ptr < ptr+len;ptr++){
         printch(*ptr);
     }
