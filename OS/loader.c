@@ -251,9 +251,9 @@ int load_file(char* file_name,char *pos){
     while(1){
         //printf(next_cluster);
         
-        load_sector(data_start+(next_cluster-2),pos); // load the file sector
+        //load_sector(data_start+(next_cluster-2),pos); // load the file sector
 
-        load_sector(FAT_start+(next_cluster*2)/bytes_per_sector,FAT_search_sector); //load the fat search sector
+        load_sector(FAT_start+(next_cluster*2)/bytes_per_sector,(void*)FAT_search_sector); //load the fat search sector
 
         next_cluster = FAT_search_sector[(next_cluster*2)%bytes_per_sector]; //look for the next cluster
        
