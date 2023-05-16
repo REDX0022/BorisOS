@@ -341,7 +341,7 @@ int __start__(){
 void printf(int n){
     if(n==0){printch('0');return;}
     printf(n/10);
-    char tmpprint = (char)((n%10)+48);
+    char tmpprint =((uint32_t)n%10)+48;
     printch(tmpprint&0xFF); //48 is the offset of the char 0
     n/=10;
     
