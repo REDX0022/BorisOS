@@ -336,7 +336,7 @@ int __start__(){
 
 
     //we are not gonna bullshit
-    load_sector(0,0x20000);
+    load_sector(0,0x70000);
     dmph(0x70000,50);
     printch(0xA);
     printch(0xD);
