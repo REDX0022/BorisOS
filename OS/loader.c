@@ -235,15 +235,12 @@ int load_file(char* file_name,char *pos){
             
 
             if(cmp_name(search_sector[j].name,file_name)){
-                printf((int)search_sector[j].starting_cluster);
                 next_cluster = search_sector[j].starting_cluster;
-               
-            
             } 
         }
     }
 
-    if(next_cluster = -1){
+    if(next_cluster == -1){
         return 1;
     }
     
