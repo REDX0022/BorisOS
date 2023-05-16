@@ -226,7 +226,7 @@ int load_file(char* file_name,char *pos){
             
     //we need to search for the directory
     //this early loader loads only from root dir
-    int16_t next_cluster = -1;
+    uint16_t next_cluster = -1;
     for(int i =0;i<root_dir_size;i++){
 
         load_sector(root_dir+i,(void*)search_sector); 
@@ -253,11 +253,12 @@ int load_file(char* file_name,char *pos){
         //load_sector(data_start+(next_cluster-2),(void*) pos); // load the file sector
 
         load_sector(FAT_start+(next_cluster*2)/bytes_per_sector,(void*)FAT_search_sector); //load the fat search sector
-        dmph((char*)FAT_search_sector,512);
-        while(1){}
-        next_cluster = FAT_search_sector[(next_cluster*2)%bytes_per_sector]; //look for the next cluster
 
+        next_cluster = FAT_search_sector[next_cluster]; //look for the next cluster
        
+        printf(next_cluster);
+        printch(0xA);
+        printch(0xD);
         if(next_cluster>=0xFFF8){break;} //TODO: add support for bad sectors
 
         pos +=bytes_per_sector;
