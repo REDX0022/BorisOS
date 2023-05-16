@@ -238,11 +238,11 @@ int load_file(char* file_name,char *pos){
     for(int i =0;i<root_dir_size;i++){
 
         load_sector(root_dir+i,(void*)search_sector);
-        prints(search_sector[0].name,11);
-        printch(0xA);
-        printch(0xD);
         for(int j =0;j<16;j++){ //bytes_per_sector
 
+        prints(search_sector[j].name,11);
+        printch(0xA);
+        printch(0xD);
             
 
             if(cmp_name(search_sector[j].name,file_name)){
