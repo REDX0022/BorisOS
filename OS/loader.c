@@ -388,16 +388,15 @@ void prints(char* ptr, size_t len){
 
 char hex[16] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len){
-    for(int i =0;i<len;i++){
+    //for(int i =0;i<len;i++){
         char high = (char)(hex[(*ptr)/16]);
         char low = (char)(hex[(*ptr)%16]);
-        printf(high);
-        printf(low);
-        //printch(high);
-        //printch(low);
+    
+        printch(high);
+        printch(low);
         printch(' ');
-        ptr++;
-    }
+        //ptr++;
+    //}
     
 }
 
