@@ -209,7 +209,10 @@ int load_sector_helper(struct disk_packet *ptr){
 int cmp_name(char str1[11], char *str2){
     //this just compares the root dir strings
     for(int i =0;i<11;i++){
-        if(str1[i]!=str2[i]){return 0;}
+        if(str1[i]!=str2[i]){
+            printf(i);
+            return 0;
+        }
     }
     return 1;
 }
