@@ -245,7 +245,7 @@ int load_file(char* file_name,char *pos){
     }
     
 
-    int16_t *FAT_search_sector = &temp_sector;
+    uint16_t *FAT_search_sector = &temp_sector;
     
     //follow the FAT table
     while(1){
