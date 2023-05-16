@@ -156,9 +156,6 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dp.segment = (uint16_t)(((uint32_t)memory_pos)/16);
    dp.sector = sector_pos;
    dp.rest =0;
-    dmph((char*) &dp,16);
-    printch(0xA);
-    printch(0xD);
  //TODO: Make actuall diagonsitcs
    load_sector_helper(&dp);
    return 0;
@@ -171,12 +168,6 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
 
 //we are doing this so we can access the disk packet pos via the stack
 int load_sector_helper(struct disk_packet *ptr){
-    dmph((char*)&ptr,4);
-    printch(0xA);
-    printch(0xD);
-    dmph((char*) &dp,16);
-    printch(0xA);
-    printch(0xD);
     asm(
     //mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
     //mov byte [disk_packet_struct+1],0 ; always 0
@@ -193,9 +184,9 @@ int load_sector_helper(struct disk_packet *ptr){
         "mov ds, ax  \n "
         "mov ah, 0x42 \n "
         "mov esi, dword [bp+8] ; +4 esp +4 size \n" 
-        //"ror esi, 4 \n "
-        //"mov ds, si \n "
-        //"shr esi, 28 \n "
+        "ror esi, 4 \n "
+        "mov ds, si \n "
+        "shr esi, 28 \n "
         "int 0x13 \n "
         "jnc skip \n"
         "mov bh, 0 \n"
