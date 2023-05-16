@@ -152,8 +152,8 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dp.size = 0x10;
    dp.padding = 0;
    dp.num_of_sectors = 1;
-   dp.offset = (uint16_t)( (uint32_t )memory_pos )%16;
-   dp.segment = (uint16_t)((uint32_t)memory_pos)/16;
+   dp.offset = (uint16_t)(((uint32_t )memory_pos )%16);
+   dp.segment = (uint16_t)(((uint32_t)memory_pos)/16);
    dp.sector = sector_pos;
    dp.rest =0;
     dmph((char*) &dp,16);
