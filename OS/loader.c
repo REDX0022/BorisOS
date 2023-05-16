@@ -207,6 +207,7 @@ int load_sector_helper(struct disk_packet *ptr){
         "popad \n "
     // ----------------------------------------------------------
     );
+    printch('f');
 
 }
 
