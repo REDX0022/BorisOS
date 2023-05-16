@@ -333,14 +333,14 @@ char c = 0xAC;
 int __start__(){
     //we load the operating system slowly
     
-    dmph(&c,1);
+    //dmph(&c,1);
 
 
     //we are not gonna bullshit
-    // load_sector(0,0x5000);
-    // dmph(0x5000,50);
-    // printch(0xA);
-    // printch(0xD);
+    load_sector(0,0x5000);
+    dmph(0x5000,50);
+    printch(0xA);
+    printch(0xD);
     while(1){};
     //we wanna load the memory manager
     /*
