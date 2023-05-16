@@ -220,6 +220,10 @@ int cmp_name(char str1[11], char *str2){
 /// @return 0 if sucessful, otherwise not
 int load_file(char* file_name,char *pos){
     struct directory *search_sector = &temp_sector;
+    prints(file_name,11);
+        printch(0xA);
+        printch(0xD);
+            
     //we need to search for the directory
     //this early loader loads only from root dir
     int16_t next_cluster = -1;
