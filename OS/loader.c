@@ -259,7 +259,7 @@ int load_file(char* file_name,char *pos){
 
         pos +=bytes_per_sector;
     }
-
+    return 0;
 }
 
 
