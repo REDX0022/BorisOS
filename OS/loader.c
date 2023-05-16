@@ -332,7 +332,8 @@ char c = 0x90;
 
 int __start__(){
     //we load the operating system slowly
-    dmph(&c,1);
+    printf((int)&c);
+    //dmph(&c,1);
 
     while(1){};
 
