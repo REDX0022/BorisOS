@@ -16,6 +16,7 @@ struct alloc_segment memory[max_memory_sectors];
 
 void __start__(){
     init_memory_manager();
+    while(1){}
 }
 
 /// @brief initalizes the memory manager
