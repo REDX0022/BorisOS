@@ -250,6 +250,8 @@ int load_file(char* file_name,char *pos){
     //follow the FAT table
     while(1){
         printf(next_cluster);
+        printch(0xA);
+        printch(0xD);
         
         load_sector(data_start+(next_cluster-2),(void*) pos); // load the file sector
 
