@@ -210,8 +210,7 @@ int cmp_name(char* str1, char* str2){
     //this just compares the root dir strings
     for(int i =0;i<11;i++){
         if(str1[i]!=str2[i]){
-            printch(str1[i]);
-            printch(str2[i]);
+           
             return 0;
         }
     }
@@ -236,13 +235,13 @@ int load_file(char* file_name,char *pos){
         load_sector(root_dir,(void*)search_sector); //DONT FORGET THE +i and the 6 in the for loop
         for(int j =0;j<6;j++){ //bytes_per_sector
 
-        prints(search_sector[j].name,11);
-        printch(0xA);
-        printch(0xD);
             
 
             if(cmp_name(search_sector[j].name,file_name)){
                 next_cluster = search_sector[j].starting_cluster;
+                prints(search_sector[j].name,11);
+                printch(0xA);
+                printch(0xD);
             
             } 
         }
