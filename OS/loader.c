@@ -370,7 +370,7 @@ void printf(int n){
 
 void printch(char c){
     asm("mov bh, 0x00 \n"
-        "mov al, [bp+3] ; +4 for ebx, +4 for eax, +4 for ebp, + 3 because this compiler is retarded i hope alex dies \n"
+        "mov al, [bp+2] ; +4 for ebx, +4 for eax, +4 for ebp, + 3 because this compiler is retarded i hope alex dies \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
     );
