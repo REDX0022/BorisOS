@@ -368,14 +368,14 @@ void printf(int n){
 }
 
 void printch(char c){ //i dont know it its needed to push, its for safety
-    asm("push eax \n"
-        "push ebx \n"
+    asm(//"push eax \n"
+        //"push ebx \n"
         "mov bh, 0x00 \n"
-        "mov al, [ebp+8] ; +4 for ebx,  \n"
+        "mov al, [bp+8] ; +4 for ebx,  \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
-        "pop ebx \n"
-        "pop eax \n"
+        //"pop ebx \n"
+        //"pop eax \n"
     );
 }
 
@@ -389,8 +389,8 @@ void prints(char* ptr, size_t len){
 char hex[16] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len){
     //for(int i =0;i<len;i++){
-        char high = (char)(hex[(*ptr)/16]);
-        char low = (char)(hex[(*ptr)%16]);
+        char high = (char)(hex[(*ptr)>>4]);
+        char low = (char)(hex[(*ptr)&0xF]);
     
         printch(high);
         printch(low);
