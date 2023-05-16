@@ -368,14 +368,12 @@ void printf(int n){
 }
 
 void printch(char c){ //i dont know it its needed to push, its for safety
-    asm(//"push eax \n"
-        //"push ebx \n"
+    asm("pushad \n"
         "mov bh, 0x00 \n"
         "mov al, [bp+8] ; +4 for ebx,  \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
-        //"pop ebx \n"
-        //"pop eax \n"
+        "popad \n"
     );
 }
 
