@@ -328,19 +328,19 @@ int load_map(char* name){
 }
 
 
-char c = 0x50;
+char c = 0xAA;
 
 int __start__(){
     //we load the operating system slowly
     
-    
+    dmph(&c,1);
 
 
     //we are not gonna bullshit
-    load_sector(0,0x5000);
-    dmph(0x5000,50);
-    printch(0xA);
-    printch(0xD);
+    // load_sector(0,0x5000);
+    // dmph(0x5000,50);
+    // printch(0xA);
+    // printch(0xD);
     while(1){};
     //we wanna load the memory manager
     /*
@@ -371,7 +371,7 @@ void printch(char c){ //i dont know it its needed to push, its for safety
     asm("push eax \n"
         "push ebx \n"
         "mov bh, 0x00 \n"
-        "mov al, [ebp+8] ; +4 for ebx, +4 for eax, +4 for ebp, + 3 because this compiler is retarded i hope alex dies \n"
+        "mov al, [ebp+8] ; +4 for ebx,  \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
         "pop ebx \n"
