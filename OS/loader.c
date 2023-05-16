@@ -332,6 +332,7 @@ char c = 0x50;
 
 int __start__(){
     //we load the operating system slowly
+    printch('a');
     printf(&c);
     
     //dmph(&c,1);
@@ -369,7 +370,7 @@ void printf(int n){
 
 void printch(char c){
     asm("push eax \n"
-        "mov eax, [bp+8] ; +4 for eax +4 for ebp \n"
+        "mov eax, [bp+7] ; +4 for eax +4 for ebp + 3 because this compiler is retarded i hope alex dies \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
         "pop eax \n"
