@@ -192,7 +192,7 @@ int load_sector_helper(struct disk_packet *ptr){
         "xor ax, ax  \n "
         "mov ds, ax  \n "
         "mov ah, 0x42 \n "
-        "mov esi, dword [bp+38] ; +4 for esp, +32 for pushad, +2 for ds \n" //@ bp+38 is a dword i think and we are trying to do it not propertly
+        "mov esi, dword [bp+8] ; +4 esp +4 size \n" 
         "mov dword [0x6000],esi \n"
     );
     dmph(0x6000,4);
