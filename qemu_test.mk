@@ -2,6 +2,7 @@ prereq := boot.asm LOADER.SYS MEMMNG.SYS
 
 
 run: $(prereq)
+	git pull
 	nasm boot.asm -o boot.o
 	diskutil unmountDisk disk4
 	sudo dd if=boot.o of=/dev/disk4
