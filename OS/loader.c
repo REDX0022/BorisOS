@@ -323,6 +323,8 @@ int __start__(){
     if(load_file(name,memmory_manager_address)){
         printf(14); //failed to load file
     }
+    dmph(memmory_manager_address,512);
+
     if(start_kernel_programm(memmory_manager_address)){
         printf(15); //failed to start mem mng
     }
