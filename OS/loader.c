@@ -54,16 +54,16 @@
 
 //============================Structures=======================================
  struct disk_packet{
-    int8_t size;
-    int8_t padding; 
-    int16_t num_of_sectors;
-    int16_t offset;
-    int16_t segment;
-    int32_t sector;
-    int32_t rest;
+    uint8_t size;
+    uint8_t padding; 
+    uint16_t num_of_sectors;
+    uint16_t offset;
+    uint16_t segment;
+    uint32_t sector;
+    uint32_t rest;
 };
 
- struct directory{
+ struct directory{ //TODO: put unsigned where needed
     char name[11]; //the ext is also here 
     int8_t attribute;
     int8_t NT_reserved;
