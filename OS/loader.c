@@ -332,8 +332,7 @@ char c = 0x50;
 
 int __start__(){
     //we load the operating system slowly
-    printch('a');
-    printf(&c);
+    dmph(&c,1);
     
     //dmph(&c,1);
 
@@ -369,7 +368,7 @@ void printf(int n){
     
 }
 
-void printch(char c){
+void printch(char c){ //i dont know it its needed to push, its for safety
     asm("push eax \n"
         "push ebx \n"
         "mov bh, 0x00 \n"
@@ -390,15 +389,13 @@ void prints(char* ptr, size_t len){
 
 char hex[16] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len){
-    int t = *ptr;
-    printf(t);
-    // for(int i =0;i<len;i++){
+    for(int i =0;i<len;i++){
         
-    //     printch(hex[(*ptr)/16]);
-    //     printch(hex[(*ptr)%16]);
-    //     printch(' ');
-    //     ptr++;
-    // }
+        printch(hex[(*ptr)/16]);
+        printch(hex[(*ptr)%16]);
+        printch(' ');
+        ptr++;
+    }
     
 }
 
