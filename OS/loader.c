@@ -193,22 +193,19 @@ int load_sector_helper(struct disk_packet *ptr){
         "mov ds, ax  \n "
         "mov ah, 0x42 \n "
         "mov esi, dword [bp+8] ; +4 esp +4 size \n" 
-        "mov dword [0x6000],esi \n"
-    );
-    dmph(0x6000,4);
         //"ror esi, 4 \n "
         //"mov ds, si \n "
         //"shr esi, 28 \n "
-        // "int 0x13 \n "
-        // "jnc skip \n"
-        // "mov al, 'f' \n"
-        // "mov ah, 0x0e \n"
-        // "int 0x10 \n"
-        // "skip: \n"
-        // "pop ds \n "
-        // "popad \n "
-    //----------------------------------------------------------
-    //);
+        "int 0x13 \n "
+        "jnc skip \n"
+        "mov al, 'f' \n"
+        "mov ah, 0x0e \n"
+        "int 0x10 \n"
+        "skip: \n"
+        "pop ds \n "
+        "popad \n "
+    // ----------------------------------------------------------
+    );
 
 }
 
