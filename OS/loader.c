@@ -223,29 +223,25 @@ int cmp_name(char* str1, char* str2){
 /// @return 0 if sucessful, otherwise not
 int load_file(char* file_name,char *pos){
     struct directory *search_sector = &temp_sector;
-    prints(file_name,11);
-        printch(0xA);
-        printch(0xD);
             
     //we need to search for the directory
     //this early loader loads only from root dir
     int16_t next_cluster = -1;
-    //for(int i =0;i<root_dir_size;i++){
+    for(int i =0;i<root_dir_size;i++){
 
-        load_sector(root_dir,(void*)search_sector); //DONT FORGET THE +i and the 6 in the for loop
-        for(int j =0;j<6;j++){ //bytes_per_sector
+        load_sector(root_dir+i,(void*)search_sector); 
+        for(int j =0;j<16;j++){ //bytes_per_sector
 
             
 
             if(cmp_name(search_sector[j].name,file_name)){
+                printf((int)search_sector[j].starting_cluster);
                 next_cluster = search_sector[j].starting_cluster;
-                prints(search_sector[j].name,11);
-                printch(0xA);
-                printch(0xD);
+               
             
             } 
         }
-    //}
+    }
 
     if(next_cluster = -1){
         return 1;
