@@ -202,27 +202,15 @@ int load_sector_helper(struct disk_packet *ptr){
 
 }
 
-/// @brief rudementary file name comparison
+/// @brief rudementary file name comparison, root dir only
 /// @param str1 the name in the directory
 /// @param str2 the name in the path(string)
 /// @return 
 int cmp_name(char str1[11], char *str2){
-    //the first is len 11 the second is terminated by / or null
-    int string_ended =0;
-    int j =0;
-    for(int i =0;i<8;i++){
-        if(str2[j]=='.'){
-            //if we need to compare extensins
-            j++;
-        }
-        if(str2[j] == '/'|| str2[j] ==0){
-            return 1;
-        }
-        if(str1[i] != str2[j]){
-            return 0;
-        }
-        j++;
-    }   
+    //this just compares the root dir strings
+    for(int i =0;i<11;i++){
+        if(str1[i]!=str2[i]){return 0;}
+    }
     return 1;
 }
 
@@ -318,7 +306,7 @@ int load_map(char* name){
 }
 
 
-char c = 0xAC;
+
 
 int __start__(){
     //we load the operating system slowly
