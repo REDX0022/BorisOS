@@ -233,8 +233,8 @@ int load_file(char* file_name,char *pos){
     int16_t next_cluster = -1;
     //for(int i =0;i<root_dir_size;i++){
 
-        load_sector(root_dir,(void*)search_sector); //DONT FORGET THE +i 
-        for(int j =0;j<16;j++){ //bytes_per_sector
+        load_sector(root_dir,(void*)search_sector); //DONT FORGET THE +i and the 6 in the for loop
+        for(int j =0;j<6;j++){ //bytes_per_sector
 
         prints(search_sector[j].name,11);
         printch(0xA);
