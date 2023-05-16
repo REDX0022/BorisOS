@@ -249,7 +249,7 @@ int load_file(char* file_name,char *pos){
     
     //follow the FAT table
     while(1){
-        printf(next_cluster);
+        //printf(next_cluster);
         
         load_sector(data_start+(next_cluster-2),pos); // load the file sector
 
