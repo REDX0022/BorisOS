@@ -15,7 +15,6 @@ struct alloc_segment memory[max_memory_sectors];
 
 
 void __start__(){
-    printch('m');
     init_memory_manager();
 }
 
