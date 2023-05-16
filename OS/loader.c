@@ -192,7 +192,7 @@ int load_sector_helper(struct disk_packet *ptr){
         "xor ax, ax  \n "
         "mov ds, ax  \n "
         "mov ah, 0x42 \n "
-        "mov esi, dword [bp+12] ; +4 esp +4 size \n" 
+        "mov esi, dword [bp+8] ; +4 esp +4 size \n" 
         //"ror esi, 4 \n "
         //"mov ds, si \n "
         //"shr esi, 28 \n "
@@ -336,7 +336,7 @@ int __start__(){
 
 
     //we are not gonna bullshit
-    load_sector(0,0x70000);
+    load_sector(0,0x20000);
     dmph(0x70000,50);
     printch(0xA);
     printch(0xD);
