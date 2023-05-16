@@ -323,17 +323,13 @@ char c = 0xAC;
 int __start__(){
     //we load the operating system slowly
     
-    //dmph(&c,1);
 
 
-    //we are not gonna bullshit
-    load_sector(1,0x70001);
-    dmph(0x70001,512);
-    printch(0xA);
-    printch(0xD);
-    while(1){};
+
+   
+ 
     //we wanna load the memory manager
-    /*
+    
     char name[11] = "MEMMNG  SYS";
     char map_name[11] = "MEMMNG  MAP";
     if(load_file(name,memmory_manager_address)){
@@ -345,7 +341,7 @@ int __start__(){
     if(load_map(map_name)){
         printf(16);
     }
-    */
+    
 }
 
 void printf(int n){
