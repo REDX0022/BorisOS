@@ -231,9 +231,9 @@ int load_file(char* file_name,char *pos){
     //we need to search for the directory
     //this early loader loads only from root dir
     int16_t next_cluster = -1;
-    for(int i =0;i<root_dir_size;i++){
+    //for(int i =0;i<root_dir_size;i++){
 
-        load_sector(root_dir+i,(void*)search_sector);
+        load_sector(root_dir,(void*)search_sector); //DONT FORGET THE +i 
         for(int j =0;j<16;j++){ //bytes_per_sector
 
         prints(search_sector[j].name,11);
@@ -246,7 +246,7 @@ int load_file(char* file_name,char *pos){
             
             } 
         }
-    }
+    //}
 
     if(next_cluster = -1){
         return 1;
