@@ -391,9 +391,10 @@ void dmph(char* ptr, size_t len){
     for(int i =0;i<len;i++){
         char high = (char)(hex[(*ptr)/16]);
         char low = (char)(hex[(*ptr)%16]);
-
-        printch(high);
-        printch(low);
+        printf(high);
+        printf(low);
+        //printch(high);
+        //printch(low);
         printch(' ');
         ptr++;
     }
