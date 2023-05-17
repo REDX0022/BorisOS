@@ -91,7 +91,7 @@ start:
 
     xor ax,ax
     mov ds, ax
-    mov ax, 0x2000
+    mov ax, 0x1000
     mov ss, ax ; this can grow to 0x10000
     mov sp, 0xFFFF ; this is arbitrary and the stack could be whatever it wants??
     
