@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "MEMMNG.C": "cpp"
+        "MEMMNG.C": "cpp",
+        "FILEMNG.C": "cpp"
     }
 }

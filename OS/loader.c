@@ -120,10 +120,10 @@ char temp_sector_2[bytes_per_sector];
 
 
 struct shared_lib shared_libs[max_loaded_shared_libs];
-uint16_t shared_func[max_loaded_shared_func];
+uint32_t shared_func[max_loaded_shared_func];
 
 struct shared_lib *shared_libs_ptr = &shared_libs[0]; //the pointer to the next available space//idk if the compiler supports this !!!!
-uint16_t *shared_func_ptr = &shared_func[0]; //pointer to the available space
+uint32_t *shared_func_ptr = &shared_func[0]; //pointer to the available space
 
 
 
