@@ -284,6 +284,11 @@ int start_kernel_programm(void *start){
     init execution_start; 
     execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
     //but we do need to find the libraries that it provides
+     asm("push dword 0xFFFFFFFF \n");
+    dmph(0x20000-0x200,0x200);
+    asm("add sp,4 \n");
+    printch(0xA);
+    printch(0xD);
     
     execution_start(); //for now we use a global stack for the entire os 
     return 0;
@@ -322,11 +327,6 @@ int __start__(){
         printf(14); //failed to load file
     }
     
-     asm("push dword 0xFFFFFFFF \n");
-    dmph(0x20000-0x200,0x200);
-    asm("add sp,4 \n");
-    printch(0xA);
-    printch(0xD);
 
     if(start_kernel_programm(memmory_manager_address)){
         printf(15); //failed to start mem mng
