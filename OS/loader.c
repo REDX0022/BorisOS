@@ -331,6 +331,7 @@ int __start__(){
     if(start_kernel_programm(memmory_manager_address)){
         printf(15); //failed to start mem mng
     }
+    printf(20);
     if(load_map(map_name)){
         printf(16);
     }
