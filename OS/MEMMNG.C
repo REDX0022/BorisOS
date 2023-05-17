@@ -15,8 +15,9 @@ struct alloc_segment memory[max_memory_sectors];
 
 
 void __start__(){
-    //asm("push dword 0xFFFFFFFF \n");
+     asm("push dword 0xFFFFFFFF \n");
     dmph(0x20000-0x200,0x200);
+    asm("add sp,4 \n");
     //init_memory_manager();
 
     
