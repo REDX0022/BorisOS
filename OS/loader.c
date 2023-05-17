@@ -102,7 +102,7 @@ struct MZext_header{
 
 struct shared_lib_map{
     uint16_t size;
-    uint16_t* offsets;
+    uint16_t offsets;
 };
 
 struct shared_lib{
@@ -302,7 +302,7 @@ int load_map(char* name){
     shared_libs_ptr->count = map->size;
     shared_libs_ptr->funs_ptr = shared_func_ptr;
 
-    memcpy((void*)(&map->offsets[0]),shared_func,(2*map->size)); // this is part of the map spec
+    memcpy((void*)(&map->offsets),shared_func_ptr,(2*map->size)); // this is part of the map spec
 
     shared_func_ptr += map->size;
     shared_libs_ptr++;
