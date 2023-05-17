@@ -6,15 +6,15 @@ File Ofs  Sym Addr  Sym
 0000020E  0000020E  ___Int0xdIsr
 00000280  00000280  ___Irq5Isr
 00000290  00000290  ___start__
-000002B3  000002B3  _init_memory_manager
-0000032C  0000032C  _malloc
-000005AA  000005AA  _dalloc
-00000A74  00000A74  _memcpy
-00000AD3  00000AD3  _printf
-00000B51  00000B51  _printch
-00000B67  00000B67  _prints
-00000BAD  00000BAD  _dmph
-          00000C92
+000002B5  000002B5  _init_memory_manager
+0000032E  0000032E  _malloc
+000005AC  000005AC  _dalloc
+00000A76  00000A76  _memcpy
+00000AD5  00000AD5  _printf
+00000B53  00000B53  _printch
+00000B69  00000B69  _prints
+00000BAF  00000BAF  _dmph
+          00000C94
 
           00000C94  section .relod:
           00000C94  __start__relod

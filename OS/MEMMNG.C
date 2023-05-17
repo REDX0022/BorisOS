@@ -19,7 +19,7 @@ void __start__(){
     dmph(0x20000-0x200,0x200);
     asm("add sp,4 \n");
     //init_memory_manager();
-
+    while(1){}
     
 }
 
