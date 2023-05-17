@@ -236,6 +236,7 @@ int load_file(char* file_name,char *pos){
 
             if(cmp_name(search_sector[j].name,file_name)){
                 next_cluster = search_sector[j].starting_cluster;
+                prints(search_sector[j].name,11);
             } 
         }
     }
