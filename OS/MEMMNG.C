@@ -3,8 +3,8 @@
 #include "stddef.h"
 
 #define max_memory_sectors 1000
-#define user_space_memory_begin 0x8000 //TODO: I have no clue what value to put here rn
-#define user_space_memory_len 0x80000 //TODO: -||-
+#define memory_begin 0x500 
+#define memory_end 0x80000 
 struct alloc_segment{
     uint32_t begin;
     size_t len;
@@ -26,11 +26,10 @@ void __start__(){
 /// @return success
 int init_memory_manager(){
     //TODO: change this to the actual memory map which is used
-    memory[0].begin = user_space_memory_begin; 
-    memory[0].len = (size_t)user_space_memory_len; //the whole memory space is available at the beggining 
-    memory[1].begin = user_space_memory_len+user_space_memory_begin;
+    memory[0].begin = memory_begin; 
+    memory[0].len = (size_t)(0x8000-memory_begin); //reserved by the os
+    memory[1].begin = memory_end;
     memory[1].len = (size_t)0;
-    printf(1337);
     return 0;
 }
 
