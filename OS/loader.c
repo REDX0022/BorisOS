@@ -287,7 +287,7 @@ int start_kernel_programm(void *start){
     //but we do need to find the libraries that it provides
     
     execution_start(); //for now we use a global stack for the entire os 
-
+    return 0;
 }
 
 int load_map(char* name){
