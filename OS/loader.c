@@ -332,8 +332,7 @@ int __start__(){
     if(load_map(map_name)){
         printf(16);
     }
-    dmph(shared_libs,17);
-    dmph(shared_func,50);
+   
     
 }
 
