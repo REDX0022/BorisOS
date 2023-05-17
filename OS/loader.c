@@ -285,7 +285,7 @@ int start_kernel_programm(void *start){
     execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
 
     //but we do need to find the libraries that it provides
-    dmph(0x20000-0x200,0x200);
+    
     execution_start(); //for now we use a global stack for the entire os 
 
 }

@@ -15,6 +15,7 @@ struct alloc_segment memory[max_memory_sectors];
 
 
 void __start__(){
+    dmph(0x20000-0x200,0x200);
     //init_memory_manager();
     
 }
