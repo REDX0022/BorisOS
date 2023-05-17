@@ -3,15 +3,15 @@ File Ofs  Sym Addr  Sym
           00000020  section .text:
 00000020  00000020  __start
 00000100  00000100  ___start__
-00000125  00000125  _init_memory_manager
-0000019E  0000019E  _malloc
-0000041C  0000041C  _dalloc
-000008E6  000008E6  _memcpy
-00000945  00000945  _printf
-000009C3  000009C3  _printch
-000009D9  000009D9  _prints
-00000A1F  00000A1F  _dmph
-          00000B04
+00000123  00000123  _init_memory_manager
+0000019C  0000019C  _malloc
+0000041A  0000041A  _dalloc
+000008E4  000008E4  _memcpy
+00000943  00000943  _printf
+000009C1  000009C1  _printch
+000009D7  000009D7  _prints
+00000A1D  00000A1D  _dmph
+          00000B02
 
           00000B04  section .relod:
           00000B04  __start__relod
