@@ -303,6 +303,7 @@ int load_map(char* name){
     memcpy((void*)&map->offsets,shared_func_ptr,(size_t)2*map->size); // this is part of the map spec
 
     shared_func_ptr += map->size;
+    return 0;
 }
 
 
@@ -328,6 +329,8 @@ int __start__(){
     if(load_map(map_name)){
         printf(16);
     }
+    dmph(shared_libs,15);
+    dmph(shared_func,50);
     
 }
 
