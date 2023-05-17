@@ -122,7 +122,7 @@ char temp_sector_2[bytes_per_sector];
 struct shared_lib shared_libs[max_loaded_shared_libs];
 uint16_t shared_func[max_loaded_shared_func];
 
-char (*shared_libs_ptr)[11] = &shared_libs[0]; //the pointer to the next available space//idk if the compiler supports this !!!!
+struct shared_lib *shared_libs_ptr = &shared_libs[0]; //the pointer to the next available space//idk if the compiler supports this !!!!
 uint16_t *shared_func_ptr = &shared_func[0]; //pointer to the available space
 
 
@@ -290,7 +290,7 @@ int start_kernel_programm(void *start){
     return 0;
 }
 
-int load_map(char* name){
+int load_map(char* name){ 
    
     if(load_file(name,(void *)&temp_sector_2)){
         return 1;
@@ -298,11 +298,14 @@ int load_map(char* name){
 
     struct shared_lib_map* map =  (struct shared_lib_map*)(&temp_sector_2); //znas da si nesto sjebo kad double kastujes pointere
 
-    memcpy((void*)name,&shared_libs->name,11); //11 is a file system constant
+    memcpy(name,(void*) &(shared_libs_ptr->name),11);
+    shared_libs_ptr->count = map->size;
+    shared_libs_ptr->funs_ptr = shared_func_ptr;
 
     memcpy((void*)map->offsets,shared_func_ptr,(size_t)2*map->size); // this is part of the map spec
 
     shared_func_ptr += map->size;
+    shared_libs_ptr++;
     return 0;
 }
 

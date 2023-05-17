@@ -20,6 +20,7 @@
 - Next to shared libraries there is a .MAP file which will contain function offsets
     - The first 16 bit unsigned int is the number of functions
     - Next are the function offsets, all 16 bit ** unsigned **
+    - MAP size limited to one sector
 
 ## STACK MANAGMENT ##
 -when we switch contexts we save the sp of the previous stack at the bottom of the new one
