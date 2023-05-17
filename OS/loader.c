@@ -302,7 +302,7 @@ int load_map(char* name){
     shared_libs_ptr->count = map->size;
     shared_libs_ptr->funs_ptr = shared_func_ptr;
 
-    memcpy(&map->offsets-1,shared_func_ptr,(size_t)(2*map->size+1)); // this is part of the map spec
+    memcpy(&map->offsets-1,shared_func_ptr,(2*map->size)); // this is part of the map spec
 
     shared_func_ptr += map->size;
     shared_libs_ptr++;
