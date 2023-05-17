@@ -217,7 +217,7 @@ int cmp_name(char* str1, char* str2){
     return 1;
 }
 
-/// @brief loads a file into memory, overwrites the sector remainder, so its bytes_per_sector alligned
+/// @brief loads a file into memory, OVERWRITES the sector remainder, so its bytes_per_sector alligned
 /// @param path null terminated string with path to the file
 /// @param pos the position in memory
 /// @return 0 if sucessful, otherwise not
