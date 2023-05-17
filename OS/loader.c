@@ -274,7 +274,7 @@ typedef void (* init) ();
 /// @brief Starts a kernel space programm
 /// @param start memory loaction of the programm, should be a void pointer, cant be because of arithmetic
 /// @return success
-int start_kernel_programm(char *start){
+int start_kernel_programm(void *start){
     if(!start){return -1;} //null pointer exeption
     struct MZext_header* mz;
     mz = ((struct MZext_header*) start); //there might need to be changes if there i
@@ -282,7 +282,7 @@ int start_kernel_programm(char *start){
     //here we dont read the libraries needed because that is predefned??
 
     init execution_start; 
-    execution_start = (init) (start+ mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
+    execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
 
     //but we do need to find the libraries that it provides
 
