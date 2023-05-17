@@ -23,7 +23,7 @@
 
 ## STACK MANAGMENT ##
 -when we switch contexts we save the sp of the previous stack at the bottom of the new one
--we shall have a syscall for context swiching
+-we shall have a syscall for context swiching?
 
 ## Strings ##
 - null terminated

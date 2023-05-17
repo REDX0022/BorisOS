@@ -1,4 +1,4 @@
-kernel_libs := LIBS/c0du.asm LIBS/irq5isr.c
+kernel_libs := LIBS/c0du.asm 
 targets := LOADER.SYS MEMMNG.SYS transfer
 
 run: $(targets)
