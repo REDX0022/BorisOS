@@ -226,7 +226,7 @@ int load_file(char* file_name,char *pos){
             
     //we need to search for the directory
     //this early loader loads only from root dir
-    uint16_t next_cluster = -1;
+    uint16_t next_cluster = 0; //cluster 0 isn't allowed by spec
     for(int i =0;i<root_dir_size;i++){
 
         load_sector(root_dir+i,(void*)search_sector); 
@@ -236,12 +236,12 @@ int load_file(char* file_name,char *pos){
 
             if(cmp_name(search_sector[j].name,file_name)){
                 next_cluster = search_sector[j].starting_cluster;
-                prints(search_sector[j].name,11);
+                
             } 
         }
     }
-    printf(next_cluster);
-    if(next_cluster == -1){
+   
+    if(!next_cluster){
         return 1;
     }
     
