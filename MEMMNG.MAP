@@ -6,35 +6,35 @@ File Ofs  Sym Addr  Sym
 0000020E  0000020E  ___Int0xdIsr
 00000280  00000280  ___Irq5Isr
 00000290  00000290  ___start__
-000002B2  000002B2  _thing
-000002BD  000002BD  _init_memory_manager
-00000336  00000336  _malloc
-000005B4  000005B4  _dalloc
-00000A7E  00000A7E  _memcpy
-00000ADD  00000ADD  _printf
-00000B5B  00000B5B  _printch
-00000B71  00000B71  _prints
-00000BB7  00000BB7  _dmph
-          00000C9C
+0000029F  0000029F  _thing
+000002AA  000002AA  _init_memory_manager
+00000323  00000323  _malloc
+000005A1  000005A1  _dalloc
+00000A6B  00000A6B  _memcpy
+00000ACA  00000ACA  _printf
+00000B48  00000B48  _printch
+00000B5E  00000B5E  _prints
+00000BA4  00000BA4  _dmph
+          00000C89
 
-          00000C9C  section .relod:
-          00000C9C  __start__relod
-          00000E1C  __stop__relod
-          00000E1C
+          00000C8C  section .relod:
+          00000C8C  __start__relod
+          00000E04  __stop__relod
+          00000E04
 
-          00000E1C  section .relot:
-          00000E1C  __start__relot
-          00000E68  __stop__relot
-          00000E68
+          00000E04  section .relot:
+          00000E04  __start__relot
+          00000E4C  __stop__relot
+          00000E4C
 
-          00000E68  section .data:
-00000E68  00000E68  _hex
-          00000E78
+          00000E4C  section .data:
+00000E4C  00000E4C  _hex
+          00000E5C
 
-          00000E78  section .bss:
-          00000E78  __start__bss
-00000E78  00000E78  ___pOldInt0xdIsr
-00000E80  00000E80  _memory
-          00002DC0  __stop__bss
-          00002DC0
+          00000E5C  section .bss:
+          00000E5C  __start__bss
+00000E5C  00000E5C  ___pOldInt0xdIsr
+00000E64  00000E64  _memory
+          00002DA4  __stop__bss
+          00002DA4
 

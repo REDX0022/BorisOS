@@ -280,10 +280,10 @@ int start_kernel_programm(void *start){
     mz = ((struct MZext_header*) start); //there might need to be changes if there i
        
     //here we dont read the libraries needed because that is predefned??
-
+    
     init execution_start; 
-    execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
-
+    //execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
+    execution_start =(init)((char*)start+0x290);
     //but we do need to find the libraries that it provides
     
     execution_start(); //for now we use a global stack for the entire os 

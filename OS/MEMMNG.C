@@ -15,10 +15,13 @@ struct alloc_segment memory[max_memory_sectors];
 
 
 void __start__(){
-    asm("push dword 0xFFFFFFFF \n");
-    dmph(0x20000-0x200,0x200);
+    //asm("push dword 0xFFFFFFFF \n");
+    //dmph(0x20000-0x200,0x200);
     //init_memory_manager();
-    while(1){}
+    asm("mov ah, 0x0e\n"
+        "mov al, 'c' \n"
+        "int 0x10\n");
+    
 }
 
 void thing(){
