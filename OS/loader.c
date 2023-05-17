@@ -300,7 +300,7 @@ int load_map(char* name){
 
     memcpy((void*)name,&shared_libs->name,11); //11 is a file system constant
 
-    memcpy((void*)&map->offsets,shared_func_ptr,(size_t)2*map->size); // this is part of the map spec
+    memcpy((void*)map->offsets,shared_func_ptr,(size_t)2*map->size); // this is part of the map spec
 
     shared_func_ptr += map->size;
     return 0;
