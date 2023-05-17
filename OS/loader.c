@@ -240,7 +240,7 @@ int load_file(char* file_name,char *pos){
             } 
         }
     }
-
+    printf(next_cluster);
     if(next_cluster == -1){
         return 1;
     }
@@ -291,7 +291,7 @@ int start_kernel_programm(void *start){
 }
 
 int load_map(char* name){
-    printf(20);
+   
     if(load_file(name,(void *)&temp_sector_2)){
         return 1;
     }
