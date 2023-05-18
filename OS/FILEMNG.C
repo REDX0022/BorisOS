@@ -21,7 +21,7 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 #include "stddef.h"
 #include "stdint.h"
 #include "memmng_header.h"
-#include "queue.h"
+#include "dir_queue.h"
 #include "FAT16_structs.h"
 
 //========================Variables for the FAT16 file system==========================
@@ -194,18 +194,37 @@ struct directory* list_dir(struct directory folder){ //we already know the lengt
     return result;
 }
 
+/// @brief BFS
+/// @param folder the folder in which we want to search, can also be a volum 
+/// @param name name
+/// @return the first file it finds
+struct directory* search(struct directory folder,char name[11]){
+    if(!is_volume(folder)&&!is_folder(folder)){return NULL;}
+    reset_queue();
+    dir_enqueue(folder);
+    while(!dir_is_queue_empty()){ //we try to empty the queue
+        struct directory cur;
+        dir_dequeue(&cur);
+        struct directory* res = search_dir(cur, name);
+        if(res!=NULL){return res;} //we have found the file somewhere in there
+    }
+    return NULL;
+}
+
+
+
 /// @brief Does a BFS on the entire directory, places a directory in memory and returns a pointer to it, returns the first file it finds, reset_queue needs to be called before
 /// @param folder folder in which we want to search, can also be volume
 /// @param name standardized name
 struct directory* search_dir(struct directory folder, char name[11]){
-    if(!is_volume(folder)&&!is_folder(folder)){return NULL;}
+    //if(!is_volume(folder)&&!is_folder(folder)){return NULL;}
 
     //first we load the folder into memory
     struct directory* search_place = list_dir(folder);
     for(struct directory* i = search_place;i<search_place+folder.file_size_in_bytes;i++){
         
         if(is_folder(*i)){//we queue up a folder to be searched later recursively
-            enqueue(i->starting_cluster);
+            dir_enqueue(*i);//if the queue overfills this doesn't work
         }
         
         if(cmp_name(name,i->name)){ //we have found the file yayy
@@ -215,7 +234,7 @@ struct directory* search_dir(struct directory folder, char name[11]){
         }
 
     }
-    
+    dalloc((uint32_t)search_place,folder.file_size_in_bytes); //we need to dealocate the memory, we don't want no leaks
 
 }
 
