@@ -107,7 +107,7 @@ struct shared_lib_map{
 
 struct shared_lib{
     char name[11];
-    uint16_t *funs_ptr;
+    void** funs_ptr;
     uint16_t count;
 };
 
@@ -120,10 +120,10 @@ char temp_sector_2[bytes_per_sector];
 
 
 struct shared_lib shared_libs[max_loaded_shared_libs];
-uint32_t shared_func[max_loaded_shared_func];
+void* shared_func[max_loaded_shared_func];
 
 struct shared_lib *shared_libs_ptr = &shared_libs[0]; //the pointer to the next available space//idk if the compiler supports this !!!!
-uint32_t *shared_func_ptr = &shared_func[0]; //pointer to the available space
+void** shared_func_ptr = &shared_func[0]; //pointer to the available space
 
 
 
@@ -290,7 +290,7 @@ int start_kernel_programm(void *start){
     return 0;
 }
 
-int load_map(char* name){ 
+int load_map(char* name, char* pos){ 
    
     if(load_file(name,(void *)&temp_sector_2)){
         return 1;
@@ -302,7 +302,10 @@ int load_map(char* name){
     shared_libs_ptr->count = map->size;
     shared_libs_ptr->funs_ptr = shared_func_ptr;
 
-    memcpy((void*)(&map->offsets),shared_func_ptr,(2*map->size)); // this is part of the map spec
+    for(uint16_t i =0;i<map->size;i++){//we store the pointers and add the program begin
+        *shared_func_ptr = (void*) (pos + (map->offsets+ sizeof(uint16_t)*i)); //i hope to god this works
+        shared_func_ptr++;
+    }
 
     shared_func_ptr += map->size;
     shared_libs_ptr++;
@@ -329,7 +332,7 @@ int __start__(){
     if(start_kernel_programm(memmory_manager_address)){
         printf(15); //failed to start mem mng
     }
-    if(load_map(map_name)){
+    if(load_map(map_name,memmory_manager_address)){
         printf(16);
     }
    
