@@ -20,7 +20,9 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 */
 #include "stddef.h"
 #include "stdint.h"
-#include "MEMMNG.H"
+#include "memmng_header.h"
+#include "queue.h"
+#include "FAT16_structs.h"
 
 //========================Variables for the FAT16 file system==========================
 #define jump_point 0x3E
@@ -61,33 +63,28 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 
 
 
- struct disk_packet{
-    uint8_t size;
-    uint8_t padding; 
-    uint16_t num_of_sectors;
-    uint16_t offset;
-    uint16_t segment;
-    uint32_t sector;
-    uint32_t rest;
-};
-
- struct directory{ //TODO: put unsigned where needed
-    char name[11]; //the ext is also here 
-    uint8_t attribute;
-    uint8_t NT_reserved;
-    uint8_t creation_stamp;
-    uint16_t creation_time;
-    uint16_t creation_date;
-    uint16_t last_access_date;
-    uint16_t reserved_for_fat32;
-    uint16_t last_write_time;
-    uint16_t last_write_date;
-    uint16_t starting_cluster;
-    uint32_t file_size_in_bytes; //
-};
 
 char temp_sector[bytes_per_sector]; //these 2 are used by functions only while the function is executing
 char temp_sector2[bytes_per_sector]; 
+
+
+
+
+/// @brief rudementary file name comparison, root dir only
+/// @param str1 the name in the directory
+/// @param str2 the name in the path(string)
+/// @return 
+int cmp_name(char* str1, char* str2){
+    //this just compares the root dir strings
+    for(int i =0;i<11;i++){
+        if(str1[i]!=str2[i]){
+           
+            return 0;
+        }
+    }
+    return 1;
+}
+
 
 struct disk_packet dp;
 
@@ -158,7 +155,7 @@ int load_file(struct directory dir,char *pos){
 
     memcpy((void*)save_start,(void*)temp_sector2,save_size); //saves the rest
     
-    uint16_t *FAT_search_sector = &temp_sector;
+    uint16_t *FAT_search_sector =(uint16_t*) &temp_sector;
     
     uint16_t next_cluster = dir.starting_cluster;
     
@@ -197,18 +194,34 @@ struct directory* list_dir(struct directory folder){ //we already know the lengt
     return result;
 }
 
-struct directory* search_dir(struct directory folder, char name[12]){
-    if(!is_volume&&!is_folder){return NULL;}
+/// @brief Does a BFS on the entire directory, places a directory in memory and returns a pointer to it, returns the first file it finds, reset_queue needs to be called before
+/// @param folder folder in which we want to search, can also be volume
+/// @param name standardized name
+struct directory* search_dir(struct directory folder, char name[11]){
+    if(!is_volume(folder)&&!is_folder(folder)){return NULL;}
+
     //first we load the folder into memory
     struct directory* search_place = list_dir(folder);
     for(struct directory* i = search_place;i<search_place+folder.file_size_in_bytes;i++){
+        
+        if(is_folder(*i)){//we queue up a folder to be searched later recursively
+            enqueue(i->starting_cluster);
+        }
+        
+        if(cmp_name(name,i->name)){ //we have found the file yayy
+            void* res = malloc(sizeof(directory));
+            memcpy(i,res,sizeof(directory));
+            return (struct directory*) res;
+        }
 
     }
+    
 
 }
 
-
-void pad_name(char** name){
+/// @brief 
+/// @param name 
+void pad_name(char** name){//TODO, idk man im too lazy it should convert names to a standard format, exception should be folders
     
     
 }
