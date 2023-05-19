@@ -98,6 +98,10 @@ uint16_t FAT_lookup(uint16_t cluster){
     }
 }
 
+uint16_t FAT_edit(u_int16_t clutser){
+    
+}
+
 /// @brief Gets the directory from a null terminated path string
 /// @param path doesn't need to be in standard form 
 /// @return directory somewhere in memory
@@ -112,7 +116,7 @@ struct directory* from_path(char* path){//this string exists on the stack, it is
             cur_len++;
             if(*ptr =='.'){is_cur_folder=0;}
         }
-        char padded_name[11] = "\0\0\0\0\0\0\0\0\0\0"; //this is all 0s
+        char padded_name[12] = "\0\0\0\0\0\0\0\0\0\0\0"; //this is all 0s
         memcpy(dir_name,padded_name,cur_len);
         if(!is_cur_folder){ //we don't need to pad the folder name
             pad_file_name((char**) &padded_name);
@@ -314,9 +318,24 @@ void init(){
 
 /// @brief adds standardized padding
 /// @param name pointer to the name of the string being edited
-/// @return if the file name was or is valid
-int pad_file_name(char* name[11]){//TODO, idk man im too lazy it should convert names to a standard format
-    
+/// @return returns 1 if the opeartion can't be completed, otherwise 0
+int pad_file_name(char* name[12]){//TODO, idk man im too lazy it should convert names to a standard format
+    int dot_pos =-1;
+    for(int i =0;i<11;i++){
+        if((*name)[i] =='.'){
+            dot_pos = i;
+        }
+    }
+    if(dot_pos==-1 || dot_pos>8){return 1;} //file name isn't valid
+    (*name)[dot_pos] = 0;
+    //now we have to move the extension
+    char temp_ext[3];
+    temp_ext[0] =  (*name)[dot_pos+1];
+    temp_ext[1] =  (*name)[dot_pos+2];
+    temp_ext[2] =  (*name)[dot_pos+3];
+    (*name)[10] = temp_ext[2];
+    (*name)[9] = temp_ext[1];
+    (*name)[8] = temp_ext[0];
 }
 
 
