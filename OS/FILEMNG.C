@@ -61,8 +61,8 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 #define data_start root_dir+root_dir_size
 //--------------------------------------------------------
 
-
-
+int cached_FAT_sector =0;
+uint16_t FAT_cache[bytes_per_sector/2]; //this is used to cache one sector of fat
 
 char temp_sector[bytes_per_sector]; //these 2 are used by functions only while the function is executing
 char temp_sector2[bytes_per_sector]; 
@@ -83,6 +83,17 @@ int cmp_name(char* str1, char* str2){
         }
     }
     return 1;
+}
+
+uint16_t FAT_lookup(uint16_t cluster){
+    int needed_sector = FAT_start+(cluster*2)/bytes_per_sector;
+    if(needed_sector = cached_FAT_sector){ //the sector we need is cached
+        return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
+    }
+    else{ //we need to load a new sector
+        load_sector(needed_sector,(void*) &FAT_cache);
+        return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
+    }
 }
 
 
@@ -143,6 +154,9 @@ int load_sector_helper(struct disk_packet *ptr){
 
 }
 
+
+
+
 /// @brief loads a file into memory, saves the remainder sector unused 
 /// @param path null terminated string with path to the file
 /// @param pos the position in memory
@@ -155,7 +169,7 @@ int load_file(struct directory dir,char *pos){
 
     memcpy((void*)save_start,(void*)temp_sector2,save_size); //saves the rest
     
-    uint16_t *FAT_search_sector =(uint16_t*) &temp_sector;
+   
     
     uint16_t next_cluster = dir.starting_cluster;
     
@@ -164,9 +178,10 @@ int load_file(struct directory dir,char *pos){
         
         load_sector(data_start+(next_cluster-2),(void*) pos); // load the file sector
 
-        load_sector(FAT_start+(next_cluster*2)/bytes_per_sector,(void*)FAT_search_sector); //load the fat search sector
+        
 
-        next_cluster = FAT_search_sector[next_cluster]; //look for the next cluster
+        next_cluster = FAT_lookup(next_cluster); //look for the next cluster
+        
         if(next_cluster>=0xFFF8){break;} //TODO: add support for bad sectors
 
         pos +=bytes_per_sector;
