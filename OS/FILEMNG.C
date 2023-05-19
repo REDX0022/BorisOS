@@ -107,7 +107,7 @@ uint16_t FAT_free(){
     return 0;
 }
 
-int FAT_edit(u_int16_t cluster,uint16_t val){//this is really inefficient but i dont have time nor energy for something better
+int FAT_edit(uint16_t cluster,uint16_t val){//this is really inefficient but i dont have time nor energy for something better
     FAT_lookup(cluster); //it caches the cluster
     FAT_cache[(cluster%(bytes_per_sector/2))] = val;
     write_sector(FAT_start+(cluster*2)/bytes_per_sector,&FAT_cache);
@@ -246,42 +246,91 @@ int load_sector_helper(struct disk_address_packet *ptr){
 
 }
 
+/// @brief This function is full of hacks and could easly break if something is changed
+/// @param dir directory to be created
+/// @param folder @folder
+/// @return success
+int create_dir(struct directory dir,struct directory folder){//TODOO: check if dir name is valid
+    if(!is_folder(folder)){return 1;}
+
+    size_t folder_size = dir_size(folder);
+
+    struct directory* base = list_dir(folder,folder_size+sizeof(directory)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
+
+    //we want to search for an empty space, if not we put it at the end and move a 0 to the end
+    struct directory* free_space = NULL; 
+    for(struct directory* ptr = base; ptr->name[0]!=0;ptr++){
+        if(ptr->name[0]==0xE5){//TODO: add support for changing 0x05 things
+            free_space = ptr;
+            break;
+        }
+    }
+    if(free_space==NULL){//the folder is jam packed
+        base[(folder_size)/(sizeof(directory))].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
+        base[(folder_size)/(sizeof(directory))-1] = dir;
+        folder.file_size_in_bytes = folder_size+sizeof(directory);//we hack the folder for modify_dir
+      
+    }
+    else {
+        *free_space = dir;
+         folder.file_size_in_bytes = folder_size;//we hack the folder for modify_dir
+    }
+    modify_dir(folder,(char*) base); 
+    return 0;
+}
+
 
 /// @brief modifies an existing file
 /// @dir the directory of the file, this function doesn't modify it
 /// @pos
 /// @return
-int modify_file(struct directory dir,char *pos){ //this should be go, TODO : TAKE A LOOK BACK
+int modify_dir(struct directory dir,char *pos){ //this should be go, TODO : TAKE A LOOK BACK
    uint16_t cur_cluster = dir.starting_cluster; //the cluster we are currently at
    uint16_t next_cluster = FAT_lookup(cur_cluster); //the cluster which the current cluster is pointing to
 
 
     int cur_file_size_in_sectors = dir.file_size_in_bytes/bytes_per_sector;
     if(dir.file_size_in_bytes%512){cur_file_size_in_sectors++;}
-    int prev_done = 0;
-    while(1){//we have 4 cases
-        if(cur_file_size_in_sectors>0&&!prev_done){
-            write_sector(cur_cluster,pos);
-            next_cluster = FAT_lookup(cur_cluster);
+    
+    while(1){
+        if(cur_cluster>=0xFFF8 && cur_file_size_in_sectors==1){//we are on our last sector for both
+            write_sector(cur_cluster,pos); //write the last sector
+            break;
+        }
+        next_cluster = FAT_lookup(cur_cluster);
 
-        }
-        else if(cur_file_size_in_sectors>0&&prev_done){ //previous file is done we are extending
-        
-            write_sector(cur_cluster,pos);
-            next_cluster = FAT_free();
-        }
-        else if(cur_file_size_in_sectors<=0&&!prev_done){ //current file is done, we are freeing the fat table
+        if(cur_cluster>=0xFFF8){//we have reached the end of the previous file
+            while(cur_file_size_in_sectors>0){
+                write_sector(cur_cluster,pos);
+                next_cluster = FAT_free();
+                FAT_edit(cur_cluster,next_cluster);
 
+                cur_cluster = next_cluster;
+                pos+=bytes_per_sector;
+                cur_file_size_in_sectors--;
+            }
+            break;
         }
-        else if(cur_file_size_in_sectors<=0&&prev_done){
-            break;//?
+
+        if(cur_file_size_in_sectors<=0){
+            while(cur_cluster<0xFFF8){
+                next_cluster = FAT_lookup(cur_cluster);
+                FAT_edit(cur_cluster,0);
+
+            }
+            if(cur_cluster>=0xFFF8){//also the end sector
+                FAT_edit(cur_cluster,0);
+            }
+            break;
         }
-        
+
+        write_sector(cur_cluster,pos); //where both are still running
+
         cur_cluster = next_cluster;
         cur_file_size_in_sectors--;
         pos+=bytes_per_sector;
     }
-    
+    return 0; //TODO: Diagnostics
    
 }
 
@@ -317,20 +366,46 @@ int load_file(struct directory dir,char *pos){
     memcpy((void*)temp_sector2,(void*)save_start,save_size); //retrives the rest
     return 0;
 }
+/// @brief 
+/// @param folder 
+/// @return size of the directory in bytes 
+size_t dir_size(struct directory folder){
+    if(!is_folder(folder)){return 0;}
+     //we are gonna hack it to find out the size 
+    int cur_cluster = folder.starting_cluster;
+    int next_cluster;
+    int cluster_count =0; //one smaller than it should so it's easier to calc the size
+    while(next_cluster<0xFFF8){
+        next_cluster = FAT_lookup(cur_cluster);
+        cluster_count++;
+        cur_cluster= next_cluster;
+    }
+    //then the current cluster points to the next one
+    load_sector(data_start+(cur_cluster-2),(void*) &temp_sector);
+    for(int i =0;i<bytes_per_sector;i+=32){
+        if(!temp_sector2[i]){//its the end of the file
+            return cluster_count*bytes_per_sector+i;
+        }
+    }
+}
+
 
 /// @brief returnds a null terminated array of files and folders in the given directory, memory should be deallocated later
-struct directory* list_dir(struct directory folder){ //we already know the length of this list because its in the dir desc
+struct directory* list_dir(struct directory folder,size_t size){ //we already know the length of this list because its in the dir desc
 
    if(!is_folder(folder)){return NULL;}
 
-    //first we want to find out the size of the dir
-    uint32_t size_in_sectors = folder.file_size_in_bytes;
 
-    struct directory* result = (struct directory*) malloc(folder.file_size_in_bytes); //this should be deallocated when done
+   
+
+    
+
+    struct directory* result = (struct directory*) malloc(size); //this should be deallocated when done
 
     //we want to save the last part of the last sector
     
-    
+    //we have to hack the size here
+    folder.file_size_in_bytes =  size;//this is a hack and should be illegal
     
     load_file(folder,(char*)result);
 
@@ -376,12 +451,13 @@ struct directory* search_dir(struct directory folder, char name[11]){
     //first we load the folder into memory
     struct directory* search_place;
     size_t search_size;
+    size_t folder_size = dir_size(folder);
     if(is_volume(folder)){//we search the root dir
         search_place = list_root();
         search_size =  root_dir_size*bytes_per_sector;
     }
     else{
-        search_place= list_dir(folder);
+        search_place= list_dir(folder,folder_size);
         search_size= folder.file_size_in_bytes;
     } 
     for(struct directory* i = search_place;i<search_place+folder.file_size_in_bytes;i++){
@@ -393,12 +469,12 @@ struct directory* search_dir(struct directory folder, char name[11]){
         if(cmp_name(name,i->name)){ //we have found the file yayy
             void* res = malloc(sizeof(directory));
             memcpy(i,res,sizeof(directory));
-             dalloc((uint32_t)search_place,folder.file_size_in_bytes); //we need to dealocate the memory, we don't want no leaks
+             dalloc((uint32_t)search_place,folder_size); //we need to dealocate the memory, we don't want no leaks
             return (struct directory*) res;
         }
 
     }
-    dalloc((uint32_t)search_place,folder.file_size_in_bytes); //we need to dealocate the memory, we don't want no leaks
+    dalloc((uint32_t)search_place,folder_size); //we need to dealocate the memory, we don't want no leaks
     return NULL;
 
 }
