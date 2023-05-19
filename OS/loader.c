@@ -233,7 +233,7 @@ int load_file(char* file_name,char *pos){
 
         load_sector(FAT_start+(next_cluster*2)/bytes_per_sector,(void*)FAT_search_sector); //load the fat search sector
 
-        next_cluster = FAT_search_sector[next_cluster]; //look for the next cluster
+        next_cluster = FAT_search_sector[next_cluster%(bytes_per_sector/2)]; //look for the next cluster
         if(next_cluster>=0xFFF8){break;} //TODO: add support for bad sectors
 
         pos +=bytes_per_sector;
