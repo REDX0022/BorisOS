@@ -94,12 +94,24 @@ uint16_t FAT_lookup(uint16_t cluster){
     }
     else{ //we need to load a new sector
         load_sector(needed_sector,(void*) &FAT_cache);
+        cached_FAT_sector = needed_sector;
         return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
     }
 }
+/// @brief 
+/// @return the first free cluster, 0 if there is none
+uint16_t FAT_free(){
+    for(uint16_t i =2;i<sectors_per_FAT*(bytes_per_sector/2);i++){
+        if(!FAT_lookup(i)){return i;}
+    }
+    return 0;
+}
 
-uint16_t FAT_edit(u_int16_t clutser){
-    
+int FAT_edit(u_int16_t cluster,uint16_t val){//this is really inefficient but i dont have time nor energy for something better
+    FAT_lookup(cluster); //it caches the cluster
+    FAT_cache[(cluster%(bytes_per_sector/2))] = val;
+    write_sector(FAT_start+(cluster*2)/bytes_per_sector,&FAT_cache);
+    return 0; //TODO: Diagnostics
 }
 
 /// @brief Gets the directory from a null terminated path string
@@ -130,37 +142,84 @@ struct directory* from_path(char* path){//this string exists on the stack, it is
 
 
 
-struct disk_packet dp;
+struct disk_address_packet dap;
+
+int write_sector(int sector_pos,void *memory_pos){
+    dap.size = 0x10;
+    dap.padding = 0;
+    dap.num_of_sectors = 1;
+    dap.offset = (uint16_t)(((uint32_t )memory_pos )%16);
+    dap.segment = (uint16_t)(((uint32_t)memory_pos)/16);
+    dap.sector = sector_pos;
+    dap.rest =0;
+    write_sector_helper(&dap);
+    return 0;//TODO: Make actual diagnostics
+}
+
+//we are doing this so we can access the disk packet pos via the stack
+int write_sector_helper(struct disk_address_packet *ptr){
+    asm(
+    //mov byte [disk_address_packet_struct], 0x10 ;size of packet is 16 bytes
+    //mov byte [disk_address_packet_struct+1],0 ; always 0
+    //mov word [disk_address_packet_struct+2],1 ; number of sectors to transfer
+    //mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+    //mov word [disk_address_packet_struct+6], 0 ;segment of placement
+    //mov dword [disk_address_packet_struct+8] , edx ; this is in sectors
+    //mov dword [disk_address_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
+    //--------------------------call int 13h-----------------------
+        "pushad \n"
+        "push ds \n"
+        "mov dl, 0x80  ; TODO make this flexible; \n"
+        "xor ax, ax  \n "
+        "mov ds, ax  \n "
+        "mov ah, 0x43 \n "
+        "mov al, 0x3 \n" //TODO: This is split among versions and idk what to put here
+        "mov esi, dword [bp+8] ; +4 esp +4 size \n" 
+        "ror esi, 4 \n "
+        "mov ds, si \n "
+        "shr esi, 28 \n "
+        "int 0x13 \n "
+        "jnc skip \n"
+        "mov bh, 0 \n"
+        "mov al, 'f' \n"
+        "mov ah, 0x0e \n"
+        "int 0x10 \n"
+        "skip: \n"
+        "pop ds \n "
+        "popad \n "
+    // ----------------------------------------------------------
+    );
+   
+
+}
+
 
 int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good here
 
-   dp.size = 0x10;
-   dp.padding = 0;
-   dp.num_of_sectors = 1;
-   dp.offset = (uint16_t)(((uint32_t )memory_pos )%16);
-   dp.segment = (uint16_t)(((uint32_t)memory_pos)/16);
-   dp.sector = sector_pos;
-   dp.rest =0;
+   dap.size = 0x10;
+   dap.padding = 0;
+   dap.num_of_sectors = 1;
+   dap.offset = (uint16_t)(((uint32_t )memory_pos )%16);
+   dap.segment = (uint16_t)(((uint32_t)memory_pos)/16);
+   dap.sector = sector_pos;
+   dap.rest =0;
  //TODO: Make actuall diagonsitcs
-   load_sector_helper(&dp);
+   load_sector_helper(&dap);
    return 0;
 
 }
 
 
-
-
-
 //we are doing this so we can access the disk packet pos via the stack
-int load_sector_helper(struct disk_packet *ptr){
+int load_sector_helper(struct disk_address_packet *ptr){
     asm(
-    //mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
-    //mov byte [disk_packet_struct+1],0 ; always 0
-    //mov word [disk_packet_struct+2],1 ; number of sectors to transfer
-    //mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
-    //mov word [disk_packet_struct+6], 0 ;segment of placement
-    //mov dword [disk_packet_struct+8] , edx ; this is in sectors
-    //mov dword [disk_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
+    //mov byte [disk_address_packet_struct], 0x10 ;size of packet is 16 bytes
+    //mov byte [disk_address_packet_struct+1],0 ; always 0
+    //mov word [disk_address_packet_struct+2],1 ; number of sectors to transfer
+    //mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+    //mov word [disk_address_packet_struct+6], 0 ;segment of placement
+    //mov dword [disk_address_packet_struct+8] , edx ; this is in sectors
+    //mov dword [disk_address_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
     //--------------------------call int 13h-----------------------
         "pushad \n"
         "push ds \n"
@@ -188,7 +247,43 @@ int load_sector_helper(struct disk_packet *ptr){
 }
 
 
+/// @brief modifies an existing file
+/// @dir the directory of the file, this function doesn't modify it
+/// @pos
+/// @return
+int modify_file(struct directory dir,char *pos){ //this should be go, TODO : TAKE A LOOK BACK
+   uint16_t cur_cluster = dir.starting_cluster; //the cluster we are currently at
+   uint16_t next_cluster = FAT_lookup(cur_cluster); //the cluster which the current cluster is pointing to
 
+
+    int cur_file_size_in_sectors = dir.file_size_in_bytes/bytes_per_sector;
+    if(dir.file_size_in_bytes%512){cur_file_size_in_sectors++;}
+    int prev_done = 0;
+    while(1){//we have 4 cases
+        if(cur_file_size_in_sectors>0&&!prev_done){
+            write_sector(cur_cluster,pos);
+            next_cluster = FAT_lookup(cur_cluster);
+
+        }
+        else if(cur_file_size_in_sectors>0&&prev_done){ //previous file is done we are extending
+        
+            write_sector(cur_cluster,pos);
+            next_cluster = FAT_free();
+        }
+        else if(cur_file_size_in_sectors<=0&&!prev_done){ //current file is done, we are freeing the fat table
+
+        }
+        else if(cur_file_size_in_sectors<=0&&prev_done){
+            break;//?
+        }
+        
+        cur_cluster = next_cluster;
+        cur_file_size_in_sectors--;
+        pos+=bytes_per_sector;
+    }
+    
+   
+}
 
 /// @brief loads a file into memory, saves the remainder sector unused 
 /// @param path null terminated string with path to the file
