@@ -61,6 +61,8 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 #define data_start root_dir+root_dir_size
 //--------------------------------------------------------
 
+
+struct directory volume;
 int cached_FAT_sector =0;
 uint16_t FAT_cache[bytes_per_sector/2]; //this is used to cache one sector of fat
 
@@ -95,6 +97,33 @@ uint16_t FAT_lookup(uint16_t cluster){
         return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
     }
 }
+
+/// @brief Gets the directory from a null terminated path string
+/// @param path doesn't need to be in standard form 
+/// @return directory somewhere in memory
+struct directory* from_path(char* path){//this string exists on the stack, it is null terminated
+    struct directory cur = volume;
+    char* ptr=path;
+    while(*ptr!='\0'){
+        int is_cur_folder = 1; //or something stupid
+        size_t cur_len =0; //this is the length of one file or folder name
+        char* dir_name = ptr;
+        while(*ptr!='/'&&*ptr!='\0'){
+            cur_len++;
+            if(*ptr =='.'){is_cur_folder=0;}
+        }
+        char padded_name[11] = "\0\0\0\0\0\0\0\0\0\0"; //this is all 0s
+        memcpy(dir_name,padded_name,cur_len);
+        if(!is_cur_folder){ //we don't need to pad the folder name
+            pad_file_name((char**) &padded_name);
+        }
+        struct directory* ret = search_dir(cur,padded_name); //we need to dealoate the return 
+        if(ret==NULL){return NULL;}
+        cur = *ret;
+        dalloc((uint32_t)ret,sizeof(directory));
+    }
+}
+
 
 
 struct disk_packet dp;
@@ -192,7 +221,8 @@ int load_file(struct directory dir,char *pos){
 
 /// @brief returnds a null terminated array of files and folders in the given directory, memory should be deallocated later
 struct directory* list_dir(struct directory folder){ //we already know the length of this list because its in the dir desc
-    if(!is_volume&&!is_folder){return NULL;}
+
+   if(!is_folder(folder)){return NULL;}
 
     //first we want to find out the size of the dir
     uint32_t size_in_sectors = folder.file_size_in_bytes;
@@ -208,6 +238,16 @@ struct directory* list_dir(struct directory folder){ //we already know the lengt
    
     return result;
 }
+struct directory* list_root(){
+    struct directory* result = (struct directory*) malloc(root_dir_size*bytes_per_sector); //this should be deallocated when done
+    int cur_sector = root_dir;
+    for(char* ptr = (char*)(root_dir*bytes_per_sector);ptr!=(char*)((root_dir+root_dir_size)*bytes_per_sector);ptr+=bytes_per_sector){
+        load_sector(cur_sector,(void*)result);
+        cur_sector++;
+    }
+    return result;
+}
+
 
 /// @brief BFS
 /// @param folder the folder in which we want to search, can also be a volum 
@@ -233,9 +273,18 @@ struct directory* search(struct directory folder,char name[11]){
 /// @param name standardized name
 struct directory* search_dir(struct directory folder, char name[11]){
     //if(!is_volume(folder)&&!is_folder(folder)){return NULL;}
-
+    
     //first we load the folder into memory
-    struct directory* search_place = list_dir(folder);
+    struct directory* search_place;
+    size_t search_size;
+    if(is_volume(folder)){//we search the root dir
+        search_place = list_root();
+        search_size =  root_dir_size*bytes_per_sector;
+    }
+    else{
+        search_place= list_dir(folder);
+        search_size= folder.file_size_in_bytes;
+    } 
     for(struct directory* i = search_place;i<search_place+folder.file_size_in_bytes;i++){
         
         if(is_folder(*i)){//we queue up a folder to be searched later recursively
@@ -245,20 +294,31 @@ struct directory* search_dir(struct directory folder, char name[11]){
         if(cmp_name(name,i->name)){ //we have found the file yayy
             void* res = malloc(sizeof(directory));
             memcpy(i,res,sizeof(directory));
+             dalloc((uint32_t)search_place,folder.file_size_in_bytes); //we need to dealocate the memory, we don't want no leaks
             return (struct directory*) res;
         }
 
     }
     dalloc((uint32_t)search_place,folder.file_size_in_bytes); //we need to dealocate the memory, we don't want no leaks
+    return NULL;
 
 }
 
-/// @brief 
-/// @param name 
-void pad_name(char** name){//TODO, idk man im too lazy it should convert names to a standard format, exception should be folders
-    
+void init(){
+    //we want to setup the root dir
+    char temp_volume_name[11] = "BORISOSVOL"; //this changes with volume_label
+    memcpy(&temp_volume_name,&volume.name,11);
+    volume.attribute = 0b0001;
+
+}
+
+/// @brief adds standardized padding
+/// @param name pointer to the name of the string being edited
+/// @return if the file name was or is valid
+int pad_file_name(char* name[11]){//TODO, idk man im too lazy it should convert names to a standard format
     
 }
+
 
 //checks what type of directory it is
 int is_read_only(struct directory dir){
