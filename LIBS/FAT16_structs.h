@@ -2,7 +2,7 @@
 #include "stdint.h"
 
 
-struct disk_packet{
+struct disk_address_packet{
     uint8_t size;
     uint8_t padding; 
     uint16_t num_of_sectors;
@@ -11,6 +11,7 @@ struct disk_packet{
     uint32_t sector;
     uint32_t rest;
 };
+
 
  struct directory{ //TODO: put unsigned where needed
     char name[11]; //the ext is also here 

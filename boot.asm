@@ -44,7 +44,7 @@ global start
 ;;--------------------------------------------------------
 ;;assign where to put the sectors
 %assign search_sector_address 0x7E00
-%assign disk_packet_struct 0x8000
+%assign disk_address_packet_struct 0x8000
 ;;--------------------------------------------------------
 ;;we assign where the loader will be, needs to be 16 bytes alligned
 %assign loader_memory_address 0x500 
@@ -152,9 +152,9 @@ unreal:
         
         
         
-        mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
-        mov word [disk_packet_struct+6], 0 ;segment of placement
-        mov dword [disk_packet_struct+8] , edx ; this is in sectors
+        mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+        mov word [disk_address_packet_struct+6], 0 ;segment of placement
+        mov dword [disk_address_packet_struct+8] , edx ; this is in sectors
        
             
             ;----------------------We call int 13h-----------------------------
@@ -216,12 +216,12 @@ load_loader_cluster:
 
        
         
-        mov word [disk_packet_struct+4], cx ;offset of placement
-        mov word [disk_packet_struct+6], dx ;dx ;segment of placement
+        mov word [disk_address_packet_struct+4], cx ;offset of placement
+        mov word [disk_address_packet_struct+6], dx ;dx ;segment of placement
         
         add ax,  (data_start-2) ; this is the formula idk why
         and eax, 0x0000FFFF ; we clear the upper word of eax
-        mov dword [disk_packet_struct+8] , eax ; this is in sectors ; the cluster which to load 
+        mov dword [disk_address_packet_struct+8] , eax ; this is in sectors ; the cluster which to load 
         sub ax,  (data_start-2)
         
       
@@ -249,9 +249,9 @@ load_loader_cluster:
 
 
         and eax, 0xFFFF
-        mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
-        mov word [disk_packet_struct+6], 0 ;segment of placement
-        mov dword [disk_packet_struct+8] , eax ; this is in sectors
+        mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+        mov word [disk_address_packet_struct+6], 0 ;segment of placement
+        mov dword [disk_address_packet_struct+8] , eax ; this is in sectors
 
         call load_sector
 
@@ -337,20 +337,20 @@ jmp $;; TODO Make this say press enter to continue
 ;;we dont need to move the stack because we are not using it
 
 load_sector:
-    mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
-    mov byte [disk_packet_struct+1],0 ; always 0
-    mov word [disk_packet_struct+2],1 ; number of sectors to transfer
-    ;mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
-    ;mov word [disk_packet_struct+6], 0 ;segment of placement
-    ;mov dword [disk_packet_struct+8] , edx ; this is in sectors
-    mov dword [disk_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
+    mov byte [disk_address_packet_struct], 0x10 ;size of packet is 16 bytes
+    mov byte [disk_address_packet_struct+1],0 ; always 0
+    mov word [disk_address_packet_struct+2],1 ; number of sectors to transfer
+    ;mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+    ;mov word [disk_address_packet_struct+6], 0 ;segment of placement
+    ;mov dword [disk_address_packet_struct+8] , edx ; this is in sectors
+    mov dword [disk_address_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
     ;--------------------------call int 13h-----------------------
         pusha
         mov dl, 0x80 ;;TODO make this flexible
         xor ax, ax
         mov ds, ax
         mov ah, 0x42
-        mov si, disk_packet_struct
+        mov si, disk_address_packet_struct
         int 0x13
         
         popa

@@ -44,7 +44,7 @@
 //--------------------------------------------------------
 //assign where to put the sectors
 #define search_sector_address 0x7E00
-#define disk_packet_struct 0x8000
+#define disk_address_packet_struct 0x8000
 //--------------------------------------------------------
 //we assign where the loader will be, why dont i let it be he can manage his own memory man
 #define loader_memory_address 0x500
@@ -123,19 +123,19 @@ void memcpy(void *src,void *dest,size_t n){
 }
 
 
-struct disk_packet dp;
+struct disk_address_packet dap;
 
 int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good here
 
-   dp.size = 0x10;
-   dp.padding = 0;
-   dp.num_of_sectors = 1;
-   dp.offset = (uint16_t)(((uint32_t )memory_pos )%16);
-   dp.segment = (uint16_t)(((uint32_t)memory_pos)/16);
-   dp.sector = sector_pos;
-   dp.rest =0;
+   dap.size = 0x10;
+   dap.padding = 0;
+   dap.num_of_sectors = 1;
+   dap.offset = (uint16_t)(((uint32_t )memory_pos )%16);
+   dap.segment = (uint16_t)(((uint32_t)memory_pos)/16);
+   dap.sector = sector_pos;
+   dap.rest =0;
  //TODO: Make actuall diagonsitcs
-   load_sector_helper(&dp);
+   load_sector_helper(&dap);
    return 0;
 
 }
@@ -145,15 +145,15 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
 
 
 //we are doing this so we can access the disk packet pos via the stack
-int load_sector_helper(struct disk_packet *ptr){
+int load_sector_helper(struct disk_address_packet *ptr){
     asm(
-    //mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
-    //mov byte [disk_packet_struct+1],0 ; always 0
-    //mov word [disk_packet_struct+2],1 ; number of sectors to transfer
-    //mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
-    //mov word [disk_packet_struct+6], 0 ;segment of placement
-    //mov dword [disk_packet_struct+8] , edx ; this is in sectors
-    //mov dword [disk_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
+    //mov byte [disk_address_packet_struct], 0x10 ;size of packet is 16 bytes
+    //mov byte [disk_address_packet_struct+1],0 ; always 0
+    //mov word [disk_address_packet_struct+2],1 ; number of sectors to transfer
+    //mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+    //mov word [disk_address_packet_struct+6], 0 ;segment of placement
+    //mov dword [disk_address_packet_struct+8] , edx ; this is in sectors
+    //mov dword [disk_address_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
     //--------------------------call int 13h-----------------------
         "pushad \n"
         "push ds \n"
