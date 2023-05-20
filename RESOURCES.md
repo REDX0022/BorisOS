@@ -37,6 +37,9 @@ https://en.wikipedia.org/wiki/Master_boot_record#PTE
 ref 11: Triple fault error
 https://wiki.osdev.org/Triple_Fault
 
+ref 12: RTC and CMOS
+https://wiki.osdev.org/CMOS#Getting_Current_Date_and_Time_from_RTC
+
 
 ## HOW SHOULD AN OS BE DESIGNED ##
 
