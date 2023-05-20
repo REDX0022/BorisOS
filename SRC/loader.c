@@ -396,7 +396,7 @@ int __start__(){
     }
     if(load_kernel_map(map_name,memmory_manager_address)){
         struct shared_lib* sh = get_shared_lib(name);
-        init_memmng(sh->funs_ptr);
+        init_MEMMNG(sh->funs_ptr);
         prints("FAILED TO LOAD MEMORY MANAGER MAP",34);
         nl();;  
     }
@@ -427,7 +427,7 @@ int __start__(){
     }
     if(load_kernel_map(map_name1,memmory_manager_address)){
         struct shared_lib* sh = get_shared_lib(name);
-        init_memmng(sh->funs_ptr);
+        init_MEMMNG(sh->funs_ptr);
         prints("FAILED TO LOAD MEMORY MANAGER MAP",34);
         nl();;  
     }

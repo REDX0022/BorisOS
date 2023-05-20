@@ -48,7 +48,7 @@ void dmph(char* ptr, size_t len){
 
 
 
-//we need to make a primitive version of a linked list without using linked list because we dont have malloc
+
 
 
 

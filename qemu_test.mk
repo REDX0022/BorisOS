@@ -9,6 +9,7 @@ run: $(prereq)
 	diskutil mountDisk disk4
 
 	nasm SRC/MEMMNG/MEMMNGMAP.asm -o OS/MEMMNG.MAP
+	nasm SRC/FILEMNG/FILEMNGMAP.asm -o OS/FILEMNG.MAP
 
 	cp OS/LOADER.SYS /Volumes/BORISOSVOL/
 	cp OS/MEMMNG.SYS /Volumes/BORISOSVOL/
@@ -20,6 +21,8 @@ boot.asm:
 OS/LOADER.SYS:
 OS/MEMMNG.SYS:
 OS/MEMMNG.MAP:
+OS/FILEMNG.SYS:
+OS/FILEMNG.MAP:
 
 
 p:

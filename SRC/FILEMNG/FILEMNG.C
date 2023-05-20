@@ -20,10 +20,10 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 */
 #include "stddef.h"
 #include "stdint.h"
+#include "kernel_out.h"
 #include "memmng_lib.h"
 #include "dir_queue.c" //this has fat16 structs
 
-#include "kernel_out.h"
 
 //========================Variables for the FAT16 file system==========================
 #define jump_point 0x3E
@@ -142,7 +142,7 @@ struct directory* from_path(char* path){//this string exists on the stack, it is
         struct directory* ret = search_dir(cur,padded_name); //we need to dealoate the return 
         if(ret==NULL){return NULL;}
         cur = *ret;
-        dalloc((uint32_t)ret,sizeof(directory));
+        dalloc((uint32_t)ret,sizeof(volume));
     }
 }
 
@@ -185,12 +185,12 @@ int write_sector_helper(struct disk_address_packet *ptr){
         "mov ds, si \n "
         "shr esi, 28 \n "
         "int 0x13 \n "
-        "jnc skip \n"
+        "jnc .skip \n"
         "mov bh, 0 \n"
         "mov al, 'f' \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
-        "skip: \n"
+        ".skip: \n"
         "pop ds \n "
         "popad \n "
     // ----------------------------------------------------------
@@ -238,12 +238,12 @@ int load_sector_helper(struct disk_address_packet *ptr){
         "mov ds, si \n "
         "shr esi, 28 \n "
         "int 0x13 \n "
-        "jnc skip \n"
+        "jnc .skip \n"
         "mov bh, 0 \n"
         "mov al, 'f' \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
-        "skip: \n"
+        ".skip: \n"
         "pop ds \n "
         "popad \n "
     // ----------------------------------------------------------
@@ -298,7 +298,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     struct directory* base;
     if(is_folder(folder)){
         folder_size = dir_size(folder);
-        base = list_dir(folder,folder_size+sizeof(directory)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
+        base = list_dir(folder,folder_size+sizeof(volume)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
     }
     else{//its a volume
         folder_size = root_dir_size*bytes_per_sector;
@@ -314,9 +314,9 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         }
     }
     if(free_space==NULL&&is_folder(folder)){//the folder is jam packed
-        base[(folder_size)/(sizeof(directory))].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
-        base[(folder_size)/(sizeof(directory))-1] = dir;
-        folder.file_size_in_bytes = folder_size+sizeof(directory);//we hack the folder for modify_dir
+        base[(folder_size)/(sizeof(volume))].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
+        base[(folder_size)/(sizeof(volume))-1] = dir;
+        folder.file_size_in_bytes = folder_size+sizeof(volume);//we hack the folder for modify_dir
 
     }
     else {
@@ -324,7 +324,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
          folder.file_size_in_bytes = folder_size;//we hack the folder for modify_dir
     }
     modify_dir(folder,(char*) base);
-    dalloc((uint32_t)base,folder_size+sizeof(directory));
+    dalloc((uint32_t)base,folder_size+sizeof(volume));
     return 0;
 }
 
@@ -516,8 +516,8 @@ struct directory* search_dir(struct directory folder, char name[11]){
         }
         
         if(cmp_name(name,i->name)){ //we have found the file yayy
-            void* res = malloc(sizeof(directory));
-            memcpy(i,res,sizeof(directory));
+            void* res = malloc(sizeof(volume));
+            memcpy(i,res,sizeof(volume));
              dalloc((uint32_t)search_place,folder_size); //we need to dealocate the memory, we don't want no leaks
             return (struct directory*) res;
         }
@@ -537,7 +537,7 @@ void init(){
     //we want to setup the root dir
     char temp_volume_name[11] = "BORISOSVOL"; //this changes with volume_label
     memcpy(&temp_volume_name,&volume.name,11);
-    volume.attribute = 0b0001;
+    volume.attribute = 1<<3;
 
 }
 
@@ -566,26 +566,26 @@ int pad_file_name(char* name[12]){//TODO, idk man im too lazy it should convert 
 
 //checks what type of directory it is
 int is_read_only(struct directory dir){
-    return dir.attribute & 0b1;
+    return dir.attribute & 1;
 }
 
 int is_hidden(struct directory dir){
-    return dir.attribute & 0b01;
+    return dir.attribute & (1<<1);
 }
 
 int is_system(struct directory dir){
-    return dir.attribute & 0b001;
+    return dir.attribute & (1<<2);
 }
 
 int is_volume(struct directory dir){
-    return dir.attribute & 0b0001;
+    return dir.attribute & (1<<3);
 }
 
 int is_folder(struct directory dir){
-    return dir.attribute & 0b00001;
+    return dir.attribute & (1<<4);
 }
 
 int is_archive(struct directory dir){
-    return dir.attribute & 0b000001;
+    return dir.attribute & (1<<5);
 }
 
