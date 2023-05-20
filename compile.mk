@@ -12,7 +12,7 @@ OS/MEMMNG.SYS: SRC/MEMMNG.C $(kernel_libs)
 OS/LOADER.SYS: SRC/LOADER.C $(kernel_libs)
 	smlrcc -unreal  LIBS/c0du.asm SRC/LOADER.C -o OS/LOADER.SYS -I LIBS/
 
-OS/FILEMNG.SYS:
+OS/FILEMNG.SYS: SRC/FILEMNG.C SRC/FILEMNG/linked_header_FILEMNG.c
 	smlrcc -unreal SRC/FILEMNG/linked_header_FILEMNG.c LIBS/c0du.asm SRC/FILEMNG/FILEMNG.C -o OS/FILEMNG.SYS -map SRC/FILEMNG/FILEMNG.PMA  -I LIBS/
 
 
@@ -22,7 +22,12 @@ transfer:
 
 SRC/LOADER.C:
 
+
 SRC/MEMMNG.C:
+
+
+SRC/FILEMNG.C:
+
 
 
 
