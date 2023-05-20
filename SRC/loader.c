@@ -247,13 +247,13 @@ int load_file(char* file_name,char *pos){
 /// @brief 
 /// @param name 
 /// @return Pointer to a saved shared lib  
-struct shared_lib* get_shared_lib(char name[11]){
+struct shared_lib* get_shared_lib(char* name){
     for(struct shared_lib* ptr = shared_libs;ptr!=shared_libs_ptr;ptr++){
         prints(&(ptr->name),11);
         nl();
-        prints(&name,11);
+        prints(name,11);
         nl();
-        if(cmp_name(&(ptr->name),&name)){return ptr;}
+        if(cmp_name(&(ptr->name),name)){return ptr;}
     }
     return NULL;
 
@@ -404,7 +404,7 @@ int __start__(){
         nl();;  
     }
     else{
-        struct shared_lib* sh = get_shared_lib(map_name);
+        struct shared_lib* sh = get_shared_lib(&map_name);
         printf((int)sh);
         nl();
         printf((int)&shared_libs);
