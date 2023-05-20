@@ -1,0 +1,37 @@
+File Ofs  Sym Addr  Sym
+
+          00000020  section .text:
+00000020  00000020  __start
+00000100  00000100  ___start__
+0000010E  0000010E  _print_mem
+000001B6  000001B6  _init_memory_manager
+00000221  00000221  _malloc
+000004F3  000004F3  _dalloc
+00000AB2  00000AB2  _memcpy
+00000B11  00000B11  _printf
+00000B95  00000B95  _nl
+00000BB4  00000BB4  _printch
+00000BCA  00000BCA  _prints
+00000C10  00000C10  _dmph
+          00000CF5
+
+          00000CF8  section .relod:
+          00000CF8  __start__relod
+          00000EB8  __stop__relod
+          00000EB8
+
+          00000EB8  section .relot:
+          00000EB8  __start__relot
+          00000F1C  __stop__relot
+          00000F1C
+
+          00000F1C  section .data:
+00000F1C  00000F1C  _hex
+          00000F2D
+
+          00000F30  section .bss:
+          00000F30  __start__bss
+00000F30  00000F30  _memory
+          00000FF8  __stop__bss
+          00000FF8
+

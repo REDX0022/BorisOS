@@ -1,4 +1,4 @@
-prereq := boot.asm LOADER.SYS MEMMNG.SYS
+prereq := BOOT/boot.asm OS/LOADER.SYS OS/MEMMNG.SYS
 
 
 run: $(prereq)
@@ -14,7 +14,7 @@ run: $(prereq)
 	sudo qemu-system-x86_64 -cpu qemu64 -drive format=raw,file=/dev/disk4 -nographic
 
 boot.asm:
-LOADER.SYS:
-MEMMNG.SYS:
+OS/LOADER.SYS:
+OS/MEMMNG.SYS:
 
 p:
