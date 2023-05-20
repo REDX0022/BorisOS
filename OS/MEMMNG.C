@@ -22,9 +22,11 @@ void __start__(){
     print_mem();
     void* ptr2 = malloc(100);
     print_mem();
-    dalloc((uint32_t)ptr1,45);
+    dalloc((uint32_t)ptr1,45); //split segment
     print_mem();
     void* ptr3 = malloc(50);
+    print_mem();
+    dalloc((uint32_t)ptr2-1,200); //erase whole segment
     print_mem();
     
 }
