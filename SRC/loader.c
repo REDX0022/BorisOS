@@ -103,8 +103,8 @@ char temp_sector_2[bytes_per_sector];
 struct shared_lib shared_libs[max_loaded_shared_libs];
 void* shared_func[max_loaded_shared_func];
 
-struct shared_lib *shared_libs_ptr = &shared_libs[0]; //the pointer to the next available space//idk if the compiler supports this !!!!
-void** shared_func_ptr = &shared_func[0]; //pointer to the available space
+struct shared_lib *shared_libs_ptr = shared_libs; //the pointer to the next available space//idk if the compiler supports this !!!!
+void** shared_func_ptr = shared_func; //pointer to the available space
 
 
 
@@ -249,6 +249,8 @@ int load_file(char* file_name,char *pos){
 /// @return Pointer to a saved shared lib  
 struct shared_lib* get_shared_lib(char name[11]){
     for(struct shared_lib* ptr = shared_libs;ptr!=shared_libs_ptr;ptr++){
+        prints(&(ptr->name),11);
+        nl();
         if(cmp_name(&(ptr->name),&name)){return ptr;}
     }
     return NULL;
