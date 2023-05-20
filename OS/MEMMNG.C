@@ -56,16 +56,18 @@ void* malloc(size_t size){
         printf(cur_available);
         nl();
         if(cur_available>size){ //we have found the available space
-            return (void*) (memory[i].begin+memory[i].len);
             memory[i].len+=size;
+            return (void*) (memory[i].begin+memory[i].len);
         }
         else if(cur_available==size && memory[i+1].len){ //we have found the available space but we need to merge the segments
+            void* res =(void*) (memory[i].begin+memory[i].len);
             memory[i].len+=size;
             memory[i].len+=memory[i+1].len;
             for(int j = i+1;memory[j].len & j < max_memory_sectors;j++){//we shift the rest of the array one to the left
                 memory[j] = memory[j+1];
                 
             }
+            return res;
         }
     }
     return NULL; //no memory slot found
