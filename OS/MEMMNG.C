@@ -26,7 +26,7 @@ void __start__(){
     print_mem();
     void* ptr3 = malloc(50);
     print_mem();
-    dalloc((uint32_t)ptr2-1,200); //erase whole segment
+    dalloc((uint32_t)ptr2-1,20); //erase whole segment
     print_mem();
     
 }
