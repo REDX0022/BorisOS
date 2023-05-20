@@ -251,6 +251,8 @@ struct shared_lib* get_shared_lib(char name[11]){
     for(struct shared_lib* ptr = shared_libs;ptr!=shared_libs_ptr;ptr++){
         prints(&(ptr->name),11);
         nl();
+        prints(&name,11);
+        nl();
         if(cmp_name(&(ptr->name),&name)){return ptr;}
     }
     return NULL;
