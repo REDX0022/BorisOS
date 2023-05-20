@@ -405,8 +405,7 @@ int __start__(){
         prints("LOADED MEMORY MANAGER MAP",26);
         nl();
     }
-    dmph(malloc,4);
-    nl();
+   
     dmph(&shared_libs,32);
     nl();
     nl();
@@ -420,29 +419,29 @@ int __start__(){
 
     void* file_manager_address = malloc(file_manager_size);
     if(load_file(name1,file_manager_address)){
-        prints("FAILED TO LOAD MEMORY MANAGER",30);
+        prints("FAILED TO LOAD FILE MANAGER",30);
         nl();
     }
     else{
-        prints("LOADED MEMORY MANAGER SUCCESFULLY",34);
+        prints("LOADED FILE MANAGER SUCCESFULLY",34);
         nl();
     }
     if(start_kernel_programm(file_manager_address)){
-        prints("FAILED TO START MEMORY MANAGER",31);
+        prints("FAILED TO START FILE MANAGER",31);
         nl();
     }
     else{
-        prints("STARTED MEMORY MANAGER SUCCESFULLY",35);
+        prints("STARTED FILE MANAGER SUCCESFULLY",35);
         nl();
     }
     if(load_kernel_map(map_name1,file_manager_address)){
-        prints("FAILED TO LOAD MEMORY MANAGER MAP",34);
+        prints("FAILED TO LOAD FILE MANAGER MAP",34);
         nl();;  
     }
     else{
         struct shared_lib* sh = get_shared_lib(name);
         init_MEMMNG(sh->funs_ptr);
-        prints("LOADED MEMORY MANAGER MAP",26);
+        prints("LOADED FILE MANAGER MAP",26);
         nl();
     }
 
