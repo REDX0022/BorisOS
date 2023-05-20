@@ -32,7 +32,8 @@ void __start__(){
     print_mem();
     dalloc((uint32_t)ptr4,50);
     print_mem();
-   
+    dalloc((uint32_t)ptr1,500);
+    print_mem();
     
 }
 
