@@ -17,12 +17,11 @@ struct alloc_segment memory[max_memory_sectors];
 void __start__(){
     
     init_memory_manager();
-    //lets do a hex dump
-    dmph((char*)memory,8);
-
-
     print_mem();
     void* ptr1= malloc(45);
+    printf((int)ptr1);
+    printch(0xA);
+    printch(0xD);
     print_mem();
     dalloc((uint32_t)ptr1,45);
     print_mem();

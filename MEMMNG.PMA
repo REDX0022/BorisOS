@@ -3,34 +3,34 @@ File Ofs  Sym Addr  Sym
           00000020  section .text:
 00000020  00000020  __start
 00000100  00000100  ___start__
-0000014F  0000014F  _print_mem
-000001E4  000001E4  _init_memory_manager
-0000024F  0000024F  _malloc
-000004C9  000004C9  _dalloc
-0000098F  0000098F  _memcpy
-000009EE  000009EE  _printf
-00000A72  00000A72  _printch
-00000A88  00000A88  _prints
-00000ACE  00000ACE  _dmph
-          00000BB3
+00000160  00000160  _print_mem
+000001F5  000001F5  _init_memory_manager
+00000260  00000260  _malloc
+000004DA  000004DA  _dalloc
+000009A0  000009A0  _memcpy
+000009FF  000009FF  _printf
+00000A83  00000A83  _printch
+00000A99  00000A99  _prints
+00000ADF  00000ADF  _dmph
+          00000BC4
 
-          00000BB4  section .relod:
-          00000BB4  __start__relod
-          00000D54  __stop__relod
-          00000D54
+          00000BC4  section .relod:
+          00000BC4  __start__relod
+          00000D70  __stop__relod
+          00000D70
 
-          00000D54  section .relot:
-          00000D54  __start__relot
-          00000DB4  __stop__relot
-          00000DB4
+          00000D70  section .relot:
+          00000D70  __start__relot
+          00000DD8  __stop__relot
+          00000DD8
 
-          00000DB4  section .data:
-00000DB4  00000DB4  _hex
-          00000DC5
+          00000DD8  section .data:
+00000DD8  00000DD8  _hex
+          00000DE9
 
-          00000DC8  section .bss:
-          00000DC8  __start__bss
-00000DC8  00000DC8  _memory
-          00000E90  __stop__bss
-          00000E90
+          00000DEC  section .bss:
+          00000DEC  __start__bss
+00000DEC  00000DEC  _memory
+          00000EB4  __stop__bss
+          00000EB4
 
