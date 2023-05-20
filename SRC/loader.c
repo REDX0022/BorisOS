@@ -418,6 +418,8 @@ int __start__(){
     char map_name1[11] = "FILEMNG MAP";
 
     void* file_manager_address = malloc(file_manager_size);
+    printf(file_manager_address);
+    nl();
     if(load_file(name1,file_manager_address)){
         prints("FAILED TO LOAD FILE MANAGER",28);
         nl();
