@@ -51,7 +51,7 @@ int init_memory_manager(){
 /// @param size the size of memory to be allocated
 /// @return pointer to the location of available memory
 void* malloc(size_t size){
-    for(int i = 0;memory[i].len & i < max_memory_sectors;i++){
+    for(int i = 0;memory[i].len && i < max_memory_sectors;i++){
         size_t cur_available = memory[i+1].begin-memory[i].begin-memory[i].len;
         printf(cur_available);
         nl();
