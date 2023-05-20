@@ -76,7 +76,7 @@ struct MZext_header{
     uint16_t cs_reg;
     uint16_t reloc_offset; // not used
     uint16_t overlay_num; //usually unused
-    char *lib_name[16]; //only the first 11 characers are used
+    char (*lib_name)[16]; //only the first 11 characers are used
     
 };
 
@@ -270,13 +270,13 @@ int start_kernel_programm(void *start){
     mz = ((struct MZext_header*) start); //there might need to be changes if there i
     
     void*** lib_store = &temp_sector; //where in the temp sector to put the funcs
-    for(char (*lib_search)[16] = mz->lib_name; *lib_search[0]; lib_search++){
+    for(char (*lib_search)[16] = mz->lib_name; (*lib_search)[0]; lib_search++){
         struct shared_lib* sh = get_shared_lib(lib_search);
         if(sh==NULL){
             return 2; // LIB NOT FOUND
         }
         nl();
-        printf(sh->funs_ptr);
+        printf((int)sh);
         nl();
         *lib_store = sh->funs_ptr;
         lib_store++;
