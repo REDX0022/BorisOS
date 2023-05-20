@@ -126,9 +126,9 @@ void dalloc(uint32_t begin, size_t size){
 
         removed_sectors_end = i;
     }
-    if(removed_sectors_begin==-1){return;} //this shouldnt happen, should throw an error here maybe
+    if(removed_sectors_begin==-1){return;} //this shouldnt happen, should throw an error here maybe?? or maybe it should
 
-    int offset = removed_sectors_end-removed_sectors_end;
+    int offset = removed_sectors_end-removed_sectors_end+1;
     for(int i = removed_sectors_begin;memory[i].len & i+offset < max_memory_sectors;i++){
         memory[i] = memory[i+offset];
     }
