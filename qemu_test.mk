@@ -3,13 +3,13 @@ prereq := boot.asm LOADER.SYS MEMMNG.SYS
 
 run: $(prereq)
 	git pull
-	nasm boot.asm -o boot.o
+	nasm BOOT/boot.asm -o BOOT/boot.o
 	diskutil unmountDisk disk4
-	sudo dd if=boot.o of=/dev/disk4
+	sudo dd if=BOOT/boot.o of=/dev/disk4
 	diskutil mountDisk disk4
-	cp LOADER.SYS /Volumes/BORISOSVOL/
-	cp MEMMNG.SYS /Volumes/BORISOSVOL/
-	cp MEMMNG.MAP /Volumes/BORISOSVOL/
+	cp OS/LOADER.SYS /Volumes/BORISOSVOL/
+	cp OS/MEMMNG.SYS /Volumes/BORISOSVOL/
+	cp OS/MEMMNG.MAP /Volumes/BORISOSVOL/
 	diskutil unmountDisk disk4
 	sudo qemu-system-x86_64 -cpu qemu64 -drive format=raw,file=/dev/disk4 -nographic
 
