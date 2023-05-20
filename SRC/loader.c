@@ -287,7 +287,7 @@ int start_kernel_programm(void *start){
     execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
     //but we do need to find the libraries that it provides
     printf((int)execution_start);
-    execution_start(&temp_sector); //for now we use a global stack for the entire os 
+    execution_start(lib_search_ptr); //for now we use a global stack for the entire os 
     return 0;
 }
 

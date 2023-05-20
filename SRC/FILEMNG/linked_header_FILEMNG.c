@@ -7,7 +7,7 @@ extern void start_program();
 
 extern void init_MEMMNG(void* funcs);
 
-void __start__(void** libs){
+void __start__(void*** libs){
     init_MEMMNG(libs[0]);
     start_program();
 }

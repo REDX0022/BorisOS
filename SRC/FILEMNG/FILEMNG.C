@@ -546,8 +546,8 @@ void init(){
     char temp_volume_name[11] = "BORISOSVOL"; //this changes with volume_label
     prints("TRIED MEMCPY",13);
     nl();
-    //memcpy(&temp_volume_name,&volume.name,11);
-    void* ptrsmth= malloc(100);
+    memcpy(&temp_volume_name,&volume.name,11);
+   
     prints("SUCCEDED MEMCPY",16);
     nl();
     volume.attribute = 1<<3;
