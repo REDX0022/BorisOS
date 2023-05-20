@@ -249,7 +249,7 @@ int load_file(char* file_name,char *pos){
 /// @return Pointer to a saved shared lib  
 struct shared_lib* get_shared_lib(char name[11]){
     for(struct shared_lib* ptr = shared_libs;ptr!=shared_libs_ptr;ptr++){
-        if(cmp_name(&ptr->name,&name)){return ptr;}
+        if(cmp_name(&(ptr->name),&name)){return ptr;}
     }
     return NULL;
 
