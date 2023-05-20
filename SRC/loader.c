@@ -339,7 +339,8 @@ int start_programm(void *start){
     init execution_start; 
     execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
     //but we do need to find the libraries that it provides
-    
+    printf((int)execution_start);
+    nl();
     execution_start(&temp_sector); //for now we use a global stack for the entire os 
     return 0;
 }
@@ -418,8 +419,7 @@ int __start__(){
     char map_name1[11] = "FILEMNG MAP";
 
     void* file_manager_address = malloc(file_manager_size);
-    printf(file_manager_address);
-    nl();
+    
     if(load_file(name1,file_manager_address)){
         prints("FAILED TO LOAD FILE MANAGER",28);
         nl();
