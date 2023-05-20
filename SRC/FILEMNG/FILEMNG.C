@@ -527,6 +527,11 @@ struct directory* search_dir(struct directory folder, char name[11]){
 
 }
 
+
+void start_program(){
+    init();
+}
+
 void init(){
     //we want to setup the root dir
     char temp_volume_name[11] = "BORISOSVOL"; //this changes with volume_label

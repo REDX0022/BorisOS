@@ -14,7 +14,7 @@ struct alloc_segment{
 struct alloc_segment memory[max_memory_sectors];
 
 
-void __start__(){
+void start_program(){
     
     init_memory_manager();
     
