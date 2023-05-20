@@ -1,7 +1,7 @@
 File Ofs  Sym Addr  Sym
 
           00000020  section .text:
-0000002D  0000002D  ___start__
+0000002B  0000002B  ___start__
 00000050  00000050  __start
 00000130  00000130  _printf
 000001B4  000001B4  _nl
@@ -9,68 +9,71 @@ File Ofs  Sym Addr  Sym
 000001E9  000001E9  _prints
 0000022F  0000022F  _dmph
 000002F7  000002F7  _init_MEMMNG
-00000321  00000321  _reset_queue
-00000344  00000344  _dir_enqueue
-000003E5  000003E5  _dir_dequeue
-00000464  00000464  _dir_is_queue_empty
-00000483  00000483  _cmp_name
-000004E3  000004E3  _FAT_lookup
-000005A6  000005A6  _FAT_free
-000005FD  000005FD  _FAT_edit
-00000685  00000685  _get_volume
-000006A3  000006A3  _from_path
-00000882  00000882  _write_sector
-0000096E  0000096E  _write_sector_helper
-000009A1  000009A1  _load_sector
-00000A8D  00000A8D  _load_sector_helper
-00000ABE  00000ABE  _delete_dir
-00000C07  00000C07  _create_dir
-00000EEA  00000EEA  _modify_dir
-000010D8  000010D8  _load_file
-000011E3  000011E3  _dir_size
-000012DA  000012DA  _list_dir
-00001377  00001377  _list_root
-000013F8  000013F8  _search
-0000150E  0000150E  _search_dir
-000016E6  000016E6  _start_program
-000016F4  000016F4  _init
-00001777  00001777  _pad_file_name
-00001901  00001901  _is_read_only
-00001915  00001915  _is_hidden
-00001929  00001929  _is_system
-0000193D  0000193D  _is_volume
-00001951  00001951  _is_folder
-00001965  00001965  _is_archive
-          000019D8
+0000033E  0000033E  _reset_queue
+00000361  00000361  _dir_enqueue
+00000402  00000402  _dir_dequeue
+00000481  00000481  _dir_is_queue_empty
+000004A0  000004A0  _cmp_name
+00000500  00000500  _FAT_lookup
+000005C3  000005C3  _FAT_free
+0000061A  0000061A  _FAT_edit
+000006A2  000006A2  _get_volume
+000006C0  000006C0  _from_path
+0000089F  0000089F  _write_sector
+0000098B  0000098B  _write_sector_helper
+000009BE  000009BE  _load_sector
+00000AAA  00000AAA  _load_sector_helper
+00000ADB  00000ADB  _delete_dir
+00000C24  00000C24  _create_dir
+00000F07  00000F07  _modify_dir
+000010F5  000010F5  _load_file
+00001200  00001200  _dir_size
+000012F7  000012F7  _list_dir
+00001394  00001394  _list_root
+00001415  00001415  _search
+0000152B  0000152B  _search_dir
+00001703  00001703  _start_program
+00001777  00001777  _init
+000017FA  000017FA  _pad_file_name
+00001984  00001984  _is_read_only
+00001998  00001998  _is_hidden
+000019AC  000019AC  _is_system
+000019C0  000019C0  _is_volume
+000019D4  000019D4  _is_folder
+000019E8  000019E8  _is_archive
+          00001A5B
 
-          000019D8  section .relod:
-          000019D8  __start__relod
-          00001EB4  __stop__relod
-          00001EB4
+          00001A5C  section .relod:
+          00001A5C  __start__relod
+          00001F7C  __stop__relod
+          00001F7C
 
-          00001EB4  section .relot:
-          00001EB4  __start__relot
-          00002088  __stop__relot
-          00002088
+          00001F7C  section .relot:
+          00001F7C  __start__relot
+          0000216C  __stop__relot
+          0000216C
 
-          00002088  section .data:
-00002088  00002088  _hex
-0000209C  0000209C  _begin
-000020A0  000020A0  _end
-000020A4  000020A4  _cached_FAT_sector
-          000020BF
+          0000216C  section .rodata:
+          0000219D
 
-          000020C0  section .bss:
-          000020C0  __start__bss
-000020C0  000020C0  _malloc
-000020C4  000020C4  _dalloc
-000020C8  000020C8  _memcpy
-000020CC  000020CC  _ar
-000040CC  000040CC  _volume
-000040EC  000040EC  _FAT_cache
-000042EC  000042EC  _temp_sector
-000044EC  000044EC  _temp_sector2
-000046EC  000046EC  _dap
-          000046FC  __stop__bss
-          000046FC
+          000021A0  section .data:
+000021A0  000021A0  _hex
+000021B4  000021B4  _begin
+000021B8  000021B8  _end
+000021BC  000021BC  _cached_FAT_sector
+          000021D7
+
+          000021D8  section .bss:
+          000021D8  __start__bss
+000021D8  000021D8  _malloc
+000021DC  000021DC  _dalloc
+000021E0  000021E0  _memcpy
+000021E4  000021E4  _ar
+000041E4  000041E4  _volume
+00004204  00004204  _FAT_cache
+00004404  00004404  _temp_sector
+00004604  00004604  _temp_sector2
+00004804  00004804  _dap
+          00004814  __stop__bss
+          00004814
 
