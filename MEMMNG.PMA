@@ -7,31 +7,31 @@ File Ofs  Sym Addr  Sym
 00000205  00000205  _init_memory_manager
 00000270  00000270  _malloc
 00000542  00000542  _dalloc
-00000A47  00000A47  _memcpy
-00000AA6  00000AA6  _printf
-00000B2A  00000B2A  _nl
-00000B49  00000B49  _printch
-00000B5F  00000B5F  _prints
-00000BA5  00000BA5  _dmph
-          00000C8A
+00000A52  00000A52  _memcpy
+00000AB1  00000AB1  _printf
+00000B35  00000B35  _nl
+00000B54  00000B54  _printch
+00000B6A  00000B6A  _prints
+00000BB0  00000BB0  _dmph
+          00000C95
 
-          00000C8C  section .relod:
-          00000C8C  __start__relod
-          00000E88  __stop__relod
-          00000E88
+          00000C98  section .relod:
+          00000C98  __start__relod
+          00000E9C  __stop__relod
+          00000E9C
 
-          00000E88  section .relot:
-          00000E88  __start__relot
-          00000F14  __stop__relot
-          00000F14
+          00000E9C  section .relot:
+          00000E9C  __start__relot
+          00000F2C  __stop__relot
+          00000F2C
 
-          00000F14  section .data:
-00000F14  00000F14  _hex
-          00000F25
+          00000F2C  section .data:
+00000F2C  00000F2C  _hex
+          00000F3D
 
-          00000F28  section .bss:
-          00000F28  __start__bss
-00000F28  00000F28  _memory
-          00000FF0  __stop__bss
-          00000FF0
+          00000F40  section .bss:
+          00000F40  __start__bss
+00000F40  00000F40  _memory
+          00001008  __stop__bss
+          00001008
 
