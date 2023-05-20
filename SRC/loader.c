@@ -271,6 +271,7 @@ int start_kernel_programm(void *start){
     
     void*** lib_store = &temp_sector; //where in the temp sector to put the funcs
     for(char (*lib_search)[16] = mz->lib_name; (*lib_search)[0]; lib_search++){
+        prints(lib_search,11);
         struct shared_lib* sh = get_shared_lib(lib_search);
         if(sh==NULL){
             return 2; // LIB NOT FOUND
