@@ -86,11 +86,11 @@ void dalloc(uint32_t begin, size_t size){
     // - given segment is completly within another
     // - given segment messes with the part of another
     // - given segment spans multiple allocated segments
-        printch('l');
 
     int removed_sectors_begin =-1;
     int removed_sectors_end = -1;
     for(int i = 0;memory[i].len & i < max_memory_sectors;i++){
+        printch('l');
         if(memory[i].begin < begin && memory[i].begin + memory[i].len > begin + size){ //we need to split the sector in 2
             printch('a');
             struct alloc_segment temp;
