@@ -5,6 +5,7 @@
 #include "stdint.h"
 #include "stddef.h"
 #include "FAT16_structs.h"
+#include "memmng_lib.h"
 
 //========================Variables for the FAT16 file system==========================
 #define jump_point 0x3E
