@@ -17,29 +17,11 @@ struct alloc_segment memory[max_memory_sectors];
 void __start__(){
     
     init_memory_manager();
-    print_mem();
-    void* ptr1= malloc(45);
-    print_mem();
-    void* ptr2 = malloc(100);
-    print_mem();
-    dalloc((uint32_t)ptr1,45); //split segment
-    print_mem();
-    void* ptr3 = malloc(50);
-    print_mem();
-    dalloc((uint32_t)ptr1-20,100); //erase whole segment
-    print_mem();
-    void* ptr4 = malloc(200);
-    print_mem();
-    dalloc((uint32_t)ptr4,50);
-    dalloc((uint32_t)ptr4+55,20);
-    print_mem();
-    dalloc((uint32_t)32848,300);
-    print_mem();
     
 }
 
 
-void print_mem(){
+void print_mem(){//this is debug func, shall not be in the lib
     for(int i = 0;i < max_memory_sectors;i++){
         printf((int)memory[i].begin);
         printch(' ');
