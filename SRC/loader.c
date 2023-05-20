@@ -290,7 +290,7 @@ int start_kernel_programm(void *start){
     return 0;
 }
 
-int load_map(char* name, char* pos){ 
+int load_kernel_map(char* name, char* pos){ 
    
     if(load_file(name,(void *)&temp_sector_2)){
         return 1;
@@ -313,6 +313,58 @@ int load_map(char* name, char* pos){
 }
 
 
+/// @brief Starts a kernel space programm
+/// @param start memory loaction of the programm, should be a void pointer, cant be because of arithmetic
+/// @return success
+int start_programm(void *start){
+    if(!start){return -1;} //null pointer exeption
+    struct MZext_header* mz;
+    mz = ((struct MZext_header*) start); //there might need to be changes if there i
+    
+    void*** lib_search_ptr = &temp_sector; //where in the temp sector to put the funcs
+    for(char (*lib_search)[16]  = mz->lib_name; *lib_search[0]; lib_search++){
+        struct shared_lib* sh = get_shared_lib(lib_search);
+        if(sh==NULL){
+            //TODO: search for the library and load the map
+        }
+        *lib_search_ptr = sh->funs_ptr;
+        lib_search_ptr++;
+        
+    }
+    
+
+
+
+    init execution_start; 
+    execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
+    //but we do need to find the libraries that it provides
+    
+    execution_start(&temp_sector); //for now we use a global stack for the entire os 
+    return 0;
+}
+
+
+int load_map(char* name, char* pos){ //TODO: SHOULD USE THE MALLOC AND MEMORY MANAGER TIME 
+   
+    if(load_file(name,(void *)&temp_sector_2)){
+        return 1;
+    }
+
+    struct shared_lib_map* map =  (struct shared_lib_map*)(&temp_sector_2); //znas da si nesto sjebo kad double kastujes pointere
+
+    memcpy_loader(name,(void*) &(shared_libs_ptr->name),11);
+    shared_libs_ptr->count = map->size;
+    shared_libs_ptr->funs_ptr = shared_func_ptr;
+
+    for(uint16_t i =0;i<map->size;i++){//we store the pointers and add the program begin
+        *shared_func_ptr = (void*) (pos + (map->offsets+ sizeof(uint16_t)*i)); //i hope to god this works
+        shared_func_ptr++;
+    }
+
+    shared_func_ptr += map->size;
+    shared_libs_ptr++;
+    return 0;
+}
 
 
 int __start__(){
@@ -322,28 +374,38 @@ int __start__(){
 
    
  
-    //we wanna load the memory manager
+    //LOADING THE MEMORY MANAGER
     
     char name[11] = "MEMMNG  SYS";
     char map_name[11] = "MEMMNG  MAP";
     if(load_file(name,memmory_manager_address)){
-        printf(14); //failed to load file
+        prints("FAILED TO LOAD MEMORY MANAGER",30);
+        nl();
     }
     else{
         prints("LOADED MEMORY MANAGER SUCCESFULLY",34);
+        nl();
     }
     if(start_kernel_programm(memmory_manager_address)){
-        printf(15); //failed to start mem mng
+        prints("FAILED TO START MEMORY MANAGER",31);
+        nl();
     }
     else{
         prints("STARTED MEMORY MANAGER SUCCESFULLY",35);
+        nl();
     }
-    if(load_map(map_name,memmory_manager_address)){
-        printf(16);  
+    if(load_kernel_map(map_name,memmory_manager_address)){
+        struct shared_lib* sh = get_shared_lib(name);
+        init_memmng(sh->funs_ptr);
+        prints("FAILED TO LOAD MEMORY MANAGER MAP",34);
+        nl();;  
     }
     else{
         prints("LOADED MEMORY MANAGER MAP",26);
+        nl();
     }
+
+    //LOADING THE FILE SYSTEM MANAGER
    
     
 }
