@@ -269,14 +269,14 @@ int start_kernel_programm(void *start){
     struct MZext_header* mz;
     mz = ((struct MZext_header*) start); //there might need to be changes if there i
     
-    void*** lib_search_ptr = &temp_sector; //where in the temp sector to put the funcs
+    void*** lib_store = &temp_sector; //where in the temp sector to put the funcs
     for(char (*lib_search)[16] = mz->lib_name; *lib_search[0]; lib_search++){
         struct shared_lib* sh = get_shared_lib(lib_search);
         if(sh==NULL){
             return 2; // LIB NOT FOUND
         }
-        *lib_search_ptr = sh->funs_ptr;
-        lib_search_ptr++;
+        *lib_store = sh->funs_ptr;
+        lib_store++;
         
     }
     
@@ -287,9 +287,9 @@ int start_kernel_programm(void *start){
     execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
     //but we do need to find the libraries that it provides
     nl();
-    dmph(lib_search_ptr,10);
+    dmph(&temp_sector,10);
     nl();
-    execution_start(lib_search_ptr); //for now we use a global stack for the entire os 
+    execution_start(&temp_sector); //for now we use a global stack for the entire os 
     return 0;
 }
 
