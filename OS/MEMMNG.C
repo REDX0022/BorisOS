@@ -19,7 +19,8 @@ void __start__(){
     init_memory_manager();
     print_mem();
     void* ptr1= malloc(45);
-   
+    printf((int)ptr1);
+        nl();
     
 }
 
