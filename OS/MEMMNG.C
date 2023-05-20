@@ -89,7 +89,7 @@ void dalloc(uint32_t begin, size_t size){
 
     int removed_sectors_begin =-1;
     int removed_sectors_end = -1;
-    for(int i = 0;memory[i].len & i < max_memory_sectors;i++){
+    for(int i = 0;memory[i].len && i < max_memory_sectors;i++){
         printch('l');
         if(memory[i].begin < begin && memory[i].begin + memory[i].len > begin + size){ //we need to split the sector in 2
             printch('a');
