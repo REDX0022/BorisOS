@@ -17,7 +17,7 @@ run: $(prereq)
 	diskutil unmountDisk disk4
 	sudo qemu-system-x86_64 -cpu qemu64 -drive format=raw,file=/dev/disk4 -nographic
 
-BOOT/boot.o
+BOOT/boot.o:
 OS/LOADER.SYS:
 OS/MEMMNG.SYS:
 OS/MEMMNG.MAP:
