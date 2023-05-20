@@ -242,14 +242,22 @@ int load_file(char* file_name,char *pos){
     return 0;
 }
 
+/// @brief 
+/// @param name 
+/// @return Pointer to a saved shared lib  
+struct shared_lib* get_shared_lib(char name[11]){
+    for(struct shared_lib* ptr = shared_libs;ptr!=shared_libs_ptr;ptr++){
+        if(cmp_name(&ptr->name,&name)){return ptr;}
+    }
+    return NULL;
+
+}
 
 
 
 
-
-
-//TODO: Pass something to the programm at start
-typedef void (* init) (); 
+//TODO: argv and argc
+typedef void (* init) (void** libs); 
 
 /// @brief Starts a kernel space programm
 /// @param start memory loaction of the programm, should be a void pointer, cant be because of arithmetic
@@ -258,14 +266,26 @@ int start_kernel_programm(void *start){
     if(!start){return -1;} //null pointer exeption
     struct MZext_header* mz;
     mz = ((struct MZext_header*) start); //there might need to be changes if there i
-       
-    //here we dont read the libraries needed because that is predefned??
     
+    void*** lib_search_ptr = &temp_sector; //where in the temp sector to put the funcs
+    for(char (*lib_search)[16] = mz->lib_name; *lib_search[0]; lib_search++){
+        struct shared_lib* sh = get_shared_lib(lib_search);
+        if(sh==NULL){
+            return 2; // LIB NOT FOUND
+        }
+        *lib_search_ptr = sh->funs_ptr;
+        lib_search_ptr++;
+        
+    }
+    
+
+
+
     init execution_start; 
     execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
     //but we do need to find the libraries that it provides
     
-    execution_start(); //for now we use a global stack for the entire os 
+    execution_start(&temp_sector); //for now we use a global stack for the entire os 
     return 0;
 }
 
@@ -308,11 +328,20 @@ int __start__(){
     if(load_file(name,memmory_manager_address)){
         printf(14); //failed to load file
     }
+    else{
+        prints("LOADED MEMORY MANAGER SUCCESFULLY",34);
+    }
     if(start_kernel_programm(memmory_manager_address)){
         printf(15); //failed to start mem mng
     }
+    else{
+        prints("STARTED MEMORY MANAGER SUCCESFULLY",35);
+    }
     if(load_map(map_name,memmory_manager_address)){
-        printf(16);
+        printf(16);  
+    }
+    else{
+        prints("LOADED MEMORY MANAGER MAP",26);
     }
    
     
