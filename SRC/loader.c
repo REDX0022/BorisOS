@@ -397,7 +397,7 @@ int __start__(){
     char name1[11] = "FILEMNG SYS";
     char map_name1[11] = "FILEMNG MAP";
 
-    void* file_manager_address = malloc(file_manager_size);
+    void* file_manager_address = malloc(100);
     printf(file_manager_address);
     nl();
     if(load_file(name1,file_manager_address)){
