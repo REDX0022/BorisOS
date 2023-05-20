@@ -385,13 +385,7 @@ int __start__(){
         prints("LOADED MEMORY MANAGER MAP",26);
         nl();
     }
-   
-    dmph(&shared_libs,32);
-    nl();
-    nl();
-    dmph(&shared_func,50);
-    nl();
-    nl();
+    
     //LOADING THE FILE SYSTEM MANAGER
     
     char name1[11] = "FILEMNG SYS";
