@@ -280,16 +280,24 @@ int delete_dir(struct directory dir){
 /// @param folder @folder
 /// @return success
 int create_dir(struct directory dir,struct directory folder){//TODOO: check if dir name is valid
-    if(!is_folder(folder)){return 1;}
+    if(!is_folder(folder) && !is_volume(folder)){return 1;}
     
     // we want to allocate the first cluster
     dir.starting_cluster = FAT_free();
     FAT_edit(dir.starting_cluster, 0xFFFF); //per spec
 
 
-    size_t folder_size = dir_size(folder);
+    size_t folder_size; 
 
-    struct directory* base = list_dir(folder,folder_size+sizeof(directory)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
+    struct directory* base;
+    if(is_folder(folder)){
+        folder_size = dir_size(folder);
+        base = list_dir(folder,folder_size+sizeof(directory)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
+    }
+    else{//its a volume
+        folder_size = root_dir_size*bytes_per_sector;
+        base = list_root();
+    }
 
     //we want to search for an empty space, if not we put it at the end and move a 0 to the end
     struct directory* free_space = NULL; 
@@ -299,11 +307,11 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
             break;
         }
     }
-    if(free_space==NULL){//the folder is jam packed
+    if(free_space==NULL&&is_folder(folder)){//the folder is jam packed
         base[(folder_size)/(sizeof(directory))].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
         base[(folder_size)/(sizeof(directory))-1] = dir;
         folder.file_size_in_bytes = folder_size+sizeof(directory);//we hack the folder for modify_dir
-      
+
     }
     else {
         *free_space = dir;
