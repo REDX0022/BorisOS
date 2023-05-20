@@ -83,7 +83,7 @@ struct MZext_header{
 
 struct shared_lib_map{
     uint16_t size;
-    uint16_t offsets;
+    uint16_t *offsets;
 };
 
 struct shared_lib{
@@ -304,7 +304,7 @@ int load_kernel_map(char* name, char* pos){
     shared_libs_ptr->funs_ptr = shared_func_ptr;
 
     for(uint16_t i =0;i<map->size;i++){//we store the pointers and add the program begin
-        *shared_func_ptr = (void*) (pos + (map->offsets+ sizeof(uint16_t)*i)); //i hope to god this works
+        *shared_func_ptr = (void*) (pos + (map->offsets[i])); //i hope to god this works
         shared_func_ptr++;
     }
 
@@ -358,7 +358,7 @@ int load_map(char* name, char* pos){ //TODO: SHOULD USE THE MALLOC AND MEMORY MA
     shared_libs_ptr->funs_ptr = shared_func_ptr;
 
     for(uint16_t i =0;i<map->size;i++){//we store the pointers and add the program begin
-        *shared_func_ptr = (void*) (pos + (map->offsets+ sizeof(uint16_t)*i)); //i hope to god this works
+        //*shared_func_ptr = (void*) (pos + (map->offsets+ sizeof(uint16_t)*i)); //i hope to god this works
         shared_func_ptr++;
     }
 
