@@ -7,7 +7,7 @@
 #define memory_end 0x80000 
 struct alloc_segment{
     uint32_t begin;
-    size_t len;
+    uint32_t len;
 };
 
 /// @brief this is a very simple strucuter, segments of len 0 are illegal, the last segment has len 0 and is the stop segment
