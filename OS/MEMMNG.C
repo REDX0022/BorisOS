@@ -57,8 +57,6 @@ int init_memory_manager(){
 void* malloc(size_t size){
     for(int i = 0;memory[i].len && i < max_memory_sectors;i++){
         size_t cur_available = memory[i+1].begin-memory[i].begin-memory[i].len;
-        printf(cur_available);
-        nl();
         if(cur_available>size){ //we have found the available space
             void* res =(void*) (memory[i].begin+memory[i].len);
             memory[i].len+=size;
