@@ -44,7 +44,7 @@ void print_mem(){
 int init_memory_manager(){
     //TODO: change this to the actual memory map which is used
     memory[0].begin = memory_begin; 
-    memory[0].len = (size_t)(0x8000-memory_begin); //reserved by the os
+    memory[0].len = (0x8000-memory_begin); //reserved by the os
     printf(memory[0].len);
     printch(0xA);
     printch(0xD);
