@@ -109,11 +109,11 @@ void** shared_func_ptr = &shared_func[0]; //pointer to the available space
 //=====================================================================================
 
 
-/// @brief A rudementary memcpy
+/// @brief A rudementary memcpy_loader
 /// @param src 
 /// @param dest 
 /// @param n 
-void memcpy(void *src,void *dest,size_t n){
+void memcpy_loader(void *src,void *dest,size_t n){
     char *csrc = (char *)src;
     char *cdest = (char *)dest;
 
@@ -277,7 +277,7 @@ int load_map(char* name, char* pos){
 
     struct shared_lib_map* map =  (struct shared_lib_map*)(&temp_sector_2); //znas da si nesto sjebo kad double kastujes pointere
 
-    memcpy(name,(void*) &(shared_libs_ptr->name),11);
+    memcpy_loader(name,(void*) &(shared_libs_ptr->name),11);
     shared_libs_ptr->count = map->size;
     shared_libs_ptr->funs_ptr = shared_func_ptr;
 
