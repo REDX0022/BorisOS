@@ -122,7 +122,7 @@ void dalloc(uint32_t begin, size_t size){
             memory[i].begin = begin+size;
             break;
         }
-        if(memory[i].begin+memory[i].len>begin){
+        if(memory[i].begin<begin&&memory[i].begin+memory[i].len>begin){
             printch('d');
             memory[i].len = begin-memory[i].begin;
         }
