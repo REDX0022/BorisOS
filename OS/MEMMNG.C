@@ -15,9 +15,7 @@ struct alloc_segment memory[max_memory_sectors];
 
 
 void __start__(){
-    printf(0x7500);
-    printch(0xA);
-    printch(0xD);
+    
     init_memory_manager();
     print_mem();
     void* ptr1= malloc(45);
@@ -47,6 +45,9 @@ int init_memory_manager(){
     //TODO: change this to the actual memory map which is used
     memory[0].begin = memory_begin; 
     memory[0].len = (size_t)(0x8000-memory_begin); //reserved by the os
+    printf(memory[0].len);
+    printch(0xA);
+    printch(0xD);
     memory[1].begin = memory_end;
     memory[1].len = (size_t)0;
     return 0;
