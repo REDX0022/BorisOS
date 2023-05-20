@@ -1,3 +1,5 @@
+asm("db 'MEMMNG  SYS'");
+asm("times 5 db");
 asm("times 16 db"); //null terminated
 
 
