@@ -246,6 +246,33 @@ int load_sector_helper(struct disk_address_packet *ptr){
 
 }
 
+/// @brief You cant delete the root dir,
+/// @param dir directory and its sub-directories to be delted
+/// @return success TODO
+int delete_dir(struct directory dir){
+    if(is_volume(dir)){return 1;}
+    size_t folder_size = dir_size(dir);
+    struct directory* dir_listed = list_dir(dir,folder_size);
+    if(dir_listed!=NULL){//means it is a folder
+        for(struct directory* ptr = dir_listed;ptr->name[0]!=0;ptr++){
+            delete_dir(*dir_listed);
+        }
+        
+    
+    }
+    dalloc((uint32_t)dir_listed,folder_size);
+    //now we free up the current dir
+    int cur_cluster = dir.starting_cluster;
+    int next_cluster;
+    while(1){
+        next_cluster= FAT_lookup(cur_cluster);
+        FAT_edit(cur_cluster,0);
+        if(next_cluster>=0xFFF8){break;}
+
+    }
+    return 0;
+}
+
 
 
 /// @brief This function is full of hacks and could easly break if something is changed
@@ -282,7 +309,8 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         *free_space = dir;
          folder.file_size_in_bytes = folder_size;//we hack the folder for modify_dir
     }
-    modify_dir(folder,(char*) base); 
+    modify_dir(folder,(char*) base);
+    dalloc((uint32_t)base,folder_size+sizeof(directory));
     return 0;
 }
 
