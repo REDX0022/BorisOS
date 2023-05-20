@@ -275,6 +275,9 @@ int start_kernel_programm(void *start){
         if(sh==NULL){
             return 2; // LIB NOT FOUND
         }
+        nl();
+        printf(sh->funs_ptr);
+        nl();
         *lib_store = sh->funs_ptr;
         lib_store++;
         
