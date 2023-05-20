@@ -28,6 +28,8 @@ void __start__(){
     print_mem();
     dalloc((uint32_t)ptr1-20,100); //erase whole segment
     print_mem();
+    void* ptr4 = malloc(100);
+    print_mem();
     
 }
 
