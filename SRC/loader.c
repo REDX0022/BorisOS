@@ -286,7 +286,7 @@ int start_kernel_programm(void *start){
     init execution_start; 
     execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
     //but we do need to find the libraries that it provides
-    
+    printf((int)execution_start);
     execution_start(&temp_sector); //for now we use a global stack for the entire os 
     return 0;
 }
@@ -314,37 +314,7 @@ int load_kernel_map(char* name, char* pos){
 }
 
 
-/// @brief Starts a kernel space programm
-/// @param start memory loaction of the programm, should be a void pointer, cant be because of arithmetic
-/// @return success
-int start_programm(void *start){
-    if(!start){return -1;} //null pointer exeption
-    struct MZext_header* mz;
-    mz = ((struct MZext_header*) start); //there might need to be changes if there i
-    
-    void*** lib_search_ptr = &temp_sector; //where in the temp sector to put the funcs
-    for(char (*lib_search)[16]  = mz->lib_name; *lib_search[0]; lib_search++){
-        struct shared_lib* sh = get_shared_lib(lib_search);
-        if(sh==NULL){
-            //TODO: search for the library and load the map
-        }
-        *lib_search_ptr = sh->funs_ptr;
-        lib_search_ptr++;
-        
-    }
-    
-
-
-
-    init execution_start; 
-    execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
-    //but we do need to find the libraries that it provides
-    printf((int)execution_start);
-    nl();
-    execution_start(&temp_sector); //for now we use a global stack for the entire os 
-    return 0;
-}
-
+//
 
 int load_map(char* name, char* pos){ //TODO: SHOULD USE THE MALLOC AND MEMORY MANAGER TIME 
    
