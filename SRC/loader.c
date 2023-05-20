@@ -385,14 +385,16 @@ int __start__(){
         prints("LOADED MEMORY MANAGER MAP",26);
         nl();
     }
-    
+
     //LOADING THE FILE SYSTEM MANAGER
     
     char name1[11] = "FILEMNG SYS";
     char map_name1[11] = "FILEMNG MAP";
 
     void* file_manager_address = malloc(file_manager_size);
-    printf(file_manager_address);
+    printf((int)file_manager_address);
+    void* bs = malloc(100);
+    printf((int)bs);
     nl();
     if(load_file(name1,file_manager_address)){
         prints("FAILED TO LOAD FILE MANAGER",28);
