@@ -246,12 +246,19 @@ int load_sector_helper(struct disk_address_packet *ptr){
 
 }
 
+
+
 /// @brief This function is full of hacks and could easly break if something is changed
-/// @param dir directory to be created
+/// @param dir directory to be created, the only thing to be specified is the name and type
 /// @param folder @folder
 /// @return success
 int create_dir(struct directory dir,struct directory folder){//TODOO: check if dir name is valid
     if(!is_folder(folder)){return 1;}
+    
+    // we want to allocate the first cluster
+    dir.starting_cluster = FAT_free();
+    FAT_edit(dir.starting_cluster, 0xFFFF); //per spec
+
 
     size_t folder_size = dir_size(folder);
 
