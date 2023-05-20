@@ -406,7 +406,35 @@ int __start__(){
     }
 
     //LOADING THE FILE SYSTEM MANAGER
-   
+    
+    char name1[11] = "FILEMNG SYS";
+    char map_name1[11] = "FILEMNG MAP";
+    if(load_file(name1,memmory_manager_address)){
+        prints("FAILED TO LOAD MEMORY MANAGER",30);
+        nl();
+    }
+    else{
+        prints("LOADED MEMORY MANAGER SUCCESFULLY",34);
+        nl();
+    }
+    if(start_kernel_programm(memmory_manager_address)){
+        prints("FAILED TO START MEMORY MANAGER",31);
+        nl();
+    }
+    else{
+        prints("STARTED MEMORY MANAGER SUCCESFULLY",35);
+        nl();
+    }
+    if(load_kernel_map(map_name1,memmory_manager_address)){
+        struct shared_lib* sh = get_shared_lib(name);
+        init_memmng(sh->funs_ptr);
+        prints("FAILED TO LOAD MEMORY MANAGER MAP",34);
+        nl();;  
+    }
+    else{
+        prints("LOADED MEMORY MANAGER MAP",26);
+        nl();
+    }
     
 }
 
