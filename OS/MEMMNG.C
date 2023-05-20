@@ -19,8 +19,9 @@ void __start__(){
     init_memory_manager();
     print_mem();
     void* ptr1= malloc(45);
-    printf((int)ptr1);
-        nl();
+    print_mem();
+    dalloc((uint32_t)ptr1,45);
+    print_mem();
     
 }
 
