@@ -15,7 +15,9 @@ struct alloc_segment memory[max_memory_sectors];
 
 
 void __start__(){
-  
+    printf(0x7500);
+    printch(0xA);
+    printch(0xD);
     init_memory_manager();
     print_mem();
     void* ptr1= malloc(45);
@@ -166,7 +168,7 @@ void prints(char* ptr, size_t len){
     }
 }
 
-char hex[16] = "0123456789ABCDEF";
+char hex[17] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len){
     for(int i =0;i<len;i++){
         char high = (char)(hex[((*ptr)&0xFF)>>4]);
