@@ -32,6 +32,7 @@ void __start__(){
     print_mem();
     dalloc((uint32_t)ptr4,50);
     print_mem();
+   
     
 }
 
@@ -40,7 +41,7 @@ void print_mem(){
     for(int i = 0;i < max_memory_sectors;i++){
         printf((int)memory[i].begin);
         printch(' ');
-        printf((int)memory[i].len);
+        printf((int)(memory[i].len+memory[i].begin));
         nl();
 
     }
