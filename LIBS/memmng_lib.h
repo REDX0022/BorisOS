@@ -14,7 +14,7 @@ memcpy_ptr memcpy;
 
 
 void init_MEMMNG(void** funcs){ //check if this is safe
-    malloc = (malloc_ptr) ((&funcs)[0]);
-    dalloc = (dalloc_ptr)(&funcs)[1];
-    memcpy = (memcpy_ptr)(&funcs)[2];
+    malloc = (malloc_ptr)((funcs)[0]);
+    dalloc = (dalloc_ptr)(funcs)[1];
+    memcpy = (memcpy_ptr)(funcs)[2];
 }
