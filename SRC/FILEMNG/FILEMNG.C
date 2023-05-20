@@ -544,9 +544,10 @@ void start_program(){
 void init(){
     //we want to setup the root dir
     char temp_volume_name[11] = "BORISOSVOL"; //this changes with volume_label
-    prints("TRIED MEMCPY",13);
+    printf((int)&malloc);
     nl();
-    dmph((char*)&malloc,4);
+    
+    dmph((char*)&malloc,20);
     nl();
     memcpy(&temp_volume_name,&volume.name,11);
    
