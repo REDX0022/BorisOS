@@ -14,6 +14,8 @@ run: $(prereq)
 	cp OS/LOADER.SYS /Volumes/BORISOSVOL/
 	cp OS/MEMMNG.SYS /Volumes/BORISOSVOL/
 	cp OS/MEMMNG.MAP /Volumes/BORISOSVOL/
+	cp OS/FILEMNG.SYS /Volumes/BORISOSVOL/
+	
 	diskutil unmountDisk disk4
 	sudo qemu-system-x86_64 -cpu qemu64 -drive format=raw,file=/dev/disk4 -nographic
 
