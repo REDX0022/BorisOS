@@ -7,13 +7,13 @@ File Ofs  Sym Addr  Sym
 000001D6  000001D6  _init_memory_manager
 00000241  00000241  _malloc
 00000513  00000513  _dalloc
-000009E4  000009E4  _memcpy
-00000A43  00000A43  _printf
-00000AC7  00000AC7  _nl
-00000AE6  00000AE6  _printch
-00000AFC  00000AFC  _prints
-00000B42  00000B42  _dmph
-          00000C27
+000009E2  000009E2  _memcpy
+00000A41  00000A41  _printf
+00000AC5  00000AC5  _nl
+00000AE4  00000AE4  _printch
+00000AFA  00000AFA  _prints
+00000B40  00000B40  _dmph
+          00000C25
 
           00000C28  section .relod:
           00000C28  __start__relod

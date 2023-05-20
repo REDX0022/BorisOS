@@ -90,13 +90,13 @@ void dalloc(uint32_t begin, size_t size){
 
             printch('h');
             struct alloc_segment temp;
-            for(int j = max_memory_sectors; j > i+1; j--){
-                memory[j-1] = memory[j];
+            for(int j = max_memory_sectors-1; j > i+1; j--){
+                memory[j] = memory[j-1];
             }
 
             temp = memory[i+1];
 
-            memory[i+1].begin = begin+size+1;
+            memory[i+1].begin = begin+size;
             memory[i+1].len = memory[i].len + (begin - memory[i].begin);
             
             memory[i].len = begin-memory[i].begin;
