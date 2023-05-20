@@ -28,8 +28,9 @@ void __start__(){
 
 void print_mem(){
     for(int i = 0;i < max_memory_sectors;i++){
-        printf(memory[i].begin);
-        printf(memory[i].len);
+        printf((int)memory[i].begin);
+        printch(' ');
+        printf((int)memory[i].len);
         printch(0xA);
         printch(0xD);
 
