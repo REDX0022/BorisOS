@@ -401,6 +401,9 @@ int __start__(){
     }
     else{
         struct shared_lib* sh = get_shared_lib(name);
+        printf((int)sh);
+        nl();
+        printf((int)&shared_libs);
         init_MEMMNG(sh->funs_ptr);
         prints("LOADED MEMORY MANAGER MAP",26);
         nl();
