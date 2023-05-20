@@ -3,17 +3,17 @@ File Ofs  Sym Addr  Sym
           00000020  section .text:
 00000020  00000020  ___start__
 00000030  00000030  __start
-00000110  00000110  _start_program
-0000011E  0000011E  _print_mem
-000001C6  000001C6  _init_memory_manager
-00000231  00000231  _malloc
-00000503  00000503  _dalloc
-00000AC2  00000AC2  _memcpy
-00000B21  00000B21  _printf
-00000BA5  00000BA5  _nl
-00000BC4  00000BC4  _printch
-00000BDA  00000BDA  _prints
-00000C20  00000C20  _dmph
+00000110  00000110  _printf
+00000194  00000194  _nl
+000001B3  000001B3  _printch
+000001C9  000001C9  _prints
+0000020F  0000020F  _dmph
+000002D7  000002D7  _start_program
+000002E5  000002E5  _print_mem
+0000038D  0000038D  _init_memory_manager
+000003F8  000003F8  _malloc
+000006CA  000006CA  _dalloc
+00000C89  00000C89  _memcpy
           00000D05
 
           00000D08  section .relod:

@@ -23,6 +23,7 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 #include "memmng_lib.h"
 #include "dir_queue.h"
 #include "FAT16_structs.h"
+#include "kernel_out.h"
 
 //========================Variables for the FAT16 file system==========================
 #define jump_point 0x3E

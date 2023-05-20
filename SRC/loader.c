@@ -4,6 +4,7 @@
 // the loader should have a basic loader to load from path
 #include "stdint.h"
 #include "stddef.h"
+#include "kernel_out.h"
 #include "FAT16_structs.h"
 #include "memmng_lib.h"
 
@@ -346,45 +347,4 @@ int __start__(){
    
     
 }
-
-void printf(int n){
-    if(n==0){printch('0');return;}
-    printf(n/10);
-    char tmpprint =((uint32_t)n%10)+48;
-    printch(tmpprint&0xFF); //48 is the offset of the char 0
-    n/=10;
-    
-}
-
-void printch(char c){ //i dont know it its needed to push, its for safety
-    asm("pushad \n"
-        "mov bh, 0x00 \n"
-        "mov al, [bp+8] ; +4 for ebx,  \n"
-        "mov ah, 0x0e \n"
-        "int 0x10 \n"
-        "popad \n"
-    );
-}
-
-
-void prints(char* ptr, size_t len){
-    for(int i =0;i<len;i++){
-        printch(*(ptr++));
-    }
-}
-
-char hex[16] = "0123456789ABCDEF";
-void dmph(char* ptr, size_t len){
-    for(int i =0;i<len;i++){
-        char high = (char)(hex[((*ptr)&0xFF)>>4]);
-        char low = (char)(hex[(*ptr)&0xF]);
-    
-        printch(high);
-        printch(low);
-        printch(' ');
-        ptr++;
-    }
-    
-}
-
 
