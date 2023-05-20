@@ -530,7 +530,15 @@ struct directory* search_dir(struct directory folder, char name[11]){
 
 
 void start_program(){
+    prints("MADE IT TO FILE MANAGER",24);
+    nl();
     init();
+    prints("INITIALIZED FILE MANAGER",25);
+    nl();
+    void* some_ptr = malloc(100);
+    printf((int)some_ptr);
+    nl();
+
 }
 
 void init(){

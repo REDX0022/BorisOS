@@ -54,6 +54,7 @@
 #define max_loaded_shared_func 256
 //-----------------------------------------------------------
 #define memmory_manager_address 0x5000
+#define file_manager_size 0x1500 //TODOO: change this perhaps, its just a perdiction on how much it will grow
 
 //============================Structures=======================================
  
@@ -409,7 +410,9 @@ int __start__(){
     
     char name1[11] = "FILEMNG SYS";
     char map_name1[11] = "FILEMNG MAP";
-    if(load_file(name1,memmory_manager_address)){
+
+    void* file_manager_address = malloc(file_manager_size);
+    if(load_file(name1,file_manager_address)){
         prints("FAILED TO LOAD MEMORY MANAGER",30);
         nl();
     }
@@ -417,7 +420,7 @@ int __start__(){
         prints("LOADED MEMORY MANAGER SUCCESFULLY",34);
         nl();
     }
-    if(start_kernel_programm(memmory_manager_address)){
+    if(start_kernel_programm(file_manager_address)){
         prints("FAILED TO START MEMORY MANAGER",31);
         nl();
     }
@@ -425,7 +428,7 @@ int __start__(){
         prints("STARTED MEMORY MANAGER SUCCESFULLY",35);
         nl();
     }
-    if(load_kernel_map(map_name1,memmory_manager_address)){
+    if(load_kernel_map(map_name1,file_manager_address)){
         prints("FAILED TO LOAD MEMORY MANAGER MAP",34);
         nl();;  
     }
@@ -435,6 +438,11 @@ int __start__(){
         prints("LOADED MEMORY MANAGER MAP",26);
         nl();
     }
-    
+    dmph(&shared_libs,32);
+    nl();
+    nl();
+    dmph(&shared_func,50);
+
+
 }
 
