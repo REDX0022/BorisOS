@@ -402,7 +402,7 @@ int __start__(){
         nl();;  
     }
     else{
-        struct shared_lib* sh = get_shared_lib(name);
+        struct shared_lib* sh = get_shared_lib(map_name);
         printf((int)sh);
         nl();
         printf((int)&shared_libs);
