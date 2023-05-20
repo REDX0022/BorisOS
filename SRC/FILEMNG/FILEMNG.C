@@ -544,7 +544,7 @@ void start_program(){
 void init(){
     //we want to setup the root dir
     char temp_volume_name[11] = "BORISOSVOL"; //this changes with volume_label
-    printf((int)&malloc);
+    printf((int)malloc);
     nl();
     
     dmph((char*)&malloc,20);

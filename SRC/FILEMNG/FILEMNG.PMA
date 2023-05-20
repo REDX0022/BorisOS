@@ -34,14 +34,14 @@ File Ofs  Sym Addr  Sym
 0000154B  0000154B  _search_dir
 00001723  00001723  _start_program
 00001797  00001797  _init
-00001859  00001859  _pad_file_name
-000019E3  000019E3  _is_read_only
-000019F7  000019F7  _is_hidden
-00001A0B  00001A0B  _is_system
-00001A1F  00001A1F  _is_volume
-00001A33  00001A33  _is_folder
-00001A47  00001A47  _is_archive
-          00001ABA
+0000185B  0000185B  _pad_file_name
+000019E5  000019E5  _is_read_only
+000019F9  000019F9  _is_hidden
+00001A0D  00001A0D  _is_system
+00001A21  00001A21  _is_volume
+00001A35  00001A35  _is_folder
+00001A49  00001A49  _is_archive
+          00001ABC
 
           00001ABC  section .relod:
           00001ABC  __start__relod
