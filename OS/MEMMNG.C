@@ -31,6 +31,7 @@ void __start__(){
     void* ptr4 = malloc(200);
     print_mem();
     dalloc((uint32_t)ptr4,50);
+    dalloc((uint32_t)ptr4+55,20);
     print_mem();
     dalloc((uint32_t)ptr1,500);
     print_mem();
