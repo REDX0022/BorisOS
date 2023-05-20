@@ -304,7 +304,7 @@ int load_kernel_map(char* name, char* pos){
     shared_libs_ptr->funs_ptr = shared_func_ptr;
 
     for(uint16_t i =0;i<map->size;i++){//we store the pointers and add the program begin
-        *shared_func_ptr = (void*) (pos + *(&(map->offsets)+i)); //i hope to god this works
+        *shared_func_ptr = (void*) (pos + *(&(map->offsets)+i)); //this hack is so stupid i dont want to look at it anymore
         shared_func_ptr++;
     }
 
@@ -397,11 +397,11 @@ int __start__(){
     }
     if(load_kernel_map(map_name,memmory_manager_address)){
         prints("FAILED TO LOAD MEMORY MANAGER MAP",34);
-        struct shared_lib* sh = get_shared_lib(name);
-        init_MEMMNG(sh->funs_ptr);
         nl();;  
     }
     else{
+        struct shared_lib* sh = get_shared_lib(name);
+        init_MEMMNG(sh->funs_ptr);
         prints("LOADED MEMORY MANAGER MAP",26);
         nl();
     }
