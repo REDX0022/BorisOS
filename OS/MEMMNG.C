@@ -99,7 +99,7 @@ void dalloc(uint32_t begin, size_t size){
             temp = memory[i+1];
 
             memory[i+1].begin = begin+size;
-            memory[i+1].len = memory[i].len + (begin - memory[i].begin);
+            memory[i+1].len = memory[i].begin + memory[i].len - (begin + size);
             
             memory[i].len = begin-memory[i].begin;
             return; //we are done with the dalloc
