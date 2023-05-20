@@ -2,7 +2,7 @@
 #include "stdint.h"
 #include "stddef.h"
 
-#define max_memory_sectors 1000
+#define max_memory_sectors 25//change this later man okay? TODOOOOO
 #define memory_begin 0x500 
 #define memory_end 0x80000 
 struct alloc_segment{
@@ -17,8 +17,24 @@ struct alloc_segment memory[max_memory_sectors];
 void __start__(){
   
     init_memory_manager();
-   
+    print_mem();
+    void* ptr1= malloc(45);
+    print_mem();
+    dalloc((uint32_t)ptr1,45);
+    print_mem();
     
+}
+
+
+void print_mem(){
+    for(int i = 0;i < max_memory_sectors;i++){
+        printf(memory[i].begin);
+        printf(memory[i].len);
+        printch(0xA);
+        printch(0xD);
+
+    }
+
 }
 
 
