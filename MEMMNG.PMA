@@ -9,24 +9,24 @@ File Ofs  Sym Addr  Sym
 000004AD  000004AD  _dalloc
 00000973  00000973  _memcpy
 000009D2  000009D2  _printf
-00000A50  00000A50  _printch
-00000A66  00000A66  _prints
-00000AAC  00000AAC  _dmph
-          00000B91
+00000A56  00000A56  _printch
+00000A6C  00000A6C  _prints
+00000AB2  00000AB2  _dmph
+          00000B97
 
-          00000B94  section .relod:
-          00000B94  __start__relod
-          00000D20  __stop__relod
-          00000D20
+          00000B98  section .relod:
+          00000B98  __start__relod
+          00000D24  __stop__relod
+          00000D24
 
-          00000D20  section .relot:
-          00000D20  __start__relot
-          00000D78  __stop__relot
-          00000D78
+          00000D24  section .relot:
+          00000D24  __start__relot
+          00000D7C  __stop__relot
+          00000D7C
 
-          00000D78  section .data:
-00000D78  00000D78  _hex
-          00000D89
+          00000D7C  section .data:
+00000D7C  00000D7C  _hex
+          00000D8C
 
           00000D8C  section .bss:
           00000D8C  __start__bss

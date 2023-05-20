@@ -142,8 +142,8 @@ void memcpy(void *src,void *dest,size_t n){
 void printf(int n){
     if(n==0){printch('0');return;}
     printf(n/10);
-    char tmpprint = (char)((n%10)+48);
-    printch(tmpprint); //48 is the offset of the char 0
+    char tmpprint =((uint32_t)n%10)+48;
+    printch(tmpprint&0xFF); //48 is the offset of the char 0
     n/=10;
     
 }
@@ -165,7 +165,7 @@ void prints(char* ptr, size_t len){
     }
 }
 
-char hex[17] = "0123456789ABCDEF";
+char hex[16] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len){
     for(int i =0;i<len;i++){
         char high = (char)(hex[((*ptr)&0xFF)>>4]);
@@ -178,7 +178,6 @@ void dmph(char* ptr, size_t len){
     }
     
 }
-
 
 
 
