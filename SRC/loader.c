@@ -405,7 +405,7 @@ int __start__(){
         prints("LOADED MEMORY MANAGER MAP",26);
         nl();
     }
-    dmph(&malloc,4);
+    dmph(malloc,4);
     nl();
     dmph(&shared_libs,32);
     nl();
