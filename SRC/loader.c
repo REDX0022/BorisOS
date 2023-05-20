@@ -249,10 +249,6 @@ int load_file(char* file_name,char *pos){
 /// @return Pointer to a saved shared lib  
 struct shared_lib* get_shared_lib(char* name){
     for(struct shared_lib* ptr = shared_libs;ptr!=shared_libs_ptr;ptr++){
-        prints(&(ptr->name),11);
-        nl();
-        prints(name,11);
-        nl();
         if(cmp_name(&(ptr->name),name)){return ptr;}
     }
     return NULL;
@@ -405,15 +401,12 @@ int __start__(){
     }
     else{
         struct shared_lib* sh = get_shared_lib(&map_name);
-        printf(sh->funs_ptr);
-        nl();
-        printf(shared_func);
-        nl();
         init_MEMMNG(sh->funs_ptr);
         prints("LOADED MEMORY MANAGER MAP",26);
         nl();
     }
-
+    printf(malloc);
+    nl();
     dmph(&shared_libs,32);
     nl();
     nl();
