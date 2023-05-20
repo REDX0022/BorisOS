@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
+
 void printf(int n){
     if(n==0){printch('0');return;}
     printf(n/10);

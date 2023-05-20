@@ -1,4 +1,3 @@
-#include "queue.h"
 #include "stddef.h"
 #include "stdint.h"
 #include "FAT16_structs.h"
@@ -19,11 +18,11 @@ void reset_queue(){
 
 void dir_enqueue(struct directory dir){
     if(end<len){
-        ar[end++] =dir; 
+        ar[end++] = dir; 
     }
     else{
         end = 0;
-        ar[end++] =dir;
+        ar[end++] = dir;
     }
 }
 

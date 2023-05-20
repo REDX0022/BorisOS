@@ -21,8 +21,8 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 #include "stddef.h"
 #include "stdint.h"
 #include "memmng_lib.h"
-#include "dir_queue.h"
-#include "FAT16_structs.h"
+#include "dir_queue.c" //this has fat16 structs
+
 #include "kernel_out.h"
 
 //========================Variables for the FAT16 file system==========================
