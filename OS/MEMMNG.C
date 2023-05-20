@@ -92,7 +92,6 @@ void dalloc(uint32_t begin, size_t size){
     for(int i = 0;memory[i].len & i < max_memory_sectors;i++){
         if(memory[i].begin < begin && memory[i].begin + memory[i].len > begin + size){ //we need to split the sector in 2
 
-            printch('h');
             struct alloc_segment temp;
             for(int j = max_memory_sectors-1; j > i+1; j--){
                 memory[j] = memory[j-1];
@@ -118,6 +117,7 @@ void dalloc(uint32_t begin, size_t size){
         }
 
         if(memory[i].begin>=begin && removed_sectors_begin == -1){ //this segment is not nececary
+            printch('h');
             
             removed_sectors_begin = i;
             
