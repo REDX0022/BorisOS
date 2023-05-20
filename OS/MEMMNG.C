@@ -7,7 +7,7 @@
 #define memory_end 0x80000 
 struct alloc_segment{
     uint32_t begin;
-    uint32_t len;
+    size_t len;
 };
 
 /// @brief this is a very simple strucuter, segments of len 0 are illegal, the last segment has len 0 and is the stop segment
@@ -19,12 +19,7 @@ void __start__(){
     init_memory_manager();
     print_mem();
     void* ptr1= malloc(45);
-    printf((int)ptr1);
-    printch(0xA);
-    printch(0xD);
-    print_mem();
-    dalloc((uint32_t)ptr1,45);
-    print_mem();
+   
     
 }
 
@@ -34,8 +29,7 @@ void print_mem(){
         printf((int)memory[i].begin);
         printch(' ');
         printf((int)memory[i].len);
-        printch(0xA);
-        printch(0xD);
+        nl();
 
     }
 
@@ -47,7 +41,7 @@ void print_mem(){
 int init_memory_manager(){
     //TODO: change this to the actual memory map which is used
     memory[0].begin = memory_begin; 
-    memory[0].len = (0x8000-memory_begin); //reserved by the os
+    memory[0].len = (size_t)(0x8000-memory_begin); //reserved by the os
     memory[1].begin = memory_end;
     memory[1].len = (size_t)0;
     return 0;
@@ -59,6 +53,8 @@ int init_memory_manager(){
 void* malloc(size_t size){
     for(int i = 0;memory[i].len & i < max_memory_sectors;i++){
         size_t cur_available = memory[i+1].begin-memory[i].begin-memory[i].len;
+        printf(cur_available);
+        nl();
         if(cur_available>size){ //we have found the available space
             return (void*) (memory[i].begin+memory[i].len);
             memory[i].len+=size;
@@ -150,6 +146,10 @@ void printf(int n){
     printch(tmpprint&0xFF); //48 is the offset of the char 0
     n/=10;
     
+}
+void nl(){
+    printch(0xA);
+    printch(0xD);
 }
 
 void printch(char c){ //i dont know it its needed to push, its for safety
