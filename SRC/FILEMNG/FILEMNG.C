@@ -115,6 +115,11 @@ int FAT_edit(uint16_t cluster,uint16_t val){//this is really inefficient but i d
     return 0; //TODO: Diagnostics
 }
 
+
+void get_volume(struct directory* ret){
+    *ret = volume;
+}
+
 /// @brief Gets the directory from a null terminated path string
 /// @param path doesn't need to be in standard form 
 /// @return directory somewhere in memory
