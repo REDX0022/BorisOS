@@ -90,12 +90,14 @@ int cmp_name(char* str1, char* str2){
 
 uint16_t FAT_lookup(uint16_t cluster){
     int needed_sector = FAT_start+(cluster*2)/bytes_per_sector;
+    printf(needed_sector);
     if(needed_sector = cached_FAT_sector){ //the sector we need is cached
         return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
     }
     else{ //we need to load a new sector
         load_sector(needed_sector,(void*) &FAT_cache);
         cached_FAT_sector = needed_sector;
+        printf((int)FAT_cache[0]);
         return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
     }
 }
