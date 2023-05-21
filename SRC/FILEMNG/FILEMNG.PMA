@@ -9,74 +9,75 @@ File Ofs  Sym Addr  Sym
 00000209  00000209  _prints
 0000024F  0000024F  _dmph
 00000355  00000355  _init_MEMMNG
-0000039C  0000039C  _reset_queue
-000003BF  000003BF  _dir_enqueue
-00000460  00000460  _dir_dequeue
-000004DF  000004DF  _dir_is_queue_empty
-000004FE  000004FE  _cmp_name
-0000055E  0000055E  _FAT_lookup
-0000061F  0000061F  _FAT_free
-00000676  00000676  _FAT_edit
-000006FE  000006FE  _get_volume
-0000071C  0000071C  _from_path
-000008FB  000008FB  _write_sector
-000009E7  000009E7  _write_sector_helper
-00000A1A  00000A1A  _load_sector
-00000B06  00000B06  _load_sector_helper
-00000B37  00000B37  _delete_dir
-00000C80  00000C80  _create_dir
-00000FC4  00000FC4  _modify_root
-00001027  00001027  _modify_dir
-00001250  00001250  _load_file
-0000135B  0000135B  _dir_size
-00001486  00001486  _list_dir
-00001523  00001523  _list_root
-000015A4  000015A4  _search
-000016BA  000016BA  _search_dir
-00001896  00001896  _start_program
-00001B1A  00001B1A  _init
-00001B9D  00001B9D  _pad_file_name
-00001D27  00001D27  _is_read_only
-00001D3B  00001D3B  _is_hidden
-00001D4F  00001D4F  _is_system
-00001D63  00001D63  _is_volume
-00001D77  00001D77  _is_folder
-00001D8B  00001D8B  _is_archive
-          00001DFE
+000003B2  000003B2  _reset_queue
+000003D5  000003D5  _dir_enqueue
+00000476  00000476  _dir_dequeue
+000004F5  000004F5  _dir_is_queue_empty
+00000514  00000514  _cmp_name
+00000574  00000574  _FAT_lookup
+00000635  00000635  _FAT_free
+0000068C  0000068C  _FAT_edit
+00000714  00000714  _get_volume
+00000732  00000732  _from_path
+00000911  00000911  _write_sector
+000009FD  000009FD  _write_sector_helper
+00000A30  00000A30  _load_sector
+00000B1C  00000B1C  _load_sector_helper
+00000B4D  00000B4D  _delete_dir
+00000C96  00000C96  _create_dir
+00000FDA  00000FDA  _modify_root
+0000103D  0000103D  _modify_dir
+00001266  00001266  _load_file
+00001371  00001371  _dir_size
+0000149C  0000149C  _list_dir
+00001539  00001539  _list_root
+000015BA  000015BA  _search
+000016D0  000016D0  _search_dir
+000018AC  000018AC  _start_program
+00001B30  00001B30  _init
+00001BB3  00001BB3  _pad_file_name
+00001D3D  00001D3D  _is_read_only
+00001D51  00001D51  _is_hidden
+00001D65  00001D65  _is_system
+00001D79  00001D79  _is_volume
+00001D8D  00001D8D  _is_folder
+00001DA1  00001DA1  _is_archive
+          00001E14
 
-          00001E00  section .relod:
-          00001E00  __start__relod
-          00002520  __stop__relod
-          00002520
+          00001E14  section .relod:
+          00001E14  __start__relod
+          00002538  __stop__relod
+          00002538
 
-          00002520  section .relot:
-          00002520  __start__relot
-          000027F0  __stop__relot
-          000027F0
+          00002538  section .relot:
+          00002538  __start__relot
+          00002808  __stop__relot
+          00002808
 
-          000027F0  section .rodata:
-          000028DC
+          00002808  section .rodata:
+          000028F4
 
-          000028DC  section .data:
-000028DC  000028DC  _hex
-000028F0  000028F0  _begin
-000028F4  000028F4  _end
-000028F8  000028F8  _cached_FAT_sector
-          00002913
+          000028F4  section .data:
+000028F4  000028F4  _hex
+00002908  00002908  _begin
+0000290C  0000290C  _end
+00002910  00002910  _cached_FAT_sector
+          0000292B
 
-          00002914  section .bss:
-          00002914  __start__bss
-00002914  00002914  _malloc
-00002918  00002918  _dalloc
-0000291C  0000291C  _memcpy
-00002920  00002920  _ar
-00004920  00004920  _directory_size
-00004940  00004940  _volume
-00004960  00004960  _FAT_cache
-00004B60  00004B60  _temp_sector
-00004D60  00004D60  _temp_sector2
-00004F60  00004F60  _padding
-00005060  00005060  _dap
-          00005070  __stop__bss
-          00005070
+          0000292C  section .bss:
+          0000292C  __start__bss
+0000292C  0000292C  _malloc
+00002930  00002930  _dalloc
+00002934  00002934  _memcpy
+00002938  00002938  _print_mem
+0000293C  0000293C  _ar
+0000493C  0000493C  _directory_size
+0000495C  0000495C  _volume
+0000497C  0000497C  _FAT_cache
+00004B7C  00004B7C  _temp_sector
+00004D7C  00004D7C  _temp_sector2
+00004F7C  00004F7C  _padding
+0000507C  0000507C  _dap
+          0000508C  __stop__bss
+          0000508C
 

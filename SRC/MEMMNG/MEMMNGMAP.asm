@@ -1,4 +1,5 @@
-dw 3
+dw 4
 dw 0x47A ; malloc
 dw 0x7FC ; dalloc
 dw 0xDF8 ; memcpy
+dw 0x333 ; print_mem
