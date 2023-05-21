@@ -431,7 +431,8 @@ size_t dir_size(struct directory folder){
         cur_cluster= next_cluster;
         next_cluster = FAT_lookup(cur_cluster);
         cluster_count++;
-        
+         printf((int)next_cluster);
+        nl();
     }
     //then the current cluster points to the next one
     load_sector(data_start+(cur_cluster-2),(void*) &temp_sector);
