@@ -229,7 +229,7 @@ int load_sector_helper(struct disk_address_packet *ptr){
     //mov dword [disk_address_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
     //--------------------------call int 13h-----------------------
         //"pushad \n"
-        //"push ds \n" this breaks it for some fuckig reason, oh yeah i know just dont touch it
+        "push ds \n" //this breaks it for some fuckig reason, oh yeah i know just dont touch it
         "mov dl, 0x80  ; TODO make this flexible; \n"
         "xor ax, ax  \n "
         "mov ds, ax  \n "
@@ -245,7 +245,7 @@ int load_sector_helper(struct disk_address_packet *ptr){
         // "mov ah, 0x0e \n"
         // "int 0x10 \n"
         // "skipl: \n"
-        //"pop ds \n "
+        "pop ds \n "
         //"popad \n "
     // ----------------------------------------------------------
     );
