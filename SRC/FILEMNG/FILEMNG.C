@@ -561,7 +561,9 @@ void start_program(){
     prints("STARTED FILE MANAGER TESTING",29);
     nl();
     //===========FILE MNG TESTING================
-    
+    nl();
+    dmph((char*)&volume,32,16);
+    nl();
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     nl();
     dmph((char*)&volume,32,16);
