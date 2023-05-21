@@ -326,8 +326,9 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         *free_space = dir;
          folder.file_size_in_bytes = folder_size;//we hack the folder for modify_dir
     }
+    nl();
     dmph((char*)base,folder_size,16);
-
+    nl();
     modify_dir(folder,(char*) base,folder_size);
     dalloc((uint32_t)base,folder_size+sizeof(volume));
     return 0;
