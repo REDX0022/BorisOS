@@ -512,7 +512,7 @@ struct directory* search_dir(struct directory folder, char name[11]){
         search_size= dir_size(folder);
         search_place= list_dir(folder,search_size);
     } 
-    for(struct directory* i = search_place;i!=search_place+folder.file_size_in_bytes;i++){
+    for(struct directory* i = search_place;i!=(struct directory*)(((char*)search_place)+search_size);i++){
         printf((int)i);
         nl();
         if(is_folder(*i)){//we queue up a folder to be searched later recursively
