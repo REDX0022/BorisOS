@@ -428,9 +428,10 @@ size_t dir_size(struct directory folder){
     nl();
     int cluster_count =0; //one smaller than it should so it's easier to calc the size
     while(next_cluster<0xFFF8){
+        cur_cluster= next_cluster;
         next_cluster = FAT_lookup(cur_cluster);
         cluster_count++;
-        cur_cluster= next_cluster;
+        
     }
     //then the current cluster points to the next one
     load_sector(data_start+(cur_cluster-2),(void*) &temp_sector);
