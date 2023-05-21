@@ -218,7 +218,7 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
 
 //we are doing this so we can access the disk packet pos via the stack
 int load_sector_helper(struct disk_address_packet *ptr){
-    /*
+    
     asm(
     //mov byte [disk_address_packet_struct], 0x10 ;size of packet is 16 bytes
     //mov byte [disk_address_packet_struct+1],0 ; always 0
@@ -229,7 +229,7 @@ int load_sector_helper(struct disk_address_packet *ptr){
     //mov dword [disk_address_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
     //--------------------------call int 13h-----------------------
         "pushad \n"
-        "push ds \n"
+        //"push ds \n"
         "mov dl, 0x80  ; TODO make this flexible; \n"
         "xor ax, ax  \n "
         "mov ds, ax  \n "
@@ -245,11 +245,11 @@ int load_sector_helper(struct disk_address_packet *ptr){
         "mov ah, 0x0e \n"
         "int 0x10 \n"
         "skipl: \n"
-        "pop ds \n "
+        //"pop ds \n "
         "popad \n "
     // ----------------------------------------------------------
     );
-   */
+   
 
 }
 
