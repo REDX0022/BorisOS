@@ -557,7 +557,9 @@ void start_program(){
     //===========FILE MNG TESTING================
     prints("FAT TABLE BEGGINING",20);
     nl();
-    FAT_lookup(2);
+    printf(FAT_lookup(2));
+    nl();
+    while(1){}
     dmph(( char*)&FAT_cache,512,16);
     nl();
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
