@@ -238,7 +238,7 @@ int load_sector_helper(struct disk_address_packet *ptr){
         "ror esi, 4 \n "
         "mov ds, si \n "
         "shr esi, 28 \n "
-        //"int 0x13 \n "
+        "int 0x13 \n "
         "jnc skipl \n"
         "mov bh, 0 \n"
         "mov al, 'f' \n"
