@@ -71,7 +71,7 @@ char temp_sector[bytes_per_sector]; //these 2 are used by functions only while t
 char temp_sector2[bytes_per_sector]; 
 
 
-
+struct disk_address_packet dap;
 
 /// @brief rudementary file name comparison, root dir only
 /// @param str1 the name in the directory
@@ -148,7 +148,7 @@ struct directory* from_path(char* path){//this string exists on the stack, it is
 
 
 
-struct disk_address_packet dap;
+
 
 int write_sector(int sector_pos,void *memory_pos){
     dap.size = 0x10;
@@ -238,7 +238,7 @@ int load_sector_helper(struct disk_address_packet *ptr){
         "ror esi, 4 \n "
         "mov ds, si \n "
         "shr esi, 28 \n "
-        //"int 0x13 \n "
+        "int 0x13 \n "
         // "jnc skipl \n"
         // "mov bh, 0 \n"
         // "mov al, 'f' \n"
