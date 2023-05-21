@@ -581,6 +581,8 @@ void start_program(){
     create_dir(dir1,folder1);
 
     root_search = search_dir(volume,"FOLDER1    ");
+    prints("RETRUNRED FROM SEARCH",22);
+    nl();
     folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
