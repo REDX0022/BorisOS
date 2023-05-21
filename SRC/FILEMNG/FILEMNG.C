@@ -536,6 +536,7 @@ void start_program(){
     nl();
     //===========FILE MNG TESTING================
     struct directory* root_listed = list_root();
+    printf(33);
     dmph((char*)root_listed,root_dir_size*bytes_per_sector,16);
 
 
