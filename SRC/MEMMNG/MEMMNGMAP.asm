@@ -1,4 +1,4 @@
 dw 3
-dw 0x408 ; malloc
-dw 0x6DA ; dalloc
-dw 0xC99 ; memcpy
+dw 0x444 ; malloc
+dw 0x716 ; dalloc
+dw 0xCD5 ; memcpy
