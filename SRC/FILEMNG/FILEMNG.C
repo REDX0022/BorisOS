@@ -329,8 +329,14 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     return 0;
 }
 
-int modify_root(){//TODOOOO: also edit create dir accordingly
-
+int modify_root(char* pos){
+    
+    for(int cur_sector = root_dir;cur_sector<root_dir+root_dir_size;cur_sector++){
+        int t = write_sector(cur_sector,(void*)pos);
+        if(t){return 1;}
+        pos+=bytes_per_sector;
+    }
+    return 0;
 }
 
 /// @brief modifies an existing file
@@ -558,6 +564,7 @@ void start_program(){
     memcpy("TEXTFILETXT",&(dir1.name),11);
     create_dir(*root_search,dir1);
 
+    folder_size = dir_size(*root_search);
     listed_dir = list_dir(*root_search,folder_size);
     dmph((char*)listed_dir,folder_size,16);
     nl();
