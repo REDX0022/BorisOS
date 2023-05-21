@@ -578,13 +578,13 @@ void start_program(){
     struct directory dir1;
     memcpy("TEXTFILETXT",&(dir1.name),11);
     memcpy(root_search,&folder1,sizeof(folder1));
+    nl();
+    dmph((char*)&volume,32,16);
+    nl();
     create_dir(dir1,folder1);
 
     struct directory* root_dir_shit = list_root();
     dmph((char*)root_dir_shit,bytes_per_sector,16);
-    nl();
-    nl();
-    dmph((char*)&volume,32,16);
     nl();
     root_search = search_dir(volume,"FOLDER1    ");
     prints("RETRUNRED FROM SEARCH",22);
