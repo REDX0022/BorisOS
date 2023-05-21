@@ -29,7 +29,6 @@ void print_mem(){//this is debug func, shall not be in the lib
         printch(' ');
         printf((int)(memory[i].len+memory[i].begin));
         nl();
-
     }
 
 }
