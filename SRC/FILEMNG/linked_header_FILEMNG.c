@@ -1,4 +1,4 @@
-asm("db 'MEMMNG  SYS'");
+asm("db 'MEMMNG  MAP'");
 asm("times 5 db 0");
 asm("times 16 db 0"); //null terminated
 

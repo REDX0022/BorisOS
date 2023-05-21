@@ -1,4 +1,4 @@
-asm("db '</FILE NAME/>'");
+asm("db '</MAP NAME/>'");
 asm("times 5 db 0");
 asm("times 16 db 0"); //null terminated
 
