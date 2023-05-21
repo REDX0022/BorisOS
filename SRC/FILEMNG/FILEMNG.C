@@ -62,7 +62,7 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 #define data_start root_dir+root_dir_size
 //--------------------------------------------------------
 
-
+struct directory directory_size;
 struct directory volume;
 int cached_FAT_sector =-1;
 uint16_t FAT_cache[bytes_per_sector/2]; //this is used to cache one sector of fat
@@ -142,7 +142,7 @@ struct directory* from_path(char* path){//this string exists on the stack, it is
         struct directory* ret = search_dir(cur,padded_name); //we need to dealoate the return 
         if(ret==NULL){return NULL;}
         cur = *ret;
-        dalloc((uint32_t)ret,sizeof(volume));
+        dalloc((uint32_t)ret,sizeof(directory_size));
     }
 }
 
@@ -302,7 +302,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         prints("IS FOLDER yay",14);
         nl();
         folder_size = dir_size(folder);
-        base = list_dir(folder,folder_size+2*sizeof(volume)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
+        base = list_dir(folder,folder_size+2*sizeof(directory_size)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
     }
     else{//its a volume
         folder_size = root_dir_size*bytes_per_sector;
@@ -318,8 +318,8 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         }
     }
     if(free_space==NULL&&is_folder(folder)){//the folder is jam packed
-        base[(folder_size)/(sizeof(volume))+1].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
-        base[(folder_size)/(sizeof(volume))] = dir;
+        base[(folder_size)/(sizeof(directory_size))+1].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
+        base[(folder_size)/(sizeof(directory_size))] = dir;
         //we hack the folder for modify_dir
 
     }
@@ -328,10 +328,10 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
          folder.file_size_in_bytes = folder_size;//we hack the folder for modify_dir
     }
     nl();
-    dmph((char*)base,folder_size+2*sizeof(volume),16);
+    dmph((char*)base,folder_size+2*sizeof(directory_size),16);
     nl();
-    modify_dir(folder,(char*) base,folder_size+2*sizeof(volume));
-    dalloc((uint32_t)base,folder_size+2*sizeof(volume));
+    modify_dir(folder,(char*) base,folder_size+2*sizeof(directory_size));
+    dalloc((uint32_t)base,folder_size+2*sizeof(directory_size));
     prints("RETURN OF THE DALLOC",21);
     nl();
     return 0;
@@ -543,8 +543,8 @@ struct directory* search_dir(struct directory folder, char name[11]){
         }
         
         if(cmp_name(name,i->name)){ //we have found the file yayy
-            void* res = malloc(sizeof(volume));
-            memcpy((void*)i,res,sizeof(volume));
+            void* res = malloc(sizeof(directory_size));
+            memcpy((void*)i,res,sizeof(directory_size));
             dalloc((uint32_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
             return (struct directory*) res;
         }

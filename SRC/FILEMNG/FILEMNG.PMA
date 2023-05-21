@@ -70,12 +70,13 @@ File Ofs  Sym Addr  Sym
 00002970  00002970  _dalloc
 00002974  00002974  _memcpy
 00002978  00002978  _ar
-00004978  00004978  _volume
-00004998  00004998  _FAT_cache
-00004B98  00004B98  _temp_sector
-00004D98  00004D98  _temp_sector2
-00004F98  00004F98  _padding
-00005098  00005098  _dap
-          000050A8  __stop__bss
-          000050A8
+00004978  00004978  _directory_size
+00004998  00004998  _volume
+000049B8  000049B8  _FAT_cache
+00004BB8  00004BB8  _temp_sector
+00004DB8  00004DB8  _temp_sector2
+00004FB8  00004FB8  _padding
+000050B8  000050B8  _dap
+          000050C8  __stop__bss
+          000050C8
 
