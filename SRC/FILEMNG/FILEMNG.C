@@ -530,29 +530,18 @@ struct directory* search_dir(struct directory folder, char name[11]){
 
 
 void start_program(){
-    prints("MADE IT TO FILE MANAGER",24);
-    nl();
     init();
-    prints("INITIALIZED FILE MANAGER",25);
-    nl();
-    void* some_ptr = malloc(100);
-    printf((int)some_ptr);
-    nl();
+    //===========FILE MNG TESTING================
+    struct directory* root_listed = list_root();
+    dmph((char*)root_listed,root_dir_size*bytes_per_sector);
+
 
 }
 
 void init(){
     //we want to setup the root dir
     char temp_volume_name[11] = "BORISOSVOL"; //this changes with volume_label
-    printf((int)malloc);
-    nl();
-    
-    dmph((char*)&malloc,20);
-    nl();
     memcpy(&temp_volume_name,&volume.name,11);
-   
-    prints("SUCCEDED MEMCPY",16);
-    nl();
     volume.attribute = 1<<3;
 
 }
