@@ -332,6 +332,8 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     nl();
     modify_dir(folder,(char*) base,folder_size+2*sizeof(volume));
     dalloc((uint32_t)base,folder_size+2*sizeof(volume));
+    prints("RETURN OF THE DALLOC",21);
+    nl();
     return 0;
 }
 
@@ -583,7 +585,8 @@ void start_program(){
     printf((int)folder_size);
     nl();
     listed_dir = list_dir(*root_search,folder_size);
-    dmph((char*)list_dir,folder_size,16);
+    
+    dmph((char*)listed_dir,folder_size,16);
     nl();
     
 }
