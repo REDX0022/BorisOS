@@ -353,18 +353,24 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
    uint16_t cur_cluster = dir.starting_cluster; //the cluster we are currently at
    uint16_t next_cluster = FAT_lookup(cur_cluster); //the cluster which the current cluster is pointing to
 
-
     int cur_file_size_in_sectors = size/bytes_per_sector;
     if(dir.file_size_in_bytes%512){cur_file_size_in_sectors++;}
-    
+    prints("FILE SIZE modify dir",21);
+    nl();
+    printf(cur_file_size_in_sectors);
+    nl();
     while(1){
         if(cur_cluster>=0xFFF8 && cur_file_size_in_sectors==1){//we are on our last sector for both
+            printch('p');
             write_sector(cur_cluster,pos); //write the last sector
+            prints("RETURNED FROM WRITE SECTOR",27);
+            nl();
             break;
         }
         next_cluster = FAT_lookup(cur_cluster);
 
         if(cur_cluster>=0xFFF8){//we have reached the end of the previous file
+            printf('q');
             while(cur_file_size_in_sectors>0){
                 write_sector(cur_cluster,pos);
                 next_cluster = FAT_free();
@@ -378,6 +384,7 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
         }
 
         if(cur_file_size_in_sectors<=0){
+            printch('r');
             while(cur_cluster<0xFFF8){
                 next_cluster = FAT_lookup(cur_cluster);
                 FAT_edit(cur_cluster,0);
