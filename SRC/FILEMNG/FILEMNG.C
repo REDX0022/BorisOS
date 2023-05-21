@@ -513,8 +513,6 @@ struct directory* search_dir(struct directory folder, char name[11]){
         search_place= list_dir(folder,search_size);
     } 
     for(struct directory* i = search_place;i!=(struct directory*)(((char*)search_place)+search_size);i++){
-        printf((int)i);
-        nl();
         if(is_folder(*i)){//we queue up a folder to be searched later recursively
             dir_enqueue(*i);//if the queue overfills this doesn't work
         }
@@ -538,7 +536,7 @@ void start_program(){
     prints("STARTED FILE MANAGER TESTING",29);
     nl();
     //===========FILE MNG TESTING================
-    struct directory* root_search = search_dir(volume,"FOLDER1   ");
+    struct directory* root_search = search_dir(volume,"FOLDER1    ");
     printf((int)root_search);
     nl();
     dmph((char*)root_search,32,16);
