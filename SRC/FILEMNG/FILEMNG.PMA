@@ -23,25 +23,25 @@ File Ofs  Sym Addr  Sym
 000009E9  000009E9  _write_sector_helper
 00000A1C  00000A1C  _load_sector
 00000B08  00000B08  _load_sector_helper
-00000B37  00000B37  _delete_dir
-00000C80  00000C80  _create_dir
-00000F63  00000F63  _modify_dir
-00001151  00001151  _load_file
-0000125C  0000125C  _dir_size
-00001353  00001353  _list_dir
-000013F0  000013F0  _list_root
-0000147C  0000147C  _search
-00001592  00001592  _search_dir
-0000176A  0000176A  _start_program
-000017A5  000017A5  _init
-00001828  00001828  _pad_file_name
-000019B2  000019B2  _is_read_only
-000019C6  000019C6  _is_hidden
-000019DA  000019DA  _is_system
-000019EE  000019EE  _is_volume
-00001A02  00001A02  _is_folder
-00001A16  00001A16  _is_archive
-          00001A89
+00000B39  00000B39  _delete_dir
+00000C82  00000C82  _create_dir
+00000F65  00000F65  _modify_dir
+00001153  00001153  _load_file
+0000125E  0000125E  _dir_size
+00001355  00001355  _list_dir
+000013F2  000013F2  _list_root
+0000147E  0000147E  _search
+00001594  00001594  _search_dir
+0000176C  0000176C  _start_program
+000017A7  000017A7  _init
+0000182A  0000182A  _pad_file_name
+000019B4  000019B4  _is_read_only
+000019C8  000019C8  _is_hidden
+000019DC  000019DC  _is_system
+000019F0  000019F0  _is_volume
+00001A04  00001A04  _is_folder
+00001A18  00001A18  _is_archive
+          00001A8B
 
           00001A8C  section .relod:
           00001A8C  __start__relod
