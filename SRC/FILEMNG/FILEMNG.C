@@ -230,7 +230,6 @@ int load_sector_helper(struct disk_address_packet *ptr){
     //--------------------------call int 13h-----------------------
         "pushad \n"
         "push ds \n" //this breaks it for some fuckig reason, oh yeah i know just dont touch it
-        "push word 10 \n" //something for the 13h bug to swallow
         "mov dl, 0x80  ; TODO make this flexible; \n"
         "xor ax, ax  \n "
         "mov ds, ax  \n "
