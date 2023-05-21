@@ -360,17 +360,18 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
     printf(cur_file_size_in_sectors);
     nl();
     while(1){
-        if(cur_cluster>=0xFFF8 && cur_file_size_in_sectors==1){//we are on our last sector for both
+        next_cluster = FAT_lookup(cur_cluster);
+        if(next_cluster>=0xFFF8 && cur_file_size_in_sectors==1){//we are on our last sector for both
             printch('p');
             write_sector(cur_cluster,pos); //write the last sector
             prints("RETURNED FROM WRITE SECTOR",27);
             nl();
             break;
         }
-        next_cluster = FAT_lookup(cur_cluster);
+        
 
-        if(cur_cluster>=0xFFF8){//we have reached the end of the previous file
-            printf('q');
+        if(next_cluster>=0xFFF8){//we have reached the end of the previous file
+            printch('q');
             while(cur_file_size_in_sectors>0){
                 write_sector(cur_cluster,pos);
                 next_cluster = FAT_free();
@@ -385,13 +386,10 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
 
         if(cur_file_size_in_sectors<=0){
             printch('r');
-            while(cur_cluster<0xFFF8){
+            while(next_cluster<0xFFF8){
                 next_cluster = FAT_lookup(cur_cluster);
                 FAT_edit(cur_cluster,0);
 
-            }
-            if(cur_cluster>=0xFFF8){//also the end sector
-                FAT_edit(cur_cluster,0);
             }
             break;
         }
