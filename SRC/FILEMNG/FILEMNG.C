@@ -546,6 +546,11 @@ void start_program(){
     prints("STARTED FILE MANAGER TESTING",29);
     nl();
     //===========FILE MNG TESTING================
+    prints("FAT TABLE BEGGINING",20);
+    nl();
+    FAT_lookup(2);
+    dmph(( char*)&FAT_cache,512,16);
+    nl();
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     prints("FOUND FOLDER PRESUMABLY",24);
     nl();
