@@ -502,16 +502,15 @@ struct directory* search_dir(struct directory folder, char name[11]){
     //first we load the folder into memory
     struct directory* search_place;
     size_t search_size;
-    size_t folder_size = dir_size(folder);
     if(is_volume(folder)){//we search the root dir
         prints("stopped to list root",21);
         nl();
-        search_place = list_root();
         search_size =  root_dir_size*bytes_per_sector;
+        search_place = list_root();
     }
     else{
-        search_place= list_dir(folder,folder_size);
-        search_size= folder.file_size_in_bytes;
+        search_size= dir_size(folder);
+        search_place= list_dir(folder,search_size);
     } 
     for(struct directory* i = search_place;i!=search_place+folder.file_size_in_bytes;i++){
         printf((int)i);
@@ -523,12 +522,12 @@ struct directory* search_dir(struct directory folder, char name[11]){
         if(cmp_name(name,i->name)){ //we have found the file yayy
             void* res = malloc(sizeof(volume));
             memcpy(i,res,sizeof(volume));
-             dalloc((uint32_t)search_place,folder_size); //we need to dealocate the memory, we don't want no leaks
+             dalloc((uint32_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
             return (struct directory*) res;
         }
 
     }
-    dalloc((uint32_t)search_place,folder_size); //we need to dealocate the memory, we don't want no leaks
+    dalloc((uint32_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
     return NULL;
 
 }
