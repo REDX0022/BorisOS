@@ -302,7 +302,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         prints("IS FOLDER yay",14);
         nl();
         folder_size = dir_size(folder);
-        base = list_dir(folder,folder_size+sizeof(volume)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
+        base = list_dir(folder,folder_size+2*sizeof(volume)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
     }
     else{//its a volume
         folder_size = root_dir_size*bytes_per_sector;
@@ -328,10 +328,10 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
          folder.file_size_in_bytes = folder_size;//we hack the folder for modify_dir
     }
     nl();
-    dmph((char*)base,folder_size,16);
+    dmph((char*)base,folder_size+2*sizeof(volume),16);
     nl();
-    modify_dir(folder,(char*) base,folder_size);
-    dalloc((uint32_t)base,folder_size+sizeof(volume));
+    modify_dir(folder,(char*) base,folder_size+2*sizeof(volume));
+    dalloc((uint32_t)base,folder_size+2*sizeof(volume));
     return 0;
 }
 
