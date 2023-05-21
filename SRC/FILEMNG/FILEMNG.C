@@ -531,6 +531,7 @@ struct directory* search_dir(struct directory folder, char name[11]){
 
 void start_program(){
     init();
+    prints("STARTED FILE MANAGER TESTING",29);
     //===========FILE MNG TESTING================
     struct directory* root_listed = list_root();
     dmph((char*)root_listed,root_dir_size*bytes_per_sector);
