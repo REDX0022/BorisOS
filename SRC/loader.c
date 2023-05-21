@@ -77,7 +77,7 @@ struct MZext_header{
     uint16_t reloc_offset; // not used
     uint16_t overlay_num; //usually unused
     char padding[4];    
-    char (*lib_name)[16]; //only the first 11 characers are used
+    char *lib_name; //only the first 11 characers are used
     
 };
 
@@ -273,7 +273,7 @@ int start_kernel_programm(void *start){
     dmph((char*)start,60);
     nl();
     void*** lib_store = &temp_sector; //where in the temp sector to put the funcs
-    for(char (*lib_search)[16] = mz->lib_name; (*lib_search)[0]; lib_search++){
+    for(char *lib_search= mz->lib_name; *lib_search; lib_search+=16){//per BEX spec
         prints(mz->lib_name,11);
         struct shared_lib* sh = get_shared_lib(lib_search);
         if(sh==NULL){
