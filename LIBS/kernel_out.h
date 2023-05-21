@@ -49,9 +49,10 @@ void dmph(char* ptr, size_t len,int bytes_per_row){
         }
         else{
             printch(' ');
+            j++;
         }
         ptr++;
-        j++;
+        
     }
     
 }
