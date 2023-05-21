@@ -185,12 +185,12 @@ int write_sector_helper(struct disk_address_packet *ptr){
         "mov ds, si \n "
         "shr esi, 28 \n "
         "int 0x13 \n "
-        "jnc .skip \n"
+        "jnc skipw \n"
         "mov bh, 0 \n"
         "mov al, 'f' \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
-        ".skip: \n"
+        "skipw: \n"
         "pop ds \n "
         "popad \n "
     // ----------------------------------------------------------
@@ -238,12 +238,12 @@ int load_sector_helper(struct disk_address_packet *ptr){
         "mov ds, si \n "
         "shr esi, 28 \n "
         "int 0x13 \n "
-        "jnc .skip \n"
+        "jnc skipl \n"
         "mov bh, 0 \n"
         "mov al, 'f' \n"
         "mov ah, 0x0e \n"
         "int 0x10 \n"
-        ".skip: \n"
+        "skipl: \n"
         "pop ds \n "
         "popad \n "
     // ----------------------------------------------------------
@@ -466,7 +466,7 @@ struct directory* list_root(){
     char* ptr = (char*)result;
     
     for(int cur_sector = root_dir;cur_sector<root_dir+3;cur_sector++){
-        load_sector(cur_sector,(void*)ptr);
+        load_sector(cur_sector,(void*)ptr); //chips one sector off
         ptr+=bytes_per_sector;
     }
     printf(22);
