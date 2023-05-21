@@ -8,72 +8,72 @@ File Ofs  Sym Addr  Sym
 000001F3  000001F3  _printch
 00000209  00000209  _prints
 0000024F  0000024F  _dmph
-00000317  00000317  _init_MEMMNG
-0000035E  0000035E  _reset_queue
-00000381  00000381  _dir_enqueue
-00000422  00000422  _dir_dequeue
-000004A1  000004A1  _dir_is_queue_empty
-000004C0  000004C0  _cmp_name
-00000520  00000520  _FAT_lookup
-000005E3  000005E3  _FAT_free
-0000063A  0000063A  _FAT_edit
-000006C2  000006C2  _get_volume
-000006E0  000006E0  _from_path
-000008BF  000008BF  _write_sector
-000009AB  000009AB  _write_sector_helper
-000009DE  000009DE  _load_sector
-00000ACA  00000ACA  _load_sector_helper
-00000AFB  00000AFB  _delete_dir
-00000C44  00000C44  _create_dir
-00000F27  00000F27  _modify_dir
-00001115  00001115  _load_file
-00001220  00001220  _dir_size
-00001317  00001317  _list_dir
-000013B4  000013B4  _list_root
-00001433  00001433  _search
-00001549  00001549  _search_dir
-00001721  00001721  _start_program
-0000175E  0000175E  _init
-000017E1  000017E1  _pad_file_name
-0000196B  0000196B  _is_read_only
-0000197F  0000197F  _is_hidden
-00001993  00001993  _is_system
-000019A7  000019A7  _is_volume
-000019BB  000019BB  _is_folder
-000019CF  000019CF  _is_archive
-          00001A42
+00000342  00000342  _init_MEMMNG
+00000389  00000389  _reset_queue
+000003AC  000003AC  _dir_enqueue
+0000044D  0000044D  _dir_dequeue
+000004CC  000004CC  _dir_is_queue_empty
+000004EB  000004EB  _cmp_name
+0000054B  0000054B  _FAT_lookup
+0000060E  0000060E  _FAT_free
+00000665  00000665  _FAT_edit
+000006ED  000006ED  _get_volume
+0000070B  0000070B  _from_path
+000008EA  000008EA  _write_sector
+000009D6  000009D6  _write_sector_helper
+00000A09  00000A09  _load_sector
+00000AF5  00000AF5  _load_sector_helper
+00000B26  00000B26  _delete_dir
+00000C6F  00000C6F  _create_dir
+00000F52  00000F52  _modify_dir
+00001140  00001140  _load_file
+0000124B  0000124B  _dir_size
+00001342  00001342  _list_dir
+000013DF  000013DF  _list_root
+0000145E  0000145E  _search
+00001574  00001574  _search_dir
+0000174C  0000174C  _start_program
+0000178C  0000178C  _init
+0000180F  0000180F  _pad_file_name
+00001999  00001999  _is_read_only
+000019AD  000019AD  _is_hidden
+000019C1  000019C1  _is_system
+000019D5  000019D5  _is_volume
+000019E9  000019E9  _is_folder
+000019FD  000019FD  _is_archive
+          00001A70
 
-          00001A44  section .relod:
-          00001A44  __start__relod
-          00001F3C  __stop__relod
-          00001F3C
+          00001A70  section .relod:
+          00001A70  __start__relod
+          00001F70  __stop__relod
+          00001F70
 
-          00001F3C  section .relot:
-          00001F3C  __start__relot
-          0000211C  __stop__relot
-          0000211C
+          00001F70  section .relot:
+          00001F70  __start__relot
+          00002154  __stop__relot
+          00002154
 
-          0000211C  section .rodata:
-          00002139
+          00002154  section .rodata:
+          00002171
 
-          0000213C  section .data:
-0000213C  0000213C  _hex
-00002150  00002150  _begin
-00002154  00002154  _end
-00002158  00002158  _cached_FAT_sector
-          00002173
+          00002174  section .data:
+00002174  00002174  _hex
+00002188  00002188  _begin
+0000218C  0000218C  _end
+00002190  00002190  _cached_FAT_sector
+          000021AB
 
-          00002174  section .bss:
-          00002174  __start__bss
-00002174  00002174  _malloc
-00002178  00002178  _dalloc
-0000217C  0000217C  _memcpy
-00002180  00002180  _ar
-00004180  00004180  _volume
-000041A0  000041A0  _FAT_cache
-000043A0  000043A0  _temp_sector
-000045A0  000045A0  _temp_sector2
-000047A0  000047A0  _dap
-          000047B0  __stop__bss
-          000047B0
+          000021AC  section .bss:
+          000021AC  __start__bss
+000021AC  000021AC  _malloc
+000021B0  000021B0  _dalloc
+000021B4  000021B4  _memcpy
+000021B8  000021B8  _ar
+000041B8  000041B8  _volume
+000041D8  000041D8  _FAT_cache
+000043D8  000043D8  _temp_sector
+000045D8  000045D8  _temp_sector2
+000047D8  000047D8  _dap
+          000047E8  __stop__bss
+          000047E8
 
