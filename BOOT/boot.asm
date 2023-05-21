@@ -381,9 +381,10 @@ db 0xFF
 db 0xFF ;; end of file entry 
 db 0xFF
 
+db 0xFF
+db 0xFF
 
-
-times 508 db 0 ;;512 - the four bytes already defined
+times 506 db 0 ;;512 - the four bytes already defined
 
 times (num_of_FATs*sectors_per_FAT-1)*512 db 0 ;;size of fat -1 because we already defined the first sector
 
