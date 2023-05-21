@@ -227,8 +227,6 @@ int load_sector_helper(struct disk_address_packet *ptr){
     //mov dword [disk_address_packet_struct+8] , edx ; this is in sectors
     //mov dword [disk_address_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
     //--------------------------call int 13h-----------------------
-        "pushad \n"
-        "push ds \n"
         "mov dl, 0x80  ; TODO make this flexible; \n"
         "xor ax, ax  \n "
         "mov ds, ax  \n "
@@ -244,8 +242,6 @@ int load_sector_helper(struct disk_address_packet *ptr){
         "mov ah, 0x0e \n"
         "int 0x10 \n"
         ".skip: \n"
-        "pop ds \n "
-        "popad \n "
     // ----------------------------------------------------------
     );
    
