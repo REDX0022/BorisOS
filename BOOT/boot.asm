@@ -406,6 +406,7 @@ dd 0
 
 times 32*(512-2) db 0
 
+;;=====================DATA START==========================
 ;;then we skip the first 2 sectors
 
 times 512*2 db 0 ; this should be edited when code above is changed
