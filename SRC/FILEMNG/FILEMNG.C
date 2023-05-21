@@ -537,6 +537,7 @@ void start_program(){
     nl();
     //===========FILE MNG TESTING================
     struct directory* root_search = search_dir(volume,"MEMMNG  MAP");
+    printf((int)root_search);
     nl();
     dmph((char*)root_search,32,16);
 
