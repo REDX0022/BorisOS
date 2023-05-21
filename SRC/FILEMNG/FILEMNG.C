@@ -580,6 +580,10 @@ void start_program(){
     memcpy(root_search,&folder1,sizeof(folder1));
     create_dir(dir1,folder1);
 
+    struct directory* root_dir_shit = list_root();
+    dmph((char*)root_dir_shit,bytes_per_sector,16);
+    nl();
+
     root_search = search_dir(volume,"FOLDER1    ");
     prints("RETRUNRED FROM SEARCH",22);
     nl();
