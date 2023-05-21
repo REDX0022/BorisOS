@@ -520,6 +520,8 @@ struct directory* search_dir(struct directory folder, char name[11]){
         }
         
         if(cmp_name(name,i->name)){ //we have found the file yayy
+            prints(i->name,11);
+            nl();
             void* res = malloc(sizeof(volume));
             memcpy(i,res,sizeof(volume));
              dalloc((uint32_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
