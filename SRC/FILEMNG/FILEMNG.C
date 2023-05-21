@@ -559,6 +559,13 @@ void start_program(){
     prints("STARTED FILE MANAGER TESTING",29);
     nl();
     //===========FILE MNG TESTING================
+    load_sector(1,(void*)&temp_sector);
+    dmph((char*)&temp_sector,512,16);
+    write_sector(1000,(void*)&temp_sector);
+    load_sector(1000,(void*)&temp_sector);
+    dmph((char*)&temp_sector,512,16);
+    
+    /*
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     nl();
     printf((int)root_search);
@@ -581,7 +588,7 @@ void start_program(){
     listed_dir = list_dir(*root_search,folder_size);
     dmph((char*)listed_dir,folder_size,16);
     nl();
-
+    */
 }
 
 void init(){
