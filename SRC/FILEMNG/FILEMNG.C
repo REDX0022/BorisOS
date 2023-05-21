@@ -329,6 +329,9 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     return 0;
 }
 
+int modify_root(){//TODOOOO: also edit create dir accordingly
+
+}
 
 /// @brief modifies an existing file
 /// @dir the directory of the file, this function doesn't modify it
@@ -552,6 +555,8 @@ void start_program(){
     dmph(( char*)&FAT_cache,512,16);
     nl();
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
+    nl();
+    printf((int)root_search);
     prints("FOUND FOLDER PRESUMABLY",24);
     nl();
     size_t folder_size = dir_size(*root_search);
