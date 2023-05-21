@@ -28,53 +28,53 @@ File Ofs  Sym Addr  Sym
 00000F65  00000F65  _modify_dir
 00001153  00001153  _load_file
 0000125E  0000125E  _dir_size
-00001355  00001355  _list_dir
-000013F2  000013F2  _list_root
-00001473  00001473  _search
-00001589  00001589  _search_dir
-00001765  00001765  _start_program
-00001829  00001829  _init
-000018AC  000018AC  _pad_file_name
-00001A36  00001A36  _is_read_only
-00001A4A  00001A4A  _is_hidden
-00001A5E  00001A5E  _is_system
-00001A72  00001A72  _is_volume
-00001A86  00001A86  _is_folder
-00001A9A  00001A9A  _is_archive
-          00001B0D
+00001365  00001365  _list_dir
+00001402  00001402  _list_root
+00001483  00001483  _search
+00001599  00001599  _search_dir
+00001775  00001775  _start_program
+00001839  00001839  _init
+000018BC  000018BC  _pad_file_name
+00001A46  00001A46  _is_read_only
+00001A5A  00001A5A  _is_hidden
+00001A6E  00001A6E  _is_system
+00001A82  00001A82  _is_volume
+00001A96  00001A96  _is_folder
+00001AAA  00001AAA  _is_archive
+          00001B1D
 
-          00001B10  section .relod:
-          00001B10  __start__relod
-          00002088  __stop__relod
-          00002088
+          00001B20  section .relod:
+          00001B20  __start__relod
+          000020A0  __stop__relod
+          000020A0
 
-          00002088  section .relot:
-          00002088  __start__relot
-          000022A0  __stop__relot
-          000022A0
+          000020A0  section .relot:
+          000020A0  __start__relot
+          000022BC  __stop__relot
+          000022BC
 
-          000022A0  section .rodata:
-          000022F6
+          000022BC  section .rodata:
+          00002312
 
-          000022F8  section .data:
-000022F8  000022F8  _hex
-0000230C  0000230C  _begin
-00002310  00002310  _end
-00002314  00002314  _cached_FAT_sector
-          0000232F
+          00002314  section .data:
+00002314  00002314  _hex
+00002328  00002328  _begin
+0000232C  0000232C  _end
+00002330  00002330  _cached_FAT_sector
+          0000234B
 
-          00002330  section .bss:
-          00002330  __start__bss
-00002330  00002330  _malloc
-00002334  00002334  _dalloc
-00002338  00002338  _memcpy
-0000233C  0000233C  _ar
-0000433C  0000433C  _volume
-0000435C  0000435C  _FAT_cache
-0000455C  0000455C  _temp_sector
-0000475C  0000475C  _temp_sector2
-0000495C  0000495C  _padding
-00004A5C  00004A5C  _dap
-          00004A6C  __stop__bss
-          00004A6C
+          0000234C  section .bss:
+          0000234C  __start__bss
+0000234C  0000234C  _malloc
+00002350  00002350  _dalloc
+00002354  00002354  _memcpy
+00002358  00002358  _ar
+00004358  00004358  _volume
+00004378  00004378  _FAT_cache
+00004578  00004578  _temp_sector
+00004778  00004778  _temp_sector2
+00004978  00004978  _padding
+00004A78  00004A78  _dap
+          00004A88  __stop__bss
+          00004A88
 
