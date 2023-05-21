@@ -13,8 +13,8 @@ typedef void (*memcpy_ptr)(void* src, void *dest, size_t n);
 memcpy_ptr memcpy;
 
 
-typedef void (*print_mem_ptr)(void* src, void *dest, size_t n);
-memcpy_ptr print_mem;
+typedef void (*print_mem_ptr)();
+print_mem_ptr print_mem;
 
 
 

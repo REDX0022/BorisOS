@@ -382,10 +382,9 @@ int __start__(){
     
     char name1[11] = "FILEMNG SYS";
     char map_name1[11] = "FILEMNG MAP";
-
+    print_mem();
     void* file_manager_address = malloc(file_manager_size);
-    printf((int)file_manager_address);
-    nl();
+    print_mem();
     if(load_file(name1,file_manager_address)){
         prints("FAILED TO LOAD FILE MANAGER",28);
         nl();
