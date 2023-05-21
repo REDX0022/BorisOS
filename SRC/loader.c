@@ -54,7 +54,7 @@
 #define max_loaded_shared_func 256
 //-----------------------------------------------------------
 #define memmory_manager_address 0x5000
-#define file_manager_size 0x400*16 //16kb for now, it should be more than enough //TODOO: change this perhaps, its just a perdiction on how much it will grow
+#define file_manager_size 0x400*32 //16kb for now, it should be more than enough //TODOO: change this perhaps, its just a perdiction on how much it will grow
 
 //============================Structures=======================================
  
