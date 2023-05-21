@@ -210,7 +210,7 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dap.sector = sector_pos;
    dap.rest =0;
  //TODO: Make actuall diagonsitcs
-   load_sector_helper(&dap);
+   //load_sector_helper(&dap);
    return 0;
 
 }
