@@ -526,7 +526,7 @@ struct directory* search_dir(struct directory folder, char name[11]){
             nl();
             void* res = malloc(sizeof(volume));
             memcpy((void*)i,res,sizeof(volume));
-             dalloc((uint32_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
+             //dalloc((uint32_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
             return (struct directory*) res;
         }
 
