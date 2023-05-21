@@ -437,6 +437,7 @@ size_t dir_size(struct directory folder){
     }
     //then the current cluster points to the next one
     load_sector(data_start+(cur_cluster-2),(void*) &temp_sector);
+    //
     for(int i =0;i<bytes_per_sector;i+=32){
         if(!temp_sector[i]){//its the end of the file
             return cluster_count*bytes_per_sector+i;
