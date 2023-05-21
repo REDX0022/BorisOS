@@ -537,6 +537,8 @@ void start_program(){
     nl();
     //===========FILE MNG TESTING================
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
+    prints("FOUND FOLDER PRESUMABLY",24);
+    nl();
     size_t folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
