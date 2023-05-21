@@ -579,8 +579,11 @@ void start_program(){
     create_dir(dir1,folder1);
 
     folder_size = dir_size(*root_search);
-    listed_dir = list_dir(*root_search,folder_size);
-    dmph((char*)listed_dir,folder_size,16);
+    printf((int)folder_size);
+    nl();
+    //listed_dir = list_dir(*root_search,folder_size);
+    load_sector(root_search->starting_cluster,&temp_sector);
+    dmph((char*)temp_sector,512,16);
     nl();
     
 }
