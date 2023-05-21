@@ -504,6 +504,8 @@ struct directory* search_dir(struct directory folder, char name[11]){
     size_t search_size;
     size_t folder_size = dir_size(folder);
     if(is_volume(folder)){//we search the root dir
+        prints("stopped to list root",21);
+        nl();
         search_place = list_root();
         search_size =  root_dir_size*bytes_per_sector;
     }
@@ -511,8 +513,9 @@ struct directory* search_dir(struct directory folder, char name[11]){
         search_place= list_dir(folder,folder_size);
         search_size= folder.file_size_in_bytes;
     } 
-    for(struct directory* i = search_place;i<search_place+folder.file_size_in_bytes;i++){
-        
+    for(struct directory* i = search_place;i!=search_place+folder.file_size_in_bytes;i++){
+        printf((int)i);
+        nl();
         if(is_folder(*i)){//we queue up a folder to be searched later recursively
             dir_enqueue(*i);//if the queue overfills this doesn't work
         }
