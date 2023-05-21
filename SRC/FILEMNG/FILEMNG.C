@@ -465,6 +465,7 @@ struct directory* list_root(){
     struct directory* result = (struct directory*) malloc(root_dir_size*bytes_per_sector); //this should be deallocated when done
     int cur_sector = root_dir;
     for(char* ptr = (char*)(root_dir*bytes_per_sector);ptr!=(char*)((root_dir+root_dir_size)*bytes_per_sector);ptr+=bytes_per_sector){
+        printf((int)ptr);
         load_sector(cur_sector,(void*)result);
         cur_sector++;
     }
