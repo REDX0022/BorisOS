@@ -578,12 +578,12 @@ void start_program(){
     memcpy(root_search,&folder1,sizeof(folder1));
     create_dir(dir1,folder1);
 
+    root_search = search_dir(volume,"FOLDER1    ");
     folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
-    //listed_dir = list_dir(*root_search,folder_size);
-    load_sector(root_search->starting_cluster,&temp_sector);
-    dmph((char*)temp_sector,512,16);
+    listed_dir = list_dir(*root_search,folder_size);
+    dmph((char*)list_dir,folder_size,16);
     nl();
     
 }
