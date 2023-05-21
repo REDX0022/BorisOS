@@ -561,13 +561,8 @@ void start_program(){
     prints("STARTED FILE MANAGER TESTING",29);
     nl();
     //===========FILE MNG TESTING================
-    nl();
-    dmph((char*)&volume,32,16);
-    nl();
+   
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
-    nl();
-    dmph((char*)&volume,32,16);
-    nl();
     nl();
     printf((int)root_search);
     nl();
@@ -589,6 +584,10 @@ void start_program(){
     prints("RETRUNRED FROM SEARCH",22);
     nl();
     printf((int)root_search);
+    nl();
+    load_sector(root_search->starting_cluster,(void*)&temp_sector);
+    dmph((char*)&temp_sector,512,16);
+    nl();
     folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
