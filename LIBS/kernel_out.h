@@ -34,7 +34,7 @@ void prints(char* ptr, size_t len){
 
 char hex[17] = "0123456789ABCDEF";
 void dmph(char* ptr, size_t len,int bytes_per_row){
-    int j = 0;
+    int j = 1;
     for(int i =0;i<len;i++){
         char high = (char)(hex[((*ptr)&0xFF)>>4]);
         char low = (char)(hex[(*ptr)&0xF]);
@@ -43,7 +43,7 @@ void dmph(char* ptr, size_t len,int bytes_per_row){
         printch(low);
         printch(' ');
         if(j==bytes_per_row){
-            j =0;
+            j =1;
             printch(0xA);
             printch(0xD);
         }
