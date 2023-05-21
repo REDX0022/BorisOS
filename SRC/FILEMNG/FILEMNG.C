@@ -70,7 +70,7 @@ uint16_t FAT_cache[bytes_per_sector/2]; //this is used to cache one sector of fa
 char temp_sector[bytes_per_sector]; //these 2 are used by functions only while the function is executing
 char temp_sector2[bytes_per_sector]; 
 
-
+char padding[256];
 struct disk_address_packet dap;
 
 /// @brief rudementary file name comparison, root dir only
