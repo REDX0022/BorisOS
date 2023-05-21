@@ -562,6 +562,8 @@ void start_program(){
     load_sector(1,(void*)&temp_sector);
     dmph((char*)&temp_sector,512,16);
     write_sector(1000,(void*)&temp_sector);
+    //if we empty the sector in the meantime
+    for(int i =0;i<512;i++){temp_sector[i] = 0;}
     load_sector(1000,(void*)&temp_sector);
     dmph((char*)&temp_sector,512,16);
     
