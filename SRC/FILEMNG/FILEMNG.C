@@ -89,11 +89,7 @@ int cmp_name(char* str1, char* str2){
 }
 
 uint16_t FAT_lookup(uint16_t cluster){
-    printf(cluster);
-    nl();
     int needed_sector = FAT_start+(cluster*2)/bytes_per_sector;
-    printf(needed_sector);
-    nl();
     if(needed_sector == cached_FAT_sector){ //the sector we need is cached
         return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
     }
@@ -431,26 +427,16 @@ size_t dir_size(struct directory folder){
      //we are gonna hack it to find out the size 
     int cur_cluster = folder.starting_cluster;
     int next_cluster = FAT_lookup(cur_cluster);
-    printf((int)cur_cluster);
-    nl();
-    printf((int)next_cluster);
-    nl();
     int cluster_count =0; 
     while(next_cluster<0xFFF8){
         cur_cluster= next_cluster;
         next_cluster = FAT_lookup(cur_cluster);
         cluster_count++;
         load_sector(data_start+(cur_cluster-2),(void*) &temp_sector);
-        dmph((char*)&temp_sector,bytes_per_sector,16);
-        nl();
-        printf((int)next_cluster);
-        nl();
 
     }
     //then the current cluster points to the next one
     load_sector(data_start+(cur_cluster-2),(void*) &temp_sector);
-    dmph((char*)&temp_sector,bytes_per_sector,16);
-    nl();
     for(int i =0;i<bytes_per_sector;i+=32){
         if(!temp_sector[i]){//its the end of the file
             return cluster_count*bytes_per_sector+i;
@@ -555,8 +541,6 @@ void start_program(){
     prints("STARTED FILE MANAGER TESTING",29);
     nl();
     //===========FILE MNG TESTING================
-    prints("FAT TABLE BEGGINING",20);
-    nl();
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     nl();
     printf((int)root_search);
@@ -568,7 +552,14 @@ void start_program(){
     nl();
     struct directory* listed_dir = list_dir(*root_search,folder_size);
     dmph((char*)listed_dir,folder_size,16);
+    nl();
+    struct directory dir1;
+    memcpy("TEXTFILETXT",&(dir1.name),11);
+    create_dir(*root_search,dir1);
 
+    listed_dir = list_dir(*root_search,folder_size);
+    dmph((char*)listed_dir,folder_size,16);
+    nl();
 
 }
 
