@@ -39,9 +39,11 @@ void print_mem(){//this is debug func, shall not be in the lib
 int init_memory_manager(){
     //TODO: change this to the actual memory map which is used
     memory[0].begin = memory_begin; 
-    memory[0].len = (size_t)(0x20000-memory_begin); //reserved by the os
-    memory[1].begin = memory_end;
-    memory[1].len = (size_t)0;
+    memory[0].len = (size_t)(0x6000-memory_begin); //reserved by the os, before the memory manager was functional
+    memory[1].begin = 0x10000; //STACK BEGIN
+    memory[1].len = 0x10000; //ONE SEGMENT
+    memory[2].begin = memory_end;
+    memory[2].len = (size_t)0;
     return 0;
 }
 

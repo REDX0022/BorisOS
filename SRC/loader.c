@@ -54,7 +54,7 @@
 #define max_loaded_shared_func 256
 //-----------------------------------------------------------
 #define memmory_manager_address 0x5000
-#define file_manager_size 0x1500 //TODOO: change this perhaps, its just a perdiction on how much it will grow
+#define file_manager_size 0x400*16 //16kb for now, it should be more than enough //TODOO: change this perhaps, its just a perdiction on how much it will grow
 
 //============================Structures=======================================
  
@@ -250,7 +250,7 @@ int load_file(char* file_name,char *pos){
 /// @return Pointer to a saved shared lib  
 struct shared_lib* get_shared_lib(char* name){
     for(struct shared_lib* ptr = shared_libs;ptr!=shared_libs_ptr;ptr++){
-        
+
         if(cmp_name(&(ptr->name),name)){return ptr;}
     }
     return NULL;
@@ -384,6 +384,8 @@ int __start__(){
     char map_name1[11] = "FILEMNG MAP";
 
     void* file_manager_address = malloc(file_manager_size);
+    printf((int)file_manager_address);
+    nl();
     if(load_file(name1,file_manager_address)){
         prints("FAILED TO LOAD FILE MANAGER",28);
         nl();
