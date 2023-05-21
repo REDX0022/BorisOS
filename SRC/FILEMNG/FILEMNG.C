@@ -318,8 +318,8 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         }
     }
     if(free_space==NULL&&is_folder(folder)){//the folder is jam packed
-        base[(folder_size)/(sizeof(volume))].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
-        base[(folder_size)/(sizeof(volume))-1] = dir;
+        base[(folder_size)/(sizeof(volume))+1].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
+        base[(folder_size)/(sizeof(volume))] = dir;
         //we hack the folder for modify_dir
 
     }
@@ -354,7 +354,7 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
    uint16_t next_cluster = FAT_lookup(cur_cluster); //the cluster which the current cluster is pointing to
 
     int cur_file_size_in_sectors = size/bytes_per_sector;
-    if(dir.file_size_in_bytes%512){cur_file_size_in_sectors++;}
+    if(size%512){cur_file_size_in_sectors++;}
     prints("FILE SIZE modify dir",21);
     nl();
     printf(cur_file_size_in_sectors);
