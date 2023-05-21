@@ -298,6 +298,8 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
 
     struct directory* base;
     if(is_folder(folder)){
+        prints("IS FOLDER yay",14);
+        nl();
         folder_size = dir_size(folder);
         base = list_dir(folder,folder_size+sizeof(volume)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
     }
@@ -317,14 +319,16 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     if(free_space==NULL&&is_folder(folder)){//the folder is jam packed
         base[(folder_size)/(sizeof(volume))].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
         base[(folder_size)/(sizeof(volume))-1] = dir;
-        folder.file_size_in_bytes = folder_size+sizeof(volume);//we hack the folder for modify_dir
+        //we hack the folder for modify_dir
 
     }
     else {
         *free_space = dir;
          folder.file_size_in_bytes = folder_size;//we hack the folder for modify_dir
     }
-    modify_dir(folder,(char*) base);
+    dmph((char*)base,folder_size,16);
+
+    modify_dir(folder,(char*) base,folder_size);
     dalloc((uint32_t)base,folder_size+sizeof(volume));
     return 0;
 }
@@ -343,12 +347,12 @@ int modify_root(char* pos){
 /// @dir the directory of the file, this function doesn't modify it
 /// @pos
 /// @return
-int modify_dir(struct directory dir,char *pos){ //this should be go, TODO : TAKE A LOOK BACK
+int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go, TODO : TAKE A LOOK BACK
    uint16_t cur_cluster = dir.starting_cluster; //the cluster we are currently at
    uint16_t next_cluster = FAT_lookup(cur_cluster); //the cluster which the current cluster is pointing to
 
 
-    int cur_file_size_in_sectors = dir.file_size_in_bytes/bytes_per_sector;
+    int cur_file_size_in_sectors = size/bytes_per_sector;
     if(dir.file_size_in_bytes%512){cur_file_size_in_sectors++;}
     
     while(1){
