@@ -557,14 +557,10 @@ void start_program(){
     //===========FILE MNG TESTING================
     prints("FAT TABLE BEGGINING",20);
     nl();
-    printf(FAT_lookup(2));
-    nl();
-    dmph(( char*)&FAT_cache,512,16);
-    nl();
-    while(1){}
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     nl();
     printf((int)root_search);
+    nl();
     prints("FOUND FOLDER PRESUMABLY",24);
     nl();
     size_t folder_size = dir_size(*root_search);
