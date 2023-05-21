@@ -91,6 +91,7 @@ int cmp_name(char* str1, char* str2){
 uint16_t FAT_lookup(uint16_t cluster){
     int needed_sector = FAT_start+(cluster*2)/bytes_per_sector;
     printf(needed_sector);
+    nl();
     if(needed_sector = cached_FAT_sector){ //the sector we need is cached
         return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
     }
@@ -98,6 +99,7 @@ uint16_t FAT_lookup(uint16_t cluster){
         load_sector(needed_sector,(void*) &FAT_cache);
         cached_FAT_sector = needed_sector;
         printf((int)FAT_cache[0]);
+        nl();
         return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
     }
 }
@@ -429,6 +431,7 @@ size_t dir_size(struct directory folder){
     printf(cur_cluster);
     printf(next_cluster);
     nl();
+    while(1){}
     int cluster_count =0; //one smaller than it should so it's easier to calc the size
     while(next_cluster<0xFFF8){
         next_cluster = FAT_lookup(cur_cluster);
