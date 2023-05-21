@@ -565,9 +565,11 @@ void start_program(){
     struct directory* listed_dir = list_dir(*root_search,folder_size);
     dmph((char*)listed_dir,folder_size,16);
     nl();
+    struct directory folder1;
     struct directory dir1;
     memcpy("TEXTFILETXT",&(dir1.name),11);
-    create_dir(*root_search,dir1);
+    memcpy(root_search,&folder1,sizeof(folder1));
+    create_dir(folder1,dir1);
 
     folder_size = dir_size(*root_search);
     listed_dir = list_dir(*root_search,folder_size);
