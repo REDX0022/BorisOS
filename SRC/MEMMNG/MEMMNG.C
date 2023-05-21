@@ -56,6 +56,11 @@ void* malloc(size_t size){
         if(cur_available>size){ //we have found the available space
             void* res =(void*) (memory[i].begin+memory[i].len);
             memory[i].len+=size;
+            prints("MALLOC'd ",10);
+            printf(size);
+            printch('@');
+            printf((int)res);
+            nl();
             return res;
         }
         else if(cur_available==size && memory[i+1].len){ //we have found the available space but we need to merge the segments
@@ -66,9 +71,19 @@ void* malloc(size_t size){
                 memory[j] = memory[j+1];
                 
             }
+            prints("MALLOC'd ",10);
+            printf(size);
+            printch('@');
+            printf((int)res);
+            nl();
             return res;
         }
     }
+    prints("MALLOC'd ",10);
+    printf(size);
+    printch('@');
+    printf(0);
+    nl();
     return NULL; //no memory slot found
 }
 
@@ -78,7 +93,11 @@ void dalloc(uint32_t begin, size_t size){
     // - given segment is completly within another
     // - given segment messes with the part of another
     // - given segment spans multiple allocated segments
-
+    prints("DALLOC'd ",10);
+    printf((int)size);
+    printch('@');
+    printf((int)begin);
+    nl();
     int removed_sectors_begin =-1;
     int removed_sectors_end = -1;
     for(int i = 0;memory[i].len && i < max_memory_sectors;i++){
