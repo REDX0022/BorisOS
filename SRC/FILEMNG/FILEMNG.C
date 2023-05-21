@@ -64,7 +64,7 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 
 
 struct directory volume;
-int cached_FAT_sector =0;
+int cached_FAT_sector =-1;
 uint16_t FAT_cache[bytes_per_sector/2]; //this is used to cache one sector of fat
 
 char temp_sector[bytes_per_sector]; //these 2 are used by functions only while the function is executing
@@ -92,7 +92,7 @@ uint16_t FAT_lookup(uint16_t cluster){
     int needed_sector = FAT_start+(cluster*2)/bytes_per_sector;
     printf(needed_sector);
     nl();
-    if(needed_sector = cached_FAT_sector){ //the sector we need is cached
+    if(needed_sector == cached_FAT_sector){ //the sector we need is cached
         return FAT_cache[(cluster%(bytes_per_sector/2))];//TODO: check this calc
     }
     else{ //we need to load a new sector
