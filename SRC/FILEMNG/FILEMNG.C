@@ -564,6 +564,9 @@ void start_program(){
     
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     nl();
+    dmph((char*)&volume,32,16);
+    nl();
+    nl();
     printf((int)root_search);
     nl();
     prints("FOUND FOLDER PRESUMABLY",24);
@@ -578,9 +581,6 @@ void start_program(){
     struct directory dir1;
     memcpy("TEXTFILETXT",&(dir1.name),11);
     memcpy(root_search,&folder1,sizeof(folder1));
-    nl();
-    dmph((char*)&volume,32,16);
-    nl();
     create_dir(dir1,folder1);
 
     struct directory* root_dir_shit = list_root();
