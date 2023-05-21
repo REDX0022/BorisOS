@@ -293,7 +293,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     dir.starting_cluster = FAT_free();
     FAT_edit(dir.starting_cluster, 0xFFFF); //per spec
 
-
+    prints("WE ARE IN CREATE DIR",21);
     size_t folder_size; 
 
     struct directory* base;
