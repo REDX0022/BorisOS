@@ -424,6 +424,6 @@ times 14 db 0
 dw 0
 dd 0
 
-db 0;we need to define end of search for folder1
+times db 0;we need to define end of search for folder1
 
 times 1000 db 0
