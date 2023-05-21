@@ -4,7 +4,7 @@
 #include "kernel_out.h"
 
 
-#define max_memory_sectors 25//change this later man okay? TODOOOOO
+#define max_memory_sectors 1000//change this later man okay? TODOOOOO
 #define memory_begin 0x500 
 #define memory_end 0x80000 
 struct alloc_segment{
