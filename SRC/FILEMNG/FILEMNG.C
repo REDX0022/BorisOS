@@ -470,7 +470,6 @@ struct directory* list_root(){
         int t = load_sector(cur_sector,(void*)ptr); //chips one sector off
         ptr+=bytes_per_sector;
     }
-    printf((int)result);
     return result;
 }
 
@@ -537,10 +536,9 @@ void start_program(){
     prints("STARTED FILE MANAGER TESTING",29);
     nl();
     //===========FILE MNG TESTING================
-    struct directory* root_listed = list_root();
-    printf(23);
+    struct directory* root_search = search_dir(volume,"MEMMNG  MAP");
     nl();
-    dmph((char*)root_listed,root_dir*bytes_per_sector,16);
+    dmph((char*)root_search,32,16);
 
 
 }
