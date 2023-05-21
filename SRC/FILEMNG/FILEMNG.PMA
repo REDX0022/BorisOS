@@ -30,18 +30,18 @@ File Ofs  Sym Addr  Sym
 0000125E  0000125E  _dir_size
 00001355  00001355  _list_dir
 000013F2  000013F2  _list_root
-0000147E  0000147E  _search
-00001594  00001594  _search_dir
-0000176C  0000176C  _start_program
-000017A7  000017A7  _init
-0000182A  0000182A  _pad_file_name
-000019B4  000019B4  _is_read_only
-000019C8  000019C8  _is_hidden
-000019DC  000019DC  _is_system
-000019F0  000019F0  _is_volume
-00001A04  00001A04  _is_folder
-00001A18  00001A18  _is_archive
-          00001A8B
+0000147F  0000147F  _search
+00001595  00001595  _search_dir
+0000176D  0000176D  _start_program
+000017A8  000017A8  _init
+0000182B  0000182B  _pad_file_name
+000019B5  000019B5  _is_read_only
+000019C9  000019C9  _is_hidden
+000019DD  000019DD  _is_system
+000019F1  000019F1  _is_volume
+00001A05  00001A05  _is_folder
+00001A19  00001A19  _is_archive
+          00001A8C
 
           00001A8C  section .relod:
           00001A8C  __start__relod
