@@ -559,9 +559,9 @@ void start_program(){
     nl();
     printf(FAT_lookup(2));
     nl();
-    while(1){}
     dmph(( char*)&FAT_cache,512,16);
     nl();
+    while(1){}
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     nl();
     printf((int)root_search);
