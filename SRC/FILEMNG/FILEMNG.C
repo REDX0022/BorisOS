@@ -427,6 +427,8 @@ size_t dir_size(struct directory folder){
      //we are gonna hack it to find out the size 
     int cur_cluster = folder.starting_cluster;
     int next_cluster = FAT_lookup(cur_cluster);
+    printf(cur_cluster);
+    nl();
     printf((int)next_cluster);
     nl();
     int cluster_count =0; 
@@ -437,7 +439,7 @@ size_t dir_size(struct directory folder){
         load_sector(data_start+(cur_cluster-2),(void*) &temp_sector);
         dmph((char*)&temp_sector,bytes_per_sector,16);
         nl();
-         printf((int)next_cluster);
+        printf((int)next_cluster);
         nl();
 
     }
