@@ -294,6 +294,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     FAT_edit(dir.starting_cluster, 0xFFFF); //per spec
 
     prints("WE ARE IN CREATE DIR",21);
+    nl();
     size_t folder_size; 
 
     struct directory* base;
@@ -569,7 +570,7 @@ void start_program(){
     struct directory dir1;
     memcpy("TEXTFILETXT",&(dir1.name),11);
     memcpy(root_search,&folder1,sizeof(folder1));
-    create_dir(folder1,dir1);
+    create_dir(dir1,folder1);
 
     folder_size = dir_size(*root_search);
     listed_dir = list_dir(*root_search,folder_size);
