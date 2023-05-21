@@ -22,58 +22,58 @@ File Ofs  Sym Addr  Sym
 000008FD  000008FD  _write_sector
 000009E9  000009E9  _write_sector_helper
 00000A1C  00000A1C  _load_sector
-00000AFA  00000AFA  _load_sector_helper
-00000B2B  00000B2B  _delete_dir
-00000C74  00000C74  _create_dir
-00000F57  00000F57  _modify_dir
-00001145  00001145  _load_file
-00001250  00001250  _dir_size
-00001347  00001347  _list_dir
-000013E4  000013E4  _list_root
-00001470  00001470  _search
-00001586  00001586  _search_dir
-0000175E  0000175E  _start_program
-00001799  00001799  _init
-0000181C  0000181C  _pad_file_name
-000019A6  000019A6  _is_read_only
-000019BA  000019BA  _is_hidden
-000019CE  000019CE  _is_system
-000019E2  000019E2  _is_volume
-000019F6  000019F6  _is_folder
-00001A0A  00001A0A  _is_archive
-          00001A7D
+00000B08  00000B08  _load_sector_helper
+00000B11  00000B11  _delete_dir
+00000C5A  00000C5A  _create_dir
+00000F3D  00000F3D  _modify_dir
+0000112B  0000112B  _load_file
+00001236  00001236  _dir_size
+0000132D  0000132D  _list_dir
+000013CA  000013CA  _list_root
+00001456  00001456  _search
+0000156C  0000156C  _search_dir
+00001744  00001744  _start_program
+0000177F  0000177F  _init
+00001802  00001802  _pad_file_name
+0000198C  0000198C  _is_read_only
+000019A0  000019A0  _is_hidden
+000019B4  000019B4  _is_system
+000019C8  000019C8  _is_volume
+000019DC  000019DC  _is_folder
+000019F0  000019F0  _is_archive
+          00001A63
 
-          00001A80  section .relod:
-          00001A80  __start__relod
-          00001F8C  __stop__relod
-          00001F8C
+          00001A64  section .relod:
+          00001A64  __start__relod
+          00001F7C  __stop__relod
+          00001F7C
 
-          00001F8C  section .relot:
-          00001F8C  __start__relot
-          00002178  __stop__relot
-          00002178
+          00001F7C  section .relot:
+          00001F7C  __start__relot
+          0000216C  __stop__relot
+          0000216C
 
-          00002178  section .rodata:
-          00002195
+          0000216C  section .rodata:
+          00002189
 
-          00002198  section .data:
-00002198  00002198  _hex
-000021AC  000021AC  _begin
-000021B0  000021B0  _end
-000021B4  000021B4  _cached_FAT_sector
-          000021CF
+          0000218C  section .data:
+0000218C  0000218C  _hex
+000021A0  000021A0  _begin
+000021A4  000021A4  _end
+000021A8  000021A8  _cached_FAT_sector
+          000021C3
 
-          000021D0  section .bss:
-          000021D0  __start__bss
-000021D0  000021D0  _malloc
-000021D4  000021D4  _dalloc
-000021D8  000021D8  _memcpy
-000021DC  000021DC  _ar
-000041DC  000041DC  _volume
-000041FC  000041FC  _FAT_cache
-000043FC  000043FC  _temp_sector
-000045FC  000045FC  _temp_sector2
-000047FC  000047FC  _dap
-          0000480C  __stop__bss
-          0000480C
+          000021C4  section .bss:
+          000021C4  __start__bss
+000021C4  000021C4  _malloc
+000021C8  000021C8  _dalloc
+000021CC  000021CC  _memcpy
+000021D0  000021D0  _ar
+000041D0  000041D0  _volume
+000041F0  000041F0  _FAT_cache
+000043F0  000043F0  _temp_sector
+000045F0  000045F0  _temp_sector2
+000047F0  000047F0  _dap
+          00004800  __stop__bss
+          00004800
 

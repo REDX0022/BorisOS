@@ -210,7 +210,7 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dap.sector = sector_pos;
    dap.rest =0;
  //TODO: Make actuall diagonsitcs
-   //load_sector_helper(&dap);
+   load_sector_helper(&dap);
    return 0;
 
 }
@@ -218,6 +218,7 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
 
 //we are doing this so we can access the disk packet pos via the stack
 int load_sector_helper(struct disk_address_packet *ptr){
+    /*
     asm(
     //mov byte [disk_address_packet_struct], 0x10 ;size of packet is 16 bytes
     //mov byte [disk_address_packet_struct+1],0 ; always 0
@@ -248,7 +249,7 @@ int load_sector_helper(struct disk_address_packet *ptr){
         "popad \n "
     // ----------------------------------------------------------
     );
-   
+   */
 
 }
 
