@@ -250,8 +250,7 @@ int load_file(char* file_name,char *pos){
 /// @return Pointer to a saved shared lib  
 struct shared_lib* get_shared_lib(char* name){
     for(struct shared_lib* ptr = shared_libs;ptr!=shared_libs_ptr;ptr++){
-        prints(&(ptr->name),11);
-        nl();
+        
         if(cmp_name(&(ptr->name),name)){return ptr;}
     }
     return NULL;
@@ -289,9 +288,6 @@ int start_kernel_programm(void *start){
     init execution_start; 
     execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
     //but we do need to find the libraries that it provides
-    nl();
-    dmph(&temp_sector,10);
-    nl();
     execution_start(&temp_sector); //for now we use a global stack for the entire os 
     return 0;
 }
