@@ -8,13 +8,13 @@ File Ofs  Sym Addr  Sym
 000001C3  000001C3  _printch
 000001D9  000001D9  _prints
 0000021F  0000021F  _dmph
-00000323  00000323  _start_program
-00000331  00000331  _print_mem
-000003D9  000003D9  _init_memory_manager
-00000444  00000444  _malloc
-00000716  00000716  _dalloc
-00000CD5  00000CD5  _memcpy
-          00000D51
+00000325  00000325  _start_program
+00000333  00000333  _print_mem
+000003DB  000003DB  _init_memory_manager
+00000446  00000446  _malloc
+00000718  00000718  _dalloc
+00000CD7  00000CD7  _memcpy
+          00000D53
 
           00000D54  section .relod:
           00000D54  __start__relod

@@ -41,11 +41,14 @@ void dmph(char* ptr, size_t len,int bytes_per_row){
 
         printch(high);
         printch(low);
-        printch(' ');
+        
         if(j==bytes_per_row){
             j =1;
             printch(0xA);
             printch(0xD);
+        }
+        else{
+            printch(' ');
         }
         ptr++;
         j++;
