@@ -463,11 +463,11 @@ struct directory* list_dir(struct directory folder,size_t size){ //we already kn
 }
 struct directory* list_root(){
     struct directory* result = (struct directory*) malloc(root_dir_size*bytes_per_sector); //this should be deallocated when done
-    int cur_sector = root_dir;
-    for(char* ptr = (char*)(root_dir*bytes_per_sector);cur_sector<root_dir+root_dir_size;ptr+=bytes_per_sector){
+    char* ptr = (char*)result;
+    for(int cur_sector = root_dir;cur_sector<root_dir+root_dir_size;cur_sector++){
         //printf((int)ptr);
-        load_sector(cur_sector,(void*)result);
-        cur_sector++;
+        load_sector(cur_sector,(void*)ptr);
+        ptr+=bytes_per_sector;
     }
     return result;
 }
@@ -533,6 +533,7 @@ struct directory* search_dir(struct directory folder, char name[11]){
 void start_program(){
     init();
     prints("STARTED FILE MANAGER TESTING",29);
+    nl();
     //===========FILE MNG TESTING================
     struct directory* root_listed = list_root();
     dmph((char*)root_listed,root_dir_size*bytes_per_sector,16);
