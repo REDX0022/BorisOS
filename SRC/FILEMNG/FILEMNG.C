@@ -201,7 +201,6 @@ int write_sector_helper(struct disk_address_packet *ptr){
 
 
 int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good here
-
    dap.size = 0x10;
    dap.padding = 0;
    dap.num_of_sectors = 1;
