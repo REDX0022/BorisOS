@@ -4,6 +4,7 @@
         "FILEMNG.C": "cpp",
         "QUEUE.C": "cpp",
         "linked_header_MEMMNG.C": "cpp",
-        "linked_header_FILEMNG.C": "cpp"
+        "linked_header_FILEMNG.C": "cpp",
+        "SHELL.C": "cpp"
     }
 }
