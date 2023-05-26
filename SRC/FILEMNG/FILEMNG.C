@@ -557,7 +557,7 @@ struct directory* search_dir(struct directory folder, char name[11]){
 
 void start_program(){
     init();
-    prints("STARTED FILE MANAGER TESTING",29);
+    prints("STARTED FILE MANAGER TESTING",28);
     nl();
     //===========FILE MNG TESTING================
    
@@ -565,7 +565,7 @@ void start_program(){
     nl();
     printf((int)root_search);
     nl();
-    prints("FOUND FOLDER PRESUMABLY",24);
+    prints("FOUND FOLDER PRESUMABLY",23);
     nl();
     prints("DUMPING MEMORY",14);
     print_mem();
@@ -588,7 +588,7 @@ void start_program(){
     create_dir(dir1,folder1);
 
     root_search = search_dir(volume,"FOLDER1    ");
-    prints("RETRUNRED FROM SEARCH",22);
+    prints("RETRUNRED FROM SEARCH",21);
     nl();
     printf((int)root_search);
     nl();

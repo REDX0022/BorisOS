@@ -56,7 +56,7 @@ void* malloc(size_t size){
         if(cur_available>size){ //we have found the available space
             void* res =(void*) (memory[i].begin+memory[i].len);
             memory[i].len+=size;
-            prints("MALLOC'd ",10);
+            prints("MALLOC'd ",9);
             printf(size);
             printch('@');
             printf((int)res);
@@ -71,7 +71,7 @@ void* malloc(size_t size){
                 memory[j] = memory[j+1];
                 
             }
-            prints("MALLOC'd ",10);
+            prints("MALLOC'd ",9);
             printf(size);
             printch('@');
             printf((int)res);
@@ -79,7 +79,7 @@ void* malloc(size_t size){
             return res;
         }
     }
-    prints("MALLOC'd ",10);
+    prints("MALLOC'd ",9);
     printf(size);
     printch('@');
     printf(0);
@@ -93,7 +93,7 @@ void dalloc(uint32_t begin, size_t size){
     // - given segment is completly within another
     // - given segment messes with the part of another
     // - given segment spans multiple allocated segments
-    prints("DALLOC'd ",10);
+    prints("DALLOC'd ",9);
     printf((int)size);
     printch('@');
     printf((int)begin);
