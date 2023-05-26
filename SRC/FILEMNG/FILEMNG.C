@@ -587,7 +587,7 @@ void start_program(){
     memcpy(root_search,&folder1,sizeof(directory_size));
     create_dir(dir1,folder1);
 
-    
+    /*
     folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
@@ -595,7 +595,7 @@ void start_program(){
     
     dmph((char*)listed_dir,folder_size,16);
     nl();
-    
+    */
 }
 
 void init(){
