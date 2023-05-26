@@ -585,9 +585,10 @@ void start_program(){
     struct directory dir1;
     memcpy((void*)"TEXTFILETXT",&(dir1.name),11);
     memcpy(root_search,&folder1,sizeof(directory_size));
+    /*
     create_dir(dir1,folder1);
 
-    /*
+    
     folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
