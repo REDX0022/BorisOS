@@ -316,9 +316,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
             break;
         }
     }
-    printf((int)free_space);
-    nl();
-    while(1){}
+    
     if(free_space==NULL&&is_folder(folder)){//the folder is jam packed
         base[(folder_size)/(sizeof(directory_size))+1].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
         base[(folder_size)/(sizeof(directory_size))] = dir;
@@ -332,6 +330,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     nl();
     dmph((char*)base,folder_size+2*sizeof(directory_size),16);
     nl();
+    while(1){}
     modify_dir(folder,(char*) base,folder_size+2*sizeof(directory_size));
     dalloc((uint32_t)base,folder_size+2*sizeof(directory_size));
     prints("RETURN OF THE DALLOC",21);
