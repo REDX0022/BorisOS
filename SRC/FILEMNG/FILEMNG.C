@@ -332,7 +332,6 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     nl();
     modify_dir(folder,(char*) base,folder_size+2*sizeof(directory_size));
     dalloc((uint32_t)base,folder_size+2*sizeof(directory_size));
-    while(1){}
     prints("RETURN OF THE DALLOC",21);
     nl();
     return 0;
