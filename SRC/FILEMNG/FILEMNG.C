@@ -587,22 +587,12 @@ void start_program(){
     memcpy((void*)"TEXTFILETXT",&(dir1.name),11);
     memcpy(root_search,&folder1,sizeof(directory_size));
     create_dir(dir1,folder1);
-    while (1)
-    {
-        
-    }
 
-    root_search = search_dir(volume,"FOLDER1    ");
-    prints("RETRUNRED FROM SEARCH",21);
-    nl();
-    printf((int)root_search);
-    nl();
-    load_sector(root_search->starting_cluster,(void*)&temp_sector);
-    dmph((char*)&temp_sector,512,16);
-    nl();
+    
     folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
+    while(1){}
     listed_dir = list_dir(*root_search,folder_size);
     
     dmph((char*)listed_dir,folder_size,16);
