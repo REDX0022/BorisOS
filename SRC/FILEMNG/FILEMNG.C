@@ -565,9 +565,9 @@ void start_program(){
     nl();
     //===========FILE MNG TESTING================
    
-    /*
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     nl();
+    /*
     printf((int)root_search);
     nl();
     prints("FOUND FOLDER PRESUMABLY",23);
