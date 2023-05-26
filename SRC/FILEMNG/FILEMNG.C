@@ -307,6 +307,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         folder_size = root_dir_size*bytes_per_sector;
         base = list_root();
     }
+    dmph((char*)base,folder_size+2*sizeof(directory_size),16);
     while(1){}
 
     //we want to search for an empty space, if not we put it at the end and move a 0 to the end
