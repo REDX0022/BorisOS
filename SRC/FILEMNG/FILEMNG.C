@@ -565,6 +565,7 @@ void start_program(){
     nl();
     //===========FILE MNG TESTING================
    
+    /*
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     nl();
     printf((int)root_search);
@@ -578,7 +579,6 @@ void start_program(){
     printf((int)folder_size);
     nl();
     
-    /*
     struct directory* listed_dir = list_dir(*root_search,folder_size);
     dmph((char*)listed_dir,folder_size,16);
     nl();
