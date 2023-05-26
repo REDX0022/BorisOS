@@ -330,8 +330,8 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
     nl();
     dmph((char*)base,folder_size+2*sizeof(directory_size),16);
     nl();
-    while(1){}
     modify_dir(folder,(char*) base,folder_size+2*sizeof(directory_size));
+    while(1){}
     dalloc((uint32_t)base,folder_size+2*sizeof(directory_size));
     prints("RETURN OF THE DALLOC",21);
     nl();
