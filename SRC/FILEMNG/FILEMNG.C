@@ -577,15 +577,15 @@ void start_program(){
     struct directory* listed_dir = list_dir(*root_search,folder_size);
     dmph((char*)listed_dir,folder_size,16);
     nl();
-    while (1)
-    {
-        
-    }
     struct directory folder1;
     struct directory dir1;
     memcpy((void*)"TEXTFILETXT",&(dir1.name),11);
     memcpy(root_search,&folder1,sizeof(directory_size));
     create_dir(dir1,folder1);
+    while (1)
+    {
+        
+    }
 
     root_search = search_dir(volume,"FOLDER1    ");
     prints("RETRUNRED FROM SEARCH",22);
