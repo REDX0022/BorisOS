@@ -595,7 +595,7 @@ void start_program(){
     
     dmph((char*)listed_dir,folder_size,16);
     nl();
-    while(1){}
+    
 }
 
 void init(){
