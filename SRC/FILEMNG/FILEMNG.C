@@ -573,6 +573,11 @@ void start_program(){
     size_t folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
+    while (1)
+    {
+        
+    }
+    
     struct directory* listed_dir = list_dir(*root_search,folder_size);
     dmph((char*)listed_dir,folder_size,16);
     nl();
