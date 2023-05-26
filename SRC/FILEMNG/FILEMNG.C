@@ -581,11 +581,11 @@ void start_program(){
     struct directory dir1;
     memcpy((void*)"TEXTFILETXT",&(dir1.name),11);
     memcpy(root_search,&folder1,sizeof(directory_size));
-    create_dir(dir1,folder1);
     while (1)
     {
         
     }
+    create_dir(dir1,folder1);
 
     root_search = search_dir(volume,"FOLDER1    ");
     prints("RETRUNRED FROM SEARCH",22);
