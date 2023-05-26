@@ -365,11 +365,11 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
         next_cluster = FAT_lookup(cur_cluster);
         if(next_cluster>=0xFFF8 && cur_file_size_in_sectors==1){//we are on our last sector for both
             printch('p');
-            write_sector(cur_cluster,pos); //write the last sector
+            write_sector(data_start+(cur_cluster-2),pos); //write the last sector
             //DIAGNOSTICS
             prints("RETURNED FROM WRITE SECTOR",27);
             nl();
-            load_sector(cur_cluster,&temp_sector);
+            load_sector(data_start+(cur_cluster-2),&temp_sector);
             dmph((char*)&temp_sector,512,16);
             nl();
             break;
@@ -379,7 +379,7 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
         if(next_cluster>=0xFFF8){//we have reached the end of the previous file
             printch('q');
             while(cur_file_size_in_sectors>0){
-                write_sector(cur_cluster,pos);
+                write_sector(data_start+(cur_cluster-2),pos);
                 next_cluster = FAT_free();
                 FAT_edit(cur_cluster,next_cluster);
 
@@ -400,7 +400,7 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
             break;
         }
 
-        write_sector(cur_cluster,pos); //where both are still running
+        write_sector(data_start+(cur_cluster-2),pos); //where both are still running
 
         cur_cluster = next_cluster;
         cur_file_size_in_sectors--;

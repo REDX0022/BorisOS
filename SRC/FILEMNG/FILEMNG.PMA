@@ -27,57 +27,57 @@ File Ofs  Sym Addr  Sym
 00000C96  00000C96  _create_dir
 00000FDA  00000FDA  _modify_root
 0000103D  0000103D  _modify_dir
-0000129E  0000129E  _load_file
-000013A9  000013A9  _dir_size
-000014CC  000014CC  _list_dir
-00001569  00001569  _list_root
-000015EA  000015EA  _search
-00001700  00001700  _search_dir
-000018DC  000018DC  _start_program
-00001B0A  00001B0A  _init
-00001B8D  00001B8D  _pad_file_name
-00001D17  00001D17  _is_read_only
-00001D2B  00001D2B  _is_hidden
-00001D3F  00001D3F  _is_system
-00001D53  00001D53  _is_volume
-00001D67  00001D67  _is_folder
-00001D7B  00001D7B  _is_archive
-          00001DEE
+000012E2  000012E2  _load_file
+000013ED  000013ED  _dir_size
+00001510  00001510  _list_dir
+000015AD  000015AD  _list_root
+0000162E  0000162E  _search
+00001744  00001744  _search_dir
+00001920  00001920  _start_program
+00001B4E  00001B4E  _init
+00001BD1  00001BD1  _pad_file_name
+00001D5B  00001D5B  _is_read_only
+00001D6F  00001D6F  _is_hidden
+00001D83  00001D83  _is_system
+00001D97  00001D97  _is_volume
+00001DAB  00001DAB  _is_folder
+00001DBF  00001DBF  _is_archive
+          00001E32
 
-          00001DF0  section .relod:
-          00001DF0  __start__relod
-          00002500  __stop__relod
-          00002500
+          00001E34  section .relod:
+          00001E34  __start__relod
+          00002544  __stop__relod
+          00002544
 
-          00002500  section .relot:
-          00002500  __start__relot
-          000027C8  __stop__relot
-          000027C8
+          00002544  section .relot:
+          00002544  __start__relot
+          0000280C  __stop__relot
+          0000280C
 
-          000027C8  section .rodata:
-          000028A8
+          0000280C  section .rodata:
+          000028EC
 
-          000028A8  section .data:
-000028A8  000028A8  _hex
-000028BC  000028BC  _begin
-000028C0  000028C0  _end
-000028C4  000028C4  _cached_FAT_sector
-          000028DF
+          000028EC  section .data:
+000028EC  000028EC  _hex
+00002900  00002900  _begin
+00002904  00002904  _end
+00002908  00002908  _cached_FAT_sector
+          00002923
 
-          000028E0  section .bss:
-          000028E0  __start__bss
-000028E0  000028E0  _malloc
-000028E4  000028E4  _dalloc
-000028E8  000028E8  _memcpy
-000028EC  000028EC  _print_mem
-000028F0  000028F0  _ar
-000048F0  000048F0  _directory_size
-00004910  00004910  _volume
-00004930  00004930  _FAT_cache
-00004B30  00004B30  _temp_sector
-00004D30  00004D30  _temp_sector2
-00004F30  00004F30  _padding
-00005030  00005030  _dap
-          00005040  __stop__bss
-          00005040
+          00002924  section .bss:
+          00002924  __start__bss
+00002924  00002924  _malloc
+00002928  00002928  _dalloc
+0000292C  0000292C  _memcpy
+00002930  00002930  _print_mem
+00002934  00002934  _ar
+00004934  00004934  _directory_size
+00004954  00004954  _volume
+00004974  00004974  _FAT_cache
+00004B74  00004B74  _temp_sector
+00004D74  00004D74  _temp_sector2
+00004F74  00004F74  _padding
+00005074  00005074  _dap
+          00005084  __stop__bss
+          00005084
 
