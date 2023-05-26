@@ -294,7 +294,6 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
 
     prints("WE ARE IN CREATE DIR",21);
     nl();
-    while(1){}
     size_t folder_size; 
 
     struct directory* base;
@@ -308,6 +307,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         folder_size = root_dir_size*bytes_per_sector;
         base = list_root();
     }
+    while(1){}
 
     //we want to search for an empty space, if not we put it at the end and move a 0 to the end
     struct directory* free_space = NULL; 
