@@ -369,9 +369,6 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
             //DIAGNOSTICS
             prints("RETURNED FROM WRITE SECTOR",27);
             nl();
-            load_sector(data_start+(cur_cluster-2),&temp_sector);
-            dmph((char*)&temp_sector,512,16);
-            nl();
             break;
         }
         
@@ -594,7 +591,6 @@ void start_program(){
     folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
-    while(1){}
     listed_dir = list_dir(*root_search,folder_size);
     
     dmph((char*)listed_dir,folder_size,16);
