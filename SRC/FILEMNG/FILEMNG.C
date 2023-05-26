@@ -450,7 +450,7 @@ size_t dir_size(struct directory folder){
         cur_cluster= next_cluster;
         next_cluster = FAT_lookup(cur_cluster);
         cluster_count++;
-        load_sector(data_start+(cur_cluster-2),(void*) &temp_sector);
+        //load_sector(data_start+(cur_cluster-2),(void*) &temp_sector);
 
     }
     //then the current cluster points to the next one
@@ -567,10 +567,9 @@ void start_program(){
     nl();
     prints("FOUND FOLDER PRESUMABLY",24);
     nl();
-    prints("DUMPING MEMORY",16);
+    prints("DUMPING MEMORY",14);
     print_mem();
     nl();
-    while(1){}
     size_t folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
