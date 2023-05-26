@@ -40,6 +40,9 @@ https://wiki.osdev.org/Triple_Fault
 ref 12: RTC and CMOS
 https://wiki.osdev.org/CMOS#Getting_Current_Date_and_Time_from_RTC
 
+ref 13: Make word look like latex
+https://www.youtube.com/watch?v=6AJ13N410ns
+
 
 ## HOW SHOULD AN OS BE DESIGNED ##
 

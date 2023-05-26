@@ -567,6 +567,9 @@ void start_program(){
     nl();
     prints("FOUND FOLDER PRESUMABLY",24);
     nl();
+    prints("DUMPING MEMORY",16);
+    print_mem();
+    nl();
     size_t folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
@@ -575,7 +578,7 @@ void start_program(){
     nl();
     struct directory folder1;
     struct directory dir1;
-    memcpy("TEXTFILETXT",&(dir1.name),11);
+    memcpy((void*)"TEXTFILETXT",&(dir1.name),11);
     memcpy(root_search,&folder1,sizeof(directory_size));
     create_dir(dir1,folder1);
 
