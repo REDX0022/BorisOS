@@ -357,9 +357,9 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
 
     int cur_file_size_in_sectors = size/bytes_per_sector;
     if(size%512){cur_file_size_in_sectors++;}
-    prints("FILE SIZE modify dir",21);
+    prints("Starting cluster modify dir",21);
     nl();
-    printf(cur_file_size_in_sectors);
+    printf(cur_cluster);
     nl();
     while(1){
         next_cluster = FAT_lookup(cur_cluster);
