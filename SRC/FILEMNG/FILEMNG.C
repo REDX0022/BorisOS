@@ -367,7 +367,11 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
         if(next_cluster>=0xFFF8 && cur_file_size_in_sectors==1){//we are on our last sector for both
             printch('p');
             write_sector(cur_cluster,pos); //write the last sector
+            //DIAGNOSTICS
             prints("RETURNED FROM WRITE SECTOR",27);
+            nl();
+            load_sector(cur_cluster,&temp_sector);
+            dmph((char*)&temp_sector,512,16);
             nl();
             break;
         }
