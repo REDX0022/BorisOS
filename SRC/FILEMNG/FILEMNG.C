@@ -570,6 +570,7 @@ void start_program(){
     prints("DUMPING MEMORY",16);
     print_mem();
     nl();
+    while(1){}
     size_t folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
