@@ -12,7 +12,7 @@ ref 3: Far pointers in C
 https://www.geeksforgeeks.org/what-are-near-far-and-huge-pointers/
 
 ref 4: Good example (done in unreal mode)
-https://github.com/fysnet/FYSOS/tree/master/loader
+https://githubhjuo.com/fysnet/FYSOS/tree/master/loader
 
 ref 5: Unreal mode
 https://en.wikipedia.org/wiki/Unreal_mode
