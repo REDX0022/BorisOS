@@ -574,23 +574,68 @@ void start_program(){
     nl();
     prints("FOUND FOLDER PRESUMABLY",23);
     nl();
+
+    //here we have to test listdir when its above 512
     prints("DUMPING MEMORY",14);
     print_mem();
     nl();
     size_t folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
+   
     
     
     struct directory* listed_dir = list_dir(*root_search,folder_size);
+
     dmph((char*)listed_dir,folder_size,16);
     nl();
+    /*
     struct directory folder1;
     struct directory dir1;
-    memcpy((void*)"TEXTFILETXT",&(dir1.name),11);
+    for(char* c = (char*)&dir1;c<(((char*)&dir1)+32);c++){*c = 0;}
     memcpy(root_search,&folder1,sizeof(directory_size));
+    
+    
+    memcpy((void*)"TEXTFI01TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
-
+    memcpy((void*)"TEXTFI02TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI03TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI04TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI05TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI06TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI07TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI08TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI09TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI10TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI11TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI12TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI13TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI14TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI15TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI16TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI17TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI18TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI19TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
+    memcpy((void*)"TEXTFI20TXT",&(dir1.name),11);
+    create_dir(dir1,folder1);
     
     folder_size = dir_size(*root_search);
     printf((int)folder_size);
@@ -600,6 +645,7 @@ void start_program(){
     
     dmph((char*)listed_dir,folder_size,16);
     nl();
+    */
     
 }
 
