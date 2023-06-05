@@ -13,7 +13,7 @@ run: $(prereq)
 
 	sudo mount /dev/sdc /BORISOSVOL
 
-	
+
 
 
 	sudo cp OS/LOADER.SYS /BORISOSVOL

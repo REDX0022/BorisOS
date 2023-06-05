@@ -301,6 +301,8 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
         prints("IS FOLDER yay",14);
         nl();
         folder_size = dir_size(folder);
+        prints("RETURNED FROM THE questionable dir_size",40);//REMINDER: the bug is here, we have filed the first cluster of FOLDER1 and now dir size doesn't have an ending 0 to tell the size, to investigate we need to look at how this situation is handled usually
+        nl();
         base = list_dir(folder,folder_size+2*sizeof(directory_size)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
     }
     else{//its a volume
@@ -589,7 +591,6 @@ void start_program(){
 
     dmph((char*)listed_dir,folder_size,16);
     nl();
-    /*
     struct directory folder1;
     struct directory dir1;
     for(char* c = (char*)&dir1;c<(((char*)&dir1)+32);c++){*c = 0;}
@@ -620,12 +621,17 @@ void start_program(){
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI12TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
+
+
+ 
+    
     memcpy((void*)"TEXTFI13TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI14TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI15TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
+    /*
     memcpy((void*)"TEXTFI16TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI17TXT",&(dir1.name),11);
@@ -636,7 +642,11 @@ void start_program(){
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI20TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
-    
+    //we are gonna print memory here
+    prints("PRINTING MEMORY AFTER ADDING THE FILES AND ABUSING THE MEMMNG",61);
+    nl();
+    print_mem();
+    nl();
     folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
