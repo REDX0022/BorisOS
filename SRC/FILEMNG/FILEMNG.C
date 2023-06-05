@@ -142,7 +142,7 @@ struct directory* from_path(char* path){//this string exists on the stack, it is
         struct directory* ret = search_dir(cur,padded_name); //we need to dealoate the return 
         if(ret==NULL){return NULL;}
         cur = *ret;
-        dalloc((uint32_t)ret,sizeof(directory_size));
+        dalloc((uintptr_t)ret,sizeof(directory_size));
     }
 }
 
@@ -154,8 +154,8 @@ int write_sector(int sector_pos,void *memory_pos){
     dap.size = 0x10;
     dap.padding = 0;
     dap.num_of_sectors = 1;
-    dap.offset = (uint16_t)(((uint32_t )memory_pos )%16);
-    dap.segment = (uint16_t)(((uint32_t)memory_pos)/16);
+    dap.offset = (uint16_t)(((unsigned int )memory_pos )%16);
+    dap.segment = (uint16_t)(((unsigned int )memory_pos)/16);
     dap.sector = sector_pos;
     dap.rest =0;
     write_sector_helper(&dap);
@@ -204,8 +204,8 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dap.size = 0x10;
    dap.padding = 0;
    dap.num_of_sectors = 1;
-   dap.offset = (uint16_t)(((uint32_t )memory_pos )%16);
-   dap.segment = (uint16_t)(((uint32_t)memory_pos)/16);
+   dap.offset = (uint16_t)(((unsigned int )memory_pos )%16);
+   dap.segment = (uint16_t)(((unsigned int )memory_pos)/16);
    dap.sector = sector_pos;
    dap.rest =0;
  //TODO: Make actuall diagonsitcs
@@ -266,7 +266,7 @@ int delete_dir(struct directory dir){
         
     
     }
-    dalloc((uint32_t)dir_listed,folder_size);
+    dalloc((uintptr_t)dir_listed,folder_size);
     //now we free up the current dir
     int cur_cluster = dir.starting_cluster;
     int next_cluster;
@@ -328,10 +328,10 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
          folder.file_size_in_bytes = folder_size;//we hack the folder for modify_dir
     }
     nl();
-    dmph((char*)base,folder_size+2*sizeof(directory_size),16);
+    //dmph((char*)base,folder_size+2*sizeof(directory_size),16);
     nl();
     modify_dir(folder,(char*) base,folder_size+2*sizeof(directory_size));
-    dalloc((uint32_t)base,folder_size+2*sizeof(directory_size));
+    dalloc((uintptr_t)base,folder_size+2*sizeof(directory_size));
     prints("RETURN OF THE DALLOC",21);
     nl();
     return 0;
@@ -457,7 +457,7 @@ size_t dir_size(struct directory folder){
     }
     //then the current cluster points to the next one
     load_sector(data_start+(cur_cluster-2),(void*)&temp_sector);
-    dmph((char*)&temp_sector,512,16);
+    //dmph((char*)&temp_sector,512,16);
     nl();
     //
     for(int i =0;i<bytes_per_sector;i+=32){
@@ -540,6 +540,7 @@ struct directory* search_dir(struct directory folder, char name[11]){
         search_size= dir_size(folder);
         search_place= list_dir(folder,search_size);
     } 
+    
     for(struct directory* i = search_place;i!=(struct directory*)(((char*)search_place)+search_size);i++){
         if(is_folder(*i)){//we queue up a folder to be searched later recursively
             dir_enqueue(*i);//if the queue overfills this doesn't work
@@ -548,15 +549,17 @@ struct directory* search_dir(struct directory folder, char name[11]){
         if(cmp_name(name,i->name)){ //we have found the file yayy
             void* res = malloc(sizeof(directory_size));
             memcpy((void*)i,res,sizeof(directory_size));
-            dalloc((uint32_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
+            dalloc((uintptr_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
             return (struct directory*) res;
         }
 
     }
-    dalloc((uint32_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
+    
+    dalloc((uintptr_t)search_place,search_size); //we need to dealocate the memory, we don't want no leaks
     return NULL;
 
 }
+
 
 
 void start_program(){
@@ -567,7 +570,6 @@ void start_program(){
    
     struct directory* root_search = search_dir(volume,"FOLDER1    ");
     nl();
-    /*
     printf((int)root_search);
     nl();
     prints("FOUND FOLDER PRESUMABLY",23);
@@ -578,6 +580,7 @@ void start_program(){
     size_t folder_size = dir_size(*root_search);
     printf((int)folder_size);
     nl();
+    
     
     struct directory* listed_dir = list_dir(*root_search,folder_size);
     dmph((char*)listed_dir,folder_size,16);
@@ -593,10 +596,11 @@ void start_program(){
     printf((int)folder_size);
     nl();
     listed_dir = list_dir(*root_search,folder_size);
+  
     
     dmph((char*)listed_dir,folder_size,16);
     nl();
-    */
+    
 }
 
 void init(){

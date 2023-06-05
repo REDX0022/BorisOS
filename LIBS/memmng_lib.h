@@ -6,7 +6,7 @@
 typedef void* (*malloc_ptr)(size_t size);
 malloc_ptr malloc;
 
-typedef void (*dalloc_ptr)(uint32_t begin, size_t size);
+typedef void (*dalloc_ptr)(uintptr_t begin, size_t size);
 dalloc_ptr dalloc;
 
 typedef void (*memcpy_ptr)(void* src, void *dest, size_t n);

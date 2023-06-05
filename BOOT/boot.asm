@@ -41,6 +41,7 @@ global start
 %assign root_dir FAT_start+num_of_FATs*sectors_per_FAT
 %assign root_dir_size (num_of_root_dir*32)/bytes_per_sector
 %assign data_start root_dir+root_dir_size
+%assign drive_num_bios_address 0xFFFA
 ;;--------------------------------------------------------
 ;;assign where to put the sectors
 %assign search_sector_address 0x7E00
@@ -84,7 +85,7 @@ db file_system_type
 
 start:
 
-  
+    
    xor ax, ax
    
 
@@ -95,6 +96,7 @@ start:
     mov ss, ax ; this can grow to 0x10000
     mov sp, 0xFFF0 ; this is arbitrary and the stack could be whatever it wants??//this needs to be alligned to something man
     
+    ;;mov [drive_num_bios_address], byte 0x80
     
     cli 
     push ds
@@ -179,7 +181,7 @@ unreal:
                 
             ;------------------Call the loader------------------------------
                 ;the stack is already set up, we have one os stack
-               
+                
                 call (loader_memory_address/16):20 ;;TODO make this more flexible
             ;-----------------------------------------------------------------
             jmp $
@@ -229,7 +231,6 @@ load_loader_cluster:
 
         call load_sector
         
-                
 
     add ebx , bytes_per_sector ; change the memory offset
 
@@ -352,11 +353,15 @@ load_sector:
         mov ah, 0x42
         mov si, disk_address_packet_struct
         int 0x13
-        
+        jnc .skip
+        mov ah, 0x0E
+        ;mov bh, 0
+        mov al, 'f'
+        int 10h
+        .skip:
         popa
     ;----------------------------------------------------------
 ret
-
 
 
 ;;==================================================================================
@@ -397,8 +402,23 @@ times 20 db 0
 ;;=================FAT TESTING CODE=================== REMOVE LATER
 db 'FOLDER1    '
 db 0x10
-times 14 db 0
-dw 2 ; this is a word for the cluster ; its should be data start + 1kb
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+dw 0x02; this is a word for the cluster ; its should be data start + 1kb
 dd 0
 
 
@@ -409,21 +429,48 @@ times 32*(512-2) db 0
 ;;=====================DATA START==========================
 ;;then we skip the first 2 sectors
 
-times 512*2 db 0 ; this should be edited when code above is changed
-;;prev
 
 db '.          '
 db 0x10
-times 14 db 0
-dw 2
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+dw 0x02; this is a word for the cluster ; its should be data start + 1kb
 dd 0
 
 db '..         '
 db 0x10
-times 14 db 0
-dw 0
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+dw 0x00; this is a word for the cluster ; its should be data start + 1kb
 dd 0
 
-times db 0;we need to define end of search for folder1
 
 times 1000 db 0

@@ -4,11 +4,11 @@
 #include "kernel_out.h"
 
 
-#define max_memory_sectors 1000//change this later man okay? TODOOOOO
+#define max_memory_sectors 50//change this later man okay? TODOOOOO
 #define memory_begin 0x500 
 #define memory_end 0x80000 
 struct alloc_segment{
-    uint32_t begin;
+    uintptr_t begin;
     size_t len;
 };
 
@@ -88,7 +88,7 @@ void* malloc(size_t size){
 }
 
 //TODO this doesnt work for sure, we'll pretend it does, we'll never need it anyways
-void dalloc(uint32_t begin, size_t size){
+void dalloc(uintptr_t begin, size_t size){
     //we can have 3 cases here
     // - given segment is completly within another
     // - given segment messes with the part of another
@@ -115,6 +115,7 @@ void dalloc(uint32_t begin, size_t size){
             memory[i+1].len = memory[i].begin + memory[i].len - (begin + size);
             
             memory[i].len = begin-memory[i].begin;
+         
             return; //we are done with the dalloc
         }
         if(memory[i].begin>=begin+size){

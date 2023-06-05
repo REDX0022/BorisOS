@@ -134,8 +134,8 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
    dap.size = 0x10;
    dap.padding = 0;
    dap.num_of_sectors = 1;
-   dap.offset = (uint16_t)(((uint32_t )memory_pos )%16);
-   dap.segment = (uint16_t)(((uint32_t)memory_pos)/16);
+   dap.offset = (uint16_t)(((unsigned int )memory_pos )%16);
+   dap.segment = (uint16_t)(((unsigned int )memory_pos)/16);
    dap.sector = sector_pos;
    dap.rest =0;
  //TODO: Make actuall diagonsitcs
@@ -414,4 +414,3 @@ int __start__(){
 
 
 }
-
