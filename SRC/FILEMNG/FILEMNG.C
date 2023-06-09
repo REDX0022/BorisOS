@@ -251,11 +251,11 @@ int load_sector_helper(struct disk_address_packet *ptr){
    
 
 }
-
+/*
 /// @brief You cant delete the root dir,
 /// @param dir directory and its sub-directories to be delted
 /// @return success TODO
-int delete_dir(struct directory dir){
+int delete_dir(struct directory dir,struct directory folder){
     if(is_volume(dir)){return 1;}
     size_t folder_size = dir_size(dir);
     struct directory* dir_listed = list_dir(dir,folder_size);
@@ -278,7 +278,7 @@ int delete_dir(struct directory dir){
     }
     return 0;
 }
-
+*/
 
 /// @brief This function is full of hacks and could easly break if something is changed
 /// @param dir directory to be created, the only thing to be specified is the name and type
@@ -576,14 +576,12 @@ struct directory* search(struct directory folder,char name[11]){
 /// @param folder folder in which we want to search, can also be volume
 /// @param name standardized name
 struct directory* search_dir(struct directory folder, char name[11]){
-    //if(!is_volume(folder)&&!is_folder(folder)){return NULL;}
+    if(!is_volume(folder)&&!is_folder(folder)){return NULL;}
     
     //first we load the folder into memory
     struct directory* search_place;
     size_t search_size;
     if(is_volume(folder)){//we search the root dir
-        prints("stopped to list root",21);
-        nl();
         search_size =  root_dir_size*bytes_per_sector;
         search_place = list_root();
     }
@@ -593,7 +591,8 @@ struct directory* search_dir(struct directory folder, char name[11]){
     } 
     
     for(struct directory* i = search_place;i!=(struct directory*)(((char*)search_place)+search_size);i++){
-        if(is_folder(*i)){//we queue up a folder to be searched later recursively
+        if(is_folder(*i) && i->name[0]!='.' && i->name[0]!=0xE5){//we have to check if its delted or if its .. or .
+            
             dir_enqueue(*i);//if the queue overfills this doesn't work
         }
         
@@ -702,9 +701,15 @@ void start_program(){
     
     dmph((char*)listed_dir,folder_size,16);
     nl();
+    //lets test the search dir on a folder
+    nl();
+    struct directory* txtfile = search(volume,"TEXTFI20TXT");
+    if(txtfile==NULL){printf(29);}
+    else{dmph((char*) txtfile,32,16);}
+    nl();
 
-
-    p
+    prints("STARTED DELETE TESTING",22);
+    
 
 
     
