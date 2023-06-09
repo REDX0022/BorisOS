@@ -280,62 +280,102 @@ int delete_dir(struct directory dir){
 }
 
 
+/// @brief This function is full of hacks and could easly break if something is changed
+/// @param dir directory to be created, the only thing to be specified is the name and type
+/// @param folder @folder
+/// @return success
+int create_root(struct directory dir,struct directory folder){//TODOO: check if dir name is valid
+    if(!is_volume(folder)){return 1;}
+    
+    // we want to allocate the first cluster
+    dir.starting_cluster = FAT_free();
+    FAT_edit(dir.starting_cluster, 0xFFFF); //per spec
+
+    // prints("WE ARE IN CREATE DIR",21);
+    // nl();
+    size_t folder_size; 
+
+    struct directory* base;
+   
+    folder_size = root_dir_size*bytes_per_sector;
+    base = list_root();
+    
+    //we want to search for an empty space, if not we put it at the end and move a 0 to the end
+    struct directory* free_space = NULL; 
+    for(struct directory* ptr = base; ptr->name[0]!=0;ptr++){//here is the problem, it is not not always null ternimated
+        if(ptr->name[0]==0xE5||ptr->name[0]==0){//TODO: add support for changing 0x05 things
+            free_space = ptr;
+            break;
+        }
+    }
+    
+   
+    *free_space = dir;
+    modify_root((char*) base);
+    dalloc((uintptr_t)base,folder_size);
+    //nl();
+    //dmph((char*)base,folder_size+2*sizeof(directory_size),16);
+    //nl();
+    
+   
+    //prints("RETURN OF THE DALLOC",21);
+    //nl();
+    return 0;
+}
 
 /// @brief This function is full of hacks and could easly break if something is changed
 /// @param dir directory to be created, the only thing to be specified is the name and type
 /// @param folder @folder
 /// @return success
 int create_dir(struct directory dir,struct directory folder){//TODOO: check if dir name is valid
-    if(!is_folder(folder) && !is_volume(folder)){return 1;}
+    if(!is_folder(folder)){return 1;}
     
     // we want to allocate the first cluster
     dir.starting_cluster = FAT_free();
     FAT_edit(dir.starting_cluster, 0xFFFF); //per spec
 
-    prints("WE ARE IN CREATE DIR",21);
-    nl();
+    // prints("WE ARE IN CREATE DIR",21);
+    // nl();
     size_t folder_size; 
 
     struct directory* base;
-    if(is_folder(folder)){
-        prints("IS FOLDER yay",14);
-        nl();
-        folder_size = dir_size(folder);
-        prints("RETURNED FROM THE questionable dir_size",40);//REMINDER: the bug is here, we have filed the first cluster of FOLDER1 and now dir size doesn't have an ending 0 to tell the size, to investigate we need to look at how this situation is handled usually
-        nl();
-        base = list_dir(folder,folder_size+2*sizeof(directory_size)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
-    }
-    else{//its a volume
-        folder_size = root_dir_size*bytes_per_sector;
-        base = list_root();
-    }
-
+    // prints("IS FOLDER yay",14);
+    // nl();
+    folder_size = dir_size(folder);
+    // prints("RETURNED FROM THE questionable dir_size",40);//REMINDER: the bug is here, we have filed the first cluster of FOLDER1 and now dir size doesn't have an ending 0 to tell the size, to investigate we need to look at how this situation is handled usually
+    // nl();
+    base = list_dir(folder,folder_size+2*sizeof(directory_size)); //this is safe because we use the size only for malloc(which we want) and for saving the rest of the sector, which isn't a problem
     //we want to search for an empty space, if not we put it at the end and move a 0 to the end
     struct directory* free_space = NULL; 
-    for(struct directory* ptr = base; ptr->name[0]!=0;ptr++){
+    for(struct directory* ptr = base; ptr->name[0]!=0;ptr++){//here is the problem, it is not not always null ternimated
         if(ptr->name[0]==0xE5){//TODO: add support for changing 0x05 things
             free_space = ptr;
             break;
         }
     }
     
-    if(free_space==NULL&&is_folder(folder)){//the folder is jam packed
+    if(free_space==NULL){//the folder is jam packed, we need to add a directory
         base[(folder_size)/(sizeof(directory_size))+1].name[0] = 0; //we edit the additional "hacked" directory so its the new end of file
         base[(folder_size)/(sizeof(directory_size))] = dir;
         //we hack the folder for modify_dir
+        
+        modify_dir(folder,(char*) base,folder_size+2*sizeof(directory_size));//0 at the end even if it means the whole cluster is just one 0
+        dalloc((uintptr_t)base,folder_size+2*sizeof(directory_size));
+        
 
     }
     else {
         *free_space = dir;
-         folder.file_size_in_bytes = folder_size;//we hack the folder for modify_dir
+        modify_dir(folder,(char*) base,folder_size);
+        dalloc((uintptr_t)base,folder_size);
     }
-    nl();
+    //nl();
     //dmph((char*)base,folder_size+2*sizeof(directory_size),16);
-    nl();
-    modify_dir(folder,(char*) base,folder_size+2*sizeof(directory_size));
-    dalloc((uintptr_t)base,folder_size+2*sizeof(directory_size));
-    prints("RETURN OF THE DALLOC",21);
-    nl();
+    //nl();
+    
+   
+    //prints("RETURN OF THE DALLOC",21);
+    //nl();
     return 0;
 }
 
@@ -377,8 +417,9 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
 
         if(next_cluster>=0xFFF8){//we have reached the end of the previous file
             printch('q');
-            while(cur_file_size_in_sectors>0){
+            while(cur_file_size_in_sectors>1){
                 write_sector(data_start+(cur_cluster-2),pos);
+                
                 next_cluster = FAT_free();
                 FAT_edit(cur_cluster,next_cluster);
 
@@ -386,6 +427,9 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
                 pos+=bytes_per_sector;
                 cur_file_size_in_sectors--;
             }
+            write_sector(data_start+(cur_cluster-2),pos);
+            FAT_edit(cur_cluster,0xFFFF);//per spec
+           
             break;
         }
 
@@ -459,14 +503,19 @@ size_t dir_size(struct directory folder){
     }
     //then the current cluster points to the next one
     load_sector(data_start+(cur_cluster-2),(void*)&temp_sector);
-    //dmph((char*)&temp_sector,512,16);
+    printf(69);
     nl();
+    //dmph((char*)&temp_sector,512,16);
+    //nl();
     //
     for(int i =0;i<bytes_per_sector;i+=32){
         if(!temp_sector[i]){//its the end of the file
             return cluster_count*bytes_per_sector+i;
         }
     }
+    //if we have made it to here, means the last cluster is full, and invalid
+    return 0;
+    
 }
 
 
@@ -621,17 +670,12 @@ void start_program(){
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI12TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
-
-
- 
-    
     memcpy((void*)"TEXTFI13TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI14TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI15TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
-    /*
     memcpy((void*)"TEXTFI16TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI17TXT",&(dir1.name),11);
@@ -642,12 +686,15 @@ void start_program(){
     create_dir(dir1,folder1);
     memcpy((void*)"TEXTFI20TXT",&(dir1.name),11);
     create_dir(dir1,folder1);
+
+
+    
     //we are gonna print memory here
     prints("PRINTING MEMORY AFTER ADDING THE FILES AND ABUSING THE MEMMNG",61);
     nl();
     print_mem();
     nl();
-    folder_size = dir_size(*root_search);
+    folder_size = dir_size(*root_search);//dir size fucks with us all
     printf((int)folder_size);
     nl();
     listed_dir = list_dir(*root_search,folder_size);
@@ -655,7 +702,11 @@ void start_program(){
     
     dmph((char*)listed_dir,folder_size,16);
     nl();
-    */
+
+
+    p
+
+
     
 }
 

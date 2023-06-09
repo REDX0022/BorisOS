@@ -5,13 +5,13 @@ targets := OS/LOADER.SYS OS/MEMMNG.SYS OS/FILEMNG.SYS
 
 run: $(prereq)
 	
-	-sudo umount /dev/sdc
-	-sudo dd if=/dev/zero of=/dev/sdc
+	-sudo umount /dev/sdd
+	-sudo dd if=/dev/zero of=/dev/sdd
 	
 	
-	sudo dd if=BOOT/boot.o of=/dev/sdc
+	sudo dd if=BOOT/boot.o of=/dev/sdd
 
-	sudo mount /dev/sdc /BORISOSVOL
+	sudo mount /dev/sdd /BORISOSVOL
 
 
 
@@ -21,9 +21,9 @@ run: $(prereq)
 	sudo cp OS/FILEMNG.SYS /BORISOSVOL
 	sudo cp OS/MEMMNG.MAP /BORISOSVOL
 
-	sudo umount /dev/sdc
+	sudo umount /dev/sdd
 	
-	sudo qemu-system-x86_64 -cpu qemu64 -drive format=raw,file=/dev/sdc -nographic
+	sudo qemu-system-x86_64 -cpu qemu64 -drive format=raw,file=/dev/sdd -nographic
 	
 	
 	
