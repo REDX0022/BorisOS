@@ -299,8 +299,6 @@ int delete_(struct directory dir,struct directory folder){
 int delete_dir(struct directory dir){
     if(is_volume(dir)){return 1;}
     //now we have to mark it as deleted
-    prints(dir.name,11);
-    nl();
     
     if(is_folder(dir)){
         size_t folder_size = dir_size(dir);
@@ -318,8 +316,6 @@ int delete_dir(struct directory dir){
     int next_cluster;
     while(1){
         next_cluster= FAT_lookup(cur_cluster);
-        printf(cur_cluster);
-        nl();
         FAT_edit(cur_cluster,0);
         if(next_cluster>=0xFFF8){break;}
         cur_cluster = next_cluster;
@@ -486,10 +482,6 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
 
     int cur_file_size_in_sectors = size/bytes_per_sector;
     if(size%512){cur_file_size_in_sectors++;}
-    prints("Starting cluster modify dir",21);
-    nl();
-    printf(cur_cluster);
-    nl();
     while(1){
         next_cluster = FAT_lookup(cur_cluster);
         if(next_cluster>=0xFFF8 && cur_file_size_in_sectors==1){//we are on our last sector for both
@@ -589,8 +581,6 @@ size_t dir_size(struct directory folder){
     }
     //then the current cluster points to the next one
     load_sector(data_start+(cur_cluster-2),(void*)&temp_sector);
-    printf(69);
-    nl();
     //dmph((char*)&temp_sector,512,16);
     //nl();
     //
@@ -700,6 +690,7 @@ struct directory* search_dir(struct directory folder, char name[11]){
 
 void start_program(){
     init();
+    /*
     prints("STARTED FILE MANAGER TESTING",28);
     nl();
     //===========FILE MNG TESTING================
@@ -799,13 +790,11 @@ void start_program(){
     
     prints("STARTED DELETE TESTING",22);
     nl();
-    printf(FAT_lookup(2));
-    nl();
 
     delete_root(*root_search);
 
 
-    
+    */
 }
 
 void init(){
