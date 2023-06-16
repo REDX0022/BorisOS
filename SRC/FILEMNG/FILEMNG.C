@@ -64,7 +64,7 @@ int write_file(char* path, char name, (void*) pos, size_t size) {}
 
 struct directory directory_size;
 struct directory volume;
-int cached_FAT_sector =-1;
+int cached_FAT_sector = -1;
 uint16_t FAT_cache[bytes_per_sector/2]; //this is used to cache one sector of fat
 
 char temp_sector[bytes_per_sector]; //these 2 are used by functions only while the function is executing
@@ -251,41 +251,128 @@ int load_sector_helper(struct disk_address_packet *ptr){
    
 
 }
-/*
+
+/// @brief Idk how to name this
+/// @param dir 
+/// @param folder 
+/// @return 
+int delete_root(struct directory dir){
+    
+    size_t folder_size = root_dir_size*bytes_per_sector;
+    struct directory* folder_listed = list_root();
+    for(struct directory* i = folder_listed;i!=(struct directory*)(((char*)folder_listed)+folder_size);i++){
+        if(cmp_name(i->name,dir.name)){
+            *(i->name) = 0xE5;//this line doesn't work probbably
+            delete_dir(*i);
+            modify_root((char*)folder_listed);
+            dalloc((uintptr_t)folder_listed,folder_size);
+            return 0;
+        }
+    }
+   
+    return 1;
+}
+
+/// @brief Idk how to name this
+/// @param dir 
+/// @param folder 
+/// @return 
+int delete_(struct directory dir,struct directory folder){
+    
+    size_t folder_size = dir_size(folder);
+    struct directory* folder_listed = list_dir(folder,folder_size);
+    for(struct directory* i = folder_listed;i!=(struct directory*)(((char*)folder_listed)+folder_size);i++){
+        if(cmp_name(i->name,dir.name)){
+            *(i->name) = 0xE5;//this line doesn't work probbably
+            delete_dir(*i);
+            return 0;
+        }
+    }
+    modify_dir(folder,(char*)folder_listed,folder_size);
+    return 1;
+}
+
+
 /// @brief You cant delete the root dir,
 /// @param dir directory and its sub-directories to be delted
 /// @return success TODO
-int delete_dir(struct directory dir,struct directory folder){
+int delete_dir(struct directory dir){
     if(is_volume(dir)){return 1;}
-    size_t folder_size = dir_size(dir);
-    struct directory* dir_listed = list_dir(dir,folder_size);
-    if(dir_listed!=NULL){//means it is a folder
+    //now we have to mark it as deleted
+    prints(dir.name,11);
+    nl();
+    
+    if(is_folder(dir)){
+        size_t folder_size = dir_size(dir);
+        struct directory* dir_listed = list_dir(dir,folder_size);
         for(struct directory* ptr = dir_listed;ptr->name[0]!=0;ptr++){
-            delete_dir(*dir_listed);
+           
+            if(ptr->name[0]!= '.' && ptr->name[0]!=0xE5){delete_dir(*ptr);}
         }
-        
+        dalloc((uintptr_t)dir_listed,folder_size);
     
     }
-    dalloc((uintptr_t)dir_listed,folder_size);
+    
     //now we free up the current dir
     int cur_cluster = dir.starting_cluster;
     int next_cluster;
     while(1){
         next_cluster= FAT_lookup(cur_cluster);
+        printf(cur_cluster);
+        nl();
         FAT_edit(cur_cluster,0);
         if(next_cluster>=0xFFF8){break;}
-
+        cur_cluster = next_cluster;
     }
     return 0;
 }
-*/
 
-/// @brief This function is full of hacks and could easly break if something is changed
+/// @brief mkdir    
+/// @param name 
+/// @param folder parameter folder of all folders
+/// @return cluster where it's placed
+uint16_t make_dir(char name[11], struct directory folder){
+    struct directory* folder_stucture = (struct directory*)malloc(3*sizeof(directory_size));
+    //clear the structs
+    for(char* c = (char*)folder_stucture;c!=((char*)folder_stucture)+3*sizeof(directory_size);c++){*c=0;}
+    //set up names 
+    memcpy((void*)".          ",(void*)(folder_stucture[0].name),11);
+    memcpy((void*)"..         ",(void*)(folder_stucture[1].name),11);
+    folder_stucture[0].attribute = 0x10;
+    folder_stucture[1].attribute = 0x10;
+    struct directory maked_dir;
+    for(char* c = (char*)&maked_dir;c!=((char*)&maked_dir)+sizeof(directory_size);c++){*c=0;}
+    memcpy((void*)name,(void*)maked_dir.name,11);
+    maked_dir.attribute = 0x10;
+    uint16_t starting_cluster;
+    uint16_t return_cluster;
+    if(is_volume(folder)){
+        starting_cluster = create_root(maked_dir);
+        return_cluster =0;
+    }
+    else if(is_folder(folder)){
+        starting_cluster = create_dir(maked_dir,folder);
+        return_cluster = folder.starting_cluster;
+    }
+    else{
+        return 1;
+    }
+    if(starting_cluster==1){return 1;}
+    maked_dir.starting_cluster = starting_cluster; //this need's to be more elaborate when we start doing dates
+    folder_stucture[0].starting_cluster = starting_cluster;
+    folder_stucture[1].starting_cluster = return_cluster;
+    modify_dir(maked_dir,(char*)folder_stucture,3*sizeof(directory_size));
+    dalloc((uintptr_t)folder_stucture,3*sizeof(directory_size));
+    //we are done
+    return starting_cluster;
+}
+
+
+/// @brief This function is full of hacks and could easly break if something is changed, i dont really give a shit if it works
 /// @param dir directory to be created, the only thing to be specified is the name and type
 /// @param folder @folder
-/// @return success
-int create_root(struct directory dir,struct directory folder){//TODOO: check if dir name is valid
-    if(!is_volume(folder)){return 1;}
+/// @return cluster where it's placed
+uint16_t create_root(struct directory dir){//TODOO: check if dir name is valid
     
     // we want to allocate the first cluster
     dir.starting_cluster = FAT_free();
@@ -302,7 +389,7 @@ int create_root(struct directory dir,struct directory folder){//TODOO: check if 
     
     //we want to search for an empty space, if not we put it at the end and move a 0 to the end
     struct directory* free_space = NULL; 
-    for(struct directory* ptr = base; ptr->name[0]!=0;ptr++){//here is the problem, it is not not always null ternimated
+    for(struct directory* ptr = base; ptr!= (struct directory*)(((char*)base)+root_dir_size*bytes_per_sector);ptr++){
         if(ptr->name[0]==0xE5||ptr->name[0]==0){//TODO: add support for changing 0x05 things
             free_space = ptr;
             break;
@@ -320,14 +407,14 @@ int create_root(struct directory dir,struct directory folder){//TODOO: check if 
    
     //prints("RETURN OF THE DALLOC",21);
     //nl();
-    return 0;
+    return dir.starting_cluster;
 }
 
 /// @brief This function is full of hacks and could easly break if something is changed
 /// @param dir directory to be created, the only thing to be specified is the name and type
 /// @param folder @folder
-/// @return success
-int create_dir(struct directory dir,struct directory folder){//TODOO: check if dir name is valid
+/// @return starting cluster
+uint16_t create_dir(struct directory dir,struct directory folder){//TODOO: check if dir name is valid
     if(!is_folder(folder)){return 1;}
     
     // we want to allocate the first cluster
@@ -376,7 +463,7 @@ int create_dir(struct directory dir,struct directory folder){//TODOO: check if d
    
     //prints("RETURN OF THE DALLOC",21);
     //nl();
-    return 0;
+    return dir.starting_cluster;
 }
 
 int modify_root(char* pos){
@@ -409,8 +496,7 @@ int modify_dir(struct directory dir,char *pos,size_t size){ //this should be go,
             printch('p');
             write_sector(data_start+(cur_cluster-2),pos); //write the last sector
             //DIAGNOSTICS
-            prints("RETURNED FROM WRITE SECTOR",27);
-            nl();
+
             break;
         }
         
@@ -701,15 +787,22 @@ void start_program(){
     
     dmph((char*)listed_dir,folder_size,16);
     nl();
-    //lets test the search dir on a folder
+
+
+
+
+
+    make_dir("MFOLDER    ",volume);
+    
+
+
+    
+    prints("STARTED DELETE TESTING",22);
     nl();
-    struct directory* txtfile = search(volume,"TEXTFI20TXT");
-    if(txtfile==NULL){printf(29);}
-    else{dmph((char*) txtfile,32,16);}
+    printf(FAT_lookup(2));
     nl();
 
-    prints("STARTED DELETE TESTING",22);
-    
+    delete_root(*root_search);
 
 
     
