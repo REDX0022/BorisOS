@@ -802,7 +802,6 @@ void init(){
     char temp_volume_name[11] = "BORISOSVOL"; //this changes with volume_label
     memcpy(&temp_volume_name,&volume.name,11);
     volume.attribute = 1<<3;
-
 }
 
 /// @brief adds standardized padding

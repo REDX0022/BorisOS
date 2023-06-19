@@ -1,0 +1,39 @@
+File Ofs  Sym Addr  Sym
+
+          00000020  section .text:
+00000030  00000030  ___start__
+00000040  00000040  __start
+00000120  00000120  _specify_video_mode
+00000130  00000130  _set_cursor_size
+00000145  00000145  _set_cursor_position
+0000017A  0000017A  _select_active_page
+000001A9  000001A9  _scroll_up
+000001C2  000001C2  _write_char
+00000206  00000206  _clear
+00000261  00000261  _init
+00000274  00000274  _start_program
+          00000284
+
+          00000284  section .relod:
+          00000284  __start__relod
+          000002D4  __stop__relod
+          000002D4
+
+          000002D4  section .relot:
+          000002D4  __start__relot
+          000002EC  __stop__relot
+          000002EC
+
+          000002EC  section .rodata:
+          00000303
+
+          00000304  section .data:
+00000304  00000304  _welcome_message
+          00000308
+
+          00000308  section .bss:
+          00000308  __start__bss
+00000308  00000308  _buffer
+          000012A8  __stop__bss
+          000012A8
+

@@ -131,16 +131,16 @@ struct disk_address_packet dap;
 
 int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good here
 
-   dap.size = 0x10;
-   dap.padding = 0;
-   dap.num_of_sectors = 1;
-   dap.offset = (uint16_t)(((unsigned int )memory_pos )%16);
-   dap.segment = (uint16_t)(((unsigned int )memory_pos)/16);
-   dap.sector = sector_pos;
-   dap.rest =0;
- //TODO: Make actuall diagonsitcs
-   load_sector_helper(&dap);
-   return 0;
+    dap.size = 0x10;
+    dap.padding = 0;
+    dap.num_of_sectors = 1;
+    dap.offset = (uint16_t)(((unsigned int )memory_pos )%16);
+    dap.segment = (uint16_t)(((unsigned int )memory_pos)/16);
+    dap.sector = sector_pos;
+    dap.rest =0;
+    //TODO: Make actuall diagonsitcs
+    load_sector_helper(&dap);
+    return 0;
 
 }
 
@@ -412,5 +412,40 @@ int __start__(){
         nl();
     }
 
+    //STARTING SHELL
+
+     char name2[11] = "SHELL   SYS";
+    char map_name2[11] = "SHELL   MAP";
+    
+    void* shell_address = malloc(file_manager_size);
+    
+    if(load_file(name2,shell_address)){
+        prints("FAILED TO LOAD SHELL",20);
+        nl();
+    }
+    else{
+        prints("LOADED SHELL SUCCESFULLY",24);
+        nl();
+    }
+    if(start_kernel_programm(shell_address)){
+        prints("FAILED TO START SHELL",21);
+        nl();
+    }
+    else{
+        prints("STARTED SHELL SUCCESFULLY",25);
+        nl();
+    }
+    /*
+    if(load_kernel_map(map_name2,file_manager_address)){ //TODOOOOO: this needs to be done before the shell is started man 
+        prints("FAILED TO LOAD SHELL MAP",32);
+        nl();;  
+    }
+    else{
+        struct shared_lib* sh = get_shared_lib(name);
+        init_MEMMNG(sh->funs_ptr);
+        prints("LOADED SHELL MAP",24);
+        nl();
+    }
+    */
 
 }

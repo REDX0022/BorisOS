@@ -1,12 +1,34 @@
 /*Here we want to make a decent shell programm*/
 
+
+
+
 //lets use a lot of interrupts
 #include "stddef.h"
 #include "stdint.h"
 
+//==========================DEFINTIONS==========================
+#define VGA_MODE 0x03
+#define WIDTH 80
+#define HEIGHT 25
+#define BUFFER_HEIGHT 1000//scroll feature TODO
+#define MEMORY_BUFFER 0xB8000
 
-void specify_video_mode(){
-    //TODO:
+
+
+
+char*  welcome_message= "Welcome to BorisOS 1.0";
+
+
+uint16_t buffer[WIDTH][HEIGHT];
+
+
+void specify_video_mode(){//we are on video mode 3 for now
+    asm("push ax \n"
+        "mov ax, 0x0003 \n"    
+        "int 0x10 \n"
+        "pop ax \n"
+    );
 }
 
 void set_cursor_size(){
@@ -60,3 +82,38 @@ int scroll_up(){
     );
     return 0;
 }
+
+
+void write_char(int x, int y, unsigned char c){//it will be black and white for now
+    uint16_t* address = (uint16_t*)(MEMORY_BUFFER+(y*WIDTH)+x);
+    *address =  c | (0x01<<8);
+}
+
+
+void clear(){
+    for(int i =0;i<WIDTH; i++){
+        for(int j =0;j<HEIGHT; j++)
+        {
+            write_char(i,j,0);
+        }
+    }
+}
+
+void init(){
+    //specify_video_mode();
+    //clear();
+
+}
+
+
+void start_program(){
+    init();
+    for(int i =0;i<25;i++){
+        write_char(i,1,welcome_message[i]);
+    }
+   
+}
+
+
+
+
