@@ -100,20 +100,21 @@ void clear(){
 }
 
 void init(){
-    //specify_video_mode();
+    specify_video_mode();
     //clear();
 
 }
 
 
 void start_program(){
+   
     init();
     for(int i =0;i<25;i++){
-        write_char(i,1,welcome_message[i]);
+        //write_char(i,1,welcome_message[i]);
     }
-   
+    //set_cursor_position(6,15,0);
+    while(1){}
 }
-
 
 
 

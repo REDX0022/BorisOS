@@ -11,29 +11,29 @@ File Ofs  Sym Addr  Sym
 000001C2  000001C2  _write_char
 00000206  00000206  _clear
 00000261  00000261  _init
-00000274  00000274  _start_program
-          00000284
+0000026F  0000026F  _start_program
+          000002A0
 
-          00000284  section .relod:
-          00000284  __start__relod
-          000002D4  __stop__relod
-          000002D4
+          000002A0  section .relod:
+          000002A0  __start__relod
+          000002E8  __stop__relod
+          000002E8
 
-          000002D4  section .relot:
-          000002D4  __start__relot
-          000002EC  __stop__relot
-          000002EC
+          000002E8  section .relot:
+          000002E8  __start__relot
+          000002FC  __stop__relot
+          000002FC
 
-          000002EC  section .rodata:
-          00000303
+          000002FC  section .rodata:
+          00000313
 
-          00000304  section .data:
-00000304  00000304  _welcome_message
-          00000308
+          00000314  section .data:
+00000314  00000314  _welcome_message
+          00000318
 
-          00000308  section .bss:
-          00000308  __start__bss
-00000308  00000308  _buffer
-          000012A8  __stop__bss
-          000012A8
+          00000318  section .bss:
+          00000318  __start__bss
+00000318  00000318  _buffer
+          000012B8  __stop__bss
+          000012B8
 

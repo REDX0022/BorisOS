@@ -427,6 +427,7 @@ int __start__(){
         prints("LOADED SHELL SUCCESFULLY",24);
         nl();
     }
+    
     if(start_kernel_programm(shell_address)){
         prints("FAILED TO START SHELL",21);
         nl();

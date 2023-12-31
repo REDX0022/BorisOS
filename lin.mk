@@ -1,17 +1,17 @@
-prereq := BOOT/boot.o OS/LOADER.SYS OS/MEMMNG.SYS OS/MEMMNG.MAP  OS/FILEMNG.SYS
+prereq := BOOT/boot.o OS/LOADER.SYS OS/MEMMNG.SYS OS/MEMMNG.MAP  OS/FILEMNG.SYS OS/SHELL.SYS
 kernel_libs := LIBS/c0du.asm LIBS/kernel_out.h SRC/MEMMNG/linked_header_MEMMNG.c
-targets := OS/LOADER.SYS OS/MEMMNG.SYS OS/FILEMNG.SYS 
+targets := OS/LOADER.SYS OS/MEMMNG.SYS OS/FILEMNG.SYS OS/SHELL.SYS
 
 
 run: $(prereq)
 	
-	-sudo umount /dev/sdd
-	-sudo dd if=/dev/zero of=/dev/sdd
+	-sudo umount /dev/sdc
+	-sudo dd if=/dev/zero of=/dev/sdc
 	
 	
-	sudo dd if=BOOT/boot.o of=/dev/sdd
+	sudo dd if=BOOT/boot.o of=/dev/sdc
 
-	sudo mount /dev/sdd /BORISOSVOL
+	sudo mount /dev/sdc /BORISOSVOL
 
 
 
@@ -22,9 +22,9 @@ run: $(prereq)
 	sudo cp OS/MEMMNG.MAP /BORISOSVOL
 	sudo cp OS/SHELL.SYS /BORISOSVOL
 
-	sudo umount /dev/sdd
+	sudo umount /dev/sdc
 	
-	sudo qemu-system-x86_64 -cpu qemu64 -drive format=raw,file=/dev/sdd -nographic
+	sudo qemu-system-x86_64 -cpu qemu64 -drive format=raw,file=/dev/sdc -nographic
 	
 	
 	
