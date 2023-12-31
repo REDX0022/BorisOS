@@ -1,0 +1,5 @@
+dw 4
+dw 0x478 ; malloc
+dw 0x7F6 ; dalloc
+dw 0xDEE ; memcpy
+dw 0x333 ; print_mem

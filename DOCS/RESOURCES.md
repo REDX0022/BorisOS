@@ -12,7 +12,7 @@ ref 3: Far pointers in C
 https://www.geeksforgeeks.org/what-are-near-far-and-huge-pointers/
 
 ref 4: Good example (done in unreal mode)
-https://github.com/fysnet/FYSOS/tree/master/loader
+https://githubhjuo.com/fysnet/FYSOS/tree/master/loader
 
 ref 5: Unreal mode
 https://en.wikipedia.org/wiki/Unreal_mode
@@ -36,6 +36,12 @@ https://en.wikipedia.org/wiki/Master_boot_record#PTE
 
 ref 11: Triple fault error
 https://wiki.osdev.org/Triple_Fault
+
+ref 12: RTC and CMOS
+https://wiki.osdev.org/CMOS#Getting_Current_Date_and_Time_from_RTC
+
+ref 13: Make word look like latex
+https://www.youtube.com/watch?v=6AJ13N410ns
 
 
 ## HOW SHOULD AN OS BE DESIGNED ##

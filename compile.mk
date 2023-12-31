@@ -1,21 +1,33 @@
 kernel_libs := LIBS/c0du.asm 
-targets := LOADER.SYS MEMMNG.SYS transfer
+targets := OS/LOADER.SYS OS/MEMMNG.SYS OS/FILEMNG.SYS transfer
 
 run: $(targets)
 
-MEMMNG.SYS: OS/MEMMNG.C $(kernel_libs)
-	smlrcc -unreal LIBS/c0du.asm OS/MEMMNG.C -o MEMMNG.SYS -map MEMMNG.PMA
+BOOT/boot.o:
+	nasm BOOT/boot.asm -o BOOT/boot.o
 
-LOADER.SYS: /OS/LOADER.C $(kernel_libs)
-	smlrcc -unreal LIBS/c0du.asm OS/LOADER.C -o LOADER.SYS
+OS/MEMMNG.SYS: SRC/MEMMNG.C $(kernel_libs)
+	smlrcc -unreal SRC/MEMMNG/linked_header_MEMMNG.c LIBS/c0du.asm SRC/MEMMNG/MEMMNG.C -o OS/MEMMNG.SYS -map SRC/MEMMNG/MEMMNG.PMA  -I LIBS/
+
+OS/LOADER.SYS: SRC/LOADER.C $(kernel_libs)
+	smlrcc -unreal  LIBS/c0du.asm SRC/LOADER.C -o OS/LOADER.SYS -I LIBS/
+
+OS/FILEMNG.SYS: SRC/FILEMNG.C SRC/FILEMNG/linked_header_FILEMNG.c
+	smlrcc -unreal SRC/FILEMNG/linked_header_FILEMNG.c LIBS/c0du.asm SRC/FILEMNG/FILEMNG.C -o OS/FILEMNG.SYS -map SRC/FILEMNG/FILEMNG.PMA  -I LIBS/
+
 
 transfer:
 	git commit -am Debug 
 	git push
 
-/OS/LOADER.C:
+SRC/LOADER.C:
 
-/OS/MEMMNG.C:
+
+SRC/MEMMNG.C:
+
+
+SRC/FILEMNG.C:
+
 
 
 

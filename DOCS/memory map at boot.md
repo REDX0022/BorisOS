@@ -4,7 +4,7 @@
     0x4000-0x4199 Loaded shared library list
     0x4200-0x4500 Loaded shared library function list
     ** maybe we should let the compiler decide where he should put the shared library and shared function lists**
-0x5000-TODO Memory manager
+0x5000-0x8000 Memory manager : 5kb **DOESN'T HAVE MUCH HEADROOM** , 4 kb curretbly
 
 
 

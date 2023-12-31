@@ -41,10 +41,11 @@ global start
 %assign root_dir FAT_start+num_of_FATs*sectors_per_FAT
 %assign root_dir_size (num_of_root_dir*32)/bytes_per_sector
 %assign data_start root_dir+root_dir_size
+%assign drive_num_bios_address 0xFFFA
 ;;--------------------------------------------------------
 ;;assign where to put the sectors
 %assign search_sector_address 0x7E00
-%assign disk_packet_struct 0x8000
+%assign disk_address_packet_struct 0x8000
 ;;--------------------------------------------------------
 ;;we assign where the loader will be, needs to be 16 bytes alligned
 %assign loader_memory_address 0x500 
@@ -84,7 +85,7 @@ db file_system_type
 
 start:
 
-  
+    
    xor ax, ax
    
 
@@ -93,8 +94,9 @@ start:
     mov ds, ax
     mov ax, 0x1000
     mov ss, ax ; this can grow to 0x10000
-    mov sp, 0xFFFF ; this is arbitrary and the stack could be whatever it wants??
+    mov sp, 0xFFF0 ; this is arbitrary and the stack could be whatever it wants??//this needs to be alligned to something man
     
+    ;;mov [drive_num_bios_address], byte 0x80
     
     cli 
     push ds
@@ -152,9 +154,9 @@ unreal:
         
         
         
-        mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
-        mov word [disk_packet_struct+6], 0 ;segment of placement
-        mov dword [disk_packet_struct+8] , edx ; this is in sectors
+        mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+        mov word [disk_address_packet_struct+6], 0 ;segment of placement
+        mov dword [disk_address_packet_struct+8] , edx ; this is in sectors
        
             
             ;----------------------We call int 13h-----------------------------
@@ -179,7 +181,7 @@ unreal:
                 
             ;------------------Call the loader------------------------------
                 ;the stack is already set up, we have one os stack
-               
+                
                 call (loader_memory_address/16):20 ;;TODO make this more flexible
             ;-----------------------------------------------------------------
             jmp $
@@ -216,12 +218,12 @@ load_loader_cluster:
 
        
         
-        mov word [disk_packet_struct+4], cx ;offset of placement
-        mov word [disk_packet_struct+6], dx ;dx ;segment of placement
+        mov word [disk_address_packet_struct+4], cx ;offset of placement
+        mov word [disk_address_packet_struct+6], dx ;dx ;segment of placement
         
         add ax,  (data_start-2) ; this is the formula idk why
         and eax, 0x0000FFFF ; we clear the upper word of eax
-        mov dword [disk_packet_struct+8] , eax ; this is in sectors ; the cluster which to load 
+        mov dword [disk_address_packet_struct+8] , eax ; this is in sectors ; the cluster which to load 
         sub ax,  (data_start-2)
         
       
@@ -229,7 +231,6 @@ load_loader_cluster:
 
         call load_sector
         
-                
 
     add ebx , bytes_per_sector ; change the memory offset
 
@@ -249,9 +250,9 @@ load_loader_cluster:
 
 
         and eax, 0xFFFF
-        mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
-        mov word [disk_packet_struct+6], 0 ;segment of placement
-        mov dword [disk_packet_struct+8] , eax ; this is in sectors
+        mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+        mov word [disk_address_packet_struct+6], 0 ;segment of placement
+        mov dword [disk_address_packet_struct+8] , eax ; this is in sectors
 
         call load_sector
 
@@ -337,26 +338,30 @@ jmp $;; TODO Make this say press enter to continue
 ;;we dont need to move the stack because we are not using it
 
 load_sector:
-    mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
-    mov byte [disk_packet_struct+1],0 ; always 0
-    mov word [disk_packet_struct+2],1 ; number of sectors to transfer
-    ;mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
-    ;mov word [disk_packet_struct+6], 0 ;segment of placement
-    ;mov dword [disk_packet_struct+8] , edx ; this is in sectors
-    mov dword [disk_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
+    mov byte [disk_address_packet_struct], 0x10 ;size of packet is 16 bytes
+    mov byte [disk_address_packet_struct+1],0 ; always 0
+    mov word [disk_address_packet_struct+2],1 ; number of sectors to transfer
+    ;mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+    ;mov word [disk_address_packet_struct+6], 0 ;segment of placement
+    ;mov dword [disk_address_packet_struct+8] , edx ; this is in sectors
+    mov dword [disk_address_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
     ;--------------------------call int 13h-----------------------
         pusha
         mov dl, 0x80 ;;TODO make this flexible
         xor ax, ax
         mov ds, ax
         mov ah, 0x42
-        mov si, disk_packet_struct
+        mov si, disk_address_packet_struct
         int 0x13
-        
+        jnc .skip
+        mov ah, 0x0E
+        ;mov bh, 0
+        mov al, 'f'
+        int 10h
+        .skip:
         popa
     ;----------------------------------------------------------
 ret
-
 
 
 ;;==================================================================================
@@ -381,9 +386,10 @@ db 0xFF
 db 0xFF ;; end of file entry 
 db 0xFF
 
+db 0xFF
+db 0xFF
 
-
-times 508 db 0 ;;512 - the four bytes already defined
+times 506 db 0 ;;512 - the four bytes already defined
 
 times (num_of_FATs*sectors_per_FAT-1)*512 db 0 ;;size of fat -1 because we already defined the first sector
 
@@ -396,8 +402,23 @@ times 20 db 0
 ;;=================FAT TESTING CODE=================== REMOVE LATER
 db 'FOLDER1    '
 db 0x10
-times 14 db 0
-dw 2 ; this is a word for the cluster ; its should be data start + 1kb
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+dw 0x02; this is a word for the cluster ; its should be data start + 1kb
 dd 0
 
 
@@ -405,21 +426,50 @@ dd 0
 
 times 32*(512-2) db 0
 
+;;=====================DATA START==========================
 ;;then we skip the first 2 sectors
 
-times 512*2 db 0 ; this should be edited when code above is changed
-;;prev
 
 db '.          '
 db 0x10
-times 14 db 0
-dw 2
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+dw 0x02; this is a word for the cluster ; its should be data start + 1kb
 dd 0
 
 db '..         '
 db 0x10
-times 14 db 0
-dw 0
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+
+db 0
+db 0
+dw 0x00; this is a word for the cluster ; its should be data start + 1kb
 dd 0
 
 

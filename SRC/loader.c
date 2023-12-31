@@ -4,6 +4,9 @@
 // the loader should have a basic loader to load from path
 #include "stdint.h"
 #include "stddef.h"
+#include "kernel_out.h"
+#include "FAT16_structs.h"
+#include "memmng_lib.h"
 
 //========================Variables for the FAT16 file system==========================
 #define jump_point 0x3E
@@ -43,7 +46,7 @@
 //--------------------------------------------------------
 //assign where to put the sectors
 #define search_sector_address 0x7E00
-#define disk_packet_struct 0x8000
+#define disk_address_packet_struct 0x8000
 //--------------------------------------------------------
 //we assign where the loader will be, why dont i let it be he can manage his own memory man
 #define loader_memory_address 0x500
@@ -51,32 +54,10 @@
 #define max_loaded_shared_func 256
 //-----------------------------------------------------------
 #define memmory_manager_address 0x5000
+#define file_manager_size 0x400*32 //16kb for now, it should be more than enough //TODOO: change this perhaps, its just a perdiction on how much it will grow
 
 //============================Structures=======================================
- struct disk_packet{
-    uint8_t size;
-    uint8_t padding; 
-    uint16_t num_of_sectors;
-    uint16_t offset;
-    uint16_t segment;
-    uint32_t sector;
-    uint32_t rest;
-};
-
- struct directory{ //TODO: put unsigned where needed
-    char name[11]; //the ext is also here 
-    uint8_t attribute;
-    uint8_t NT_reserved;
-    uint8_t creation_stamp;
-    uint16_t creation_time;
-    uint16_t creation_date;
-    uint16_t last_access_date;
-    uint16_t reserved_for_fat32;
-    uint16_t last_write_time;
-    uint16_t last_write_date;
-    uint16_t starting_cluster;
-    uint32_t file_size_in_bytes; //
-};
+ 
 
 
 
@@ -95,7 +76,8 @@ struct MZext_header{
     uint16_t cs_reg;
     uint16_t reloc_offset; // not used
     uint16_t overlay_num; //usually unused
-    char *lib_name[16]; //only the first 11 characers are used
+    char padding[4];    
+    char lib_name; //only the first 11 characers are used
     
 };
 
@@ -107,7 +89,7 @@ struct shared_lib_map{
 
 struct shared_lib{
     char name[11];
-    uint16_t *funs_ptr;
+    void** funs_ptr;
     uint16_t count;
 };
 
@@ -120,21 +102,21 @@ char temp_sector_2[bytes_per_sector];
 
 
 struct shared_lib shared_libs[max_loaded_shared_libs];
-uint16_t shared_func[max_loaded_shared_func];
+void* shared_func[max_loaded_shared_func];
 
-struct shared_lib *shared_libs_ptr = &shared_libs[0]; //the pointer to the next available space//idk if the compiler supports this !!!!
-uint16_t *shared_func_ptr = &shared_func[0]; //pointer to the available space
+struct shared_lib *shared_libs_ptr = shared_libs; //the pointer to the next available space//idk if the compiler supports this !!!!
+void** shared_func_ptr = shared_func; //pointer to the available space
 
 
 
 //=====================================================================================
 
 
-/// @brief A rudementary memcpy
+/// @brief A rudementary memcpy_loader
 /// @param src 
 /// @param dest 
 /// @param n 
-void memcpy(void *src,void *dest,size_t n){
+void memcpy_loader(void *src,void *dest,size_t n){
     char *csrc = (char *)src;
     char *cdest = (char *)dest;
 
@@ -145,20 +127,20 @@ void memcpy(void *src,void *dest,size_t n){
 }
 
 
-struct disk_packet dp;
+struct disk_address_packet dap;
 
 int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good here
 
-   dp.size = 0x10;
-   dp.padding = 0;
-   dp.num_of_sectors = 1;
-   dp.offset = (uint16_t)(((uint32_t )memory_pos )%16);
-   dp.segment = (uint16_t)(((uint32_t)memory_pos)/16);
-   dp.sector = sector_pos;
-   dp.rest =0;
- //TODO: Make actuall diagonsitcs
-   load_sector_helper(&dp);
-   return 0;
+    dap.size = 0x10;
+    dap.padding = 0;
+    dap.num_of_sectors = 1;
+    dap.offset = (uint16_t)(((unsigned int )memory_pos )%16);
+    dap.segment = (uint16_t)(((unsigned int )memory_pos)/16);
+    dap.sector = sector_pos;
+    dap.rest =0;
+    //TODO: Make actuall diagonsitcs
+    load_sector_helper(&dap);
+    return 0;
 
 }
 
@@ -167,15 +149,15 @@ int load_sector(int sector_pos, void *memory_pos){ //idk if char pointer is good
 
 
 //we are doing this so we can access the disk packet pos via the stack
-int load_sector_helper(struct disk_packet *ptr){
+int load_sector_helper(struct disk_address_packet *ptr){
     asm(
-    //mov byte [disk_packet_struct], 0x10 ;size of packet is 16 bytes
-    //mov byte [disk_packet_struct+1],0 ; always 0
-    //mov word [disk_packet_struct+2],1 ; number of sectors to transfer
-    //mov word [disk_packet_struct+4], (search_sector_address) ;offset of placement
-    //mov word [disk_packet_struct+6], 0 ;segment of placement
-    //mov dword [disk_packet_struct+8] , edx ; this is in sectors
-    //mov dword [disk_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
+    //mov byte [disk_address_packet_struct], 0x10 ;size of packet is 16 bytes
+    //mov byte [disk_address_packet_struct+1],0 ; always 0
+    //mov word [disk_address_packet_struct+2],1 ; number of sectors to transfer
+    //mov word [disk_address_packet_struct+4], (search_sector_address) ;offset of placement
+    //mov word [disk_address_packet_struct+6], 0 ;segment of placement
+    //mov dword [disk_address_packet_struct+8] , edx ; this is in sectors
+    //mov dword [disk_address_packet_struct+12],0 ; should a word or a dword be here?? i have no clue, because its 32 bit i think its word but whatever
     //--------------------------call int 13h-----------------------
         "pushad \n"
         "push ds \n"
@@ -255,7 +237,7 @@ int load_file(char* file_name,char *pos){
 
         load_sector(FAT_start+(next_cluster*2)/bytes_per_sector,(void*)FAT_search_sector); //load the fat search sector
 
-        next_cluster = FAT_search_sector[next_cluster]; //look for the next cluster
+        next_cluster = FAT_search_sector[next_cluster%(bytes_per_sector/2)]; //look for the next cluster
         if(next_cluster>=0xFFF8){break;} //TODO: add support for bad sectors
 
         pos +=bytes_per_sector;
@@ -263,14 +245,23 @@ int load_file(char* file_name,char *pos){
     return 0;
 }
 
+/// @brief 
+/// @param name 
+/// @return Pointer to a saved shared lib  
+struct shared_lib* get_shared_lib(char* name){
+    for(struct shared_lib* ptr = shared_libs;ptr!=shared_libs_ptr;ptr++){
+
+        if(cmp_name(&(ptr->name),name)){return ptr;}
+    }
+    return NULL;
+
+}
 
 
 
 
-
-
-//TODO: Pass something to the programm at start
-typedef void (* init) (); 
+//TODO: argv and argc
+typedef void (* init) (void** libs); 
 
 /// @brief Starts a kernel space programm
 /// @param start memory loaction of the programm, should be a void pointer, cant be because of arithmetic
@@ -279,18 +270,29 @@ int start_kernel_programm(void *start){
     if(!start){return -1;} //null pointer exeption
     struct MZext_header* mz;
     mz = ((struct MZext_header*) start); //there might need to be changes if there i
-       
-    //here we dont read the libraries needed because that is predefned??
     
+    void*** lib_store = &temp_sector; //where in the temp sector to put the funcs
+    for(char *lib_search= &(mz->lib_name); *lib_search; lib_search+=16){//per BEX spec
+        struct shared_lib* sh = get_shared_lib(lib_search);
+        if(sh==NULL){
+            return 2; // LIB NOT FOUND
+        }
+        *lib_store = sh->funs_ptr;
+        lib_store++;
+        
+    }
+    
+
+
+
     init execution_start; 
     execution_start = (init) ((char*)mz + mz->header_size*16+mz->cs_reg*16+mz->ip_reg);
     //but we do need to find the libraries that it provides
-    
-    execution_start(); //for now we use a global stack for the entire os 
+    execution_start(&temp_sector); //for now we use a global stack for the entire os 
     return 0;
 }
 
-int load_map(char* name){ 
+int load_kernel_map(char* name, char* pos){ 
    
     if(load_file(name,(void *)&temp_sector_2)){
         return 1;
@@ -298,11 +300,14 @@ int load_map(char* name){
 
     struct shared_lib_map* map =  (struct shared_lib_map*)(&temp_sector_2); //znas da si nesto sjebo kad double kastujes pointere
 
-    memcpy(name,(void*) &(shared_libs_ptr->name),11);
+    memcpy_loader(name,(void*) &(shared_libs_ptr->name),11);
     shared_libs_ptr->count = map->size;
     shared_libs_ptr->funs_ptr = shared_func_ptr;
 
-    memcpy((void*)(&map->offsets),shared_func_ptr,(2*map->size)); // this is part of the map spec
+    for(uint16_t i =0;i<map->size;i++){//we store the pointers and add the program begin
+        *shared_func_ptr = (void*) (pos + *(&(map->offsets)+i)); //this hack is so stupid i dont want to look at it anymore
+        shared_func_ptr++;
+    }
 
     shared_func_ptr += map->size;
     shared_libs_ptr++;
@@ -310,6 +315,29 @@ int load_map(char* name){
 }
 
 
+//
+
+int load_map(char* name, char* pos){ //TODO: SHOULD USE THE MALLOC AND MEMORY MANAGER TIME 
+   
+    if(load_file(name,(void *)&temp_sector_2)){
+        return 1;
+    }
+
+    struct shared_lib_map* map =  (struct shared_lib_map*)(&temp_sector_2); //znas da si nesto sjebo kad double kastujes pointere
+
+    memcpy_loader(name,(void*) &(shared_libs_ptr->name),11);
+    shared_libs_ptr->count = map->size;
+    shared_libs_ptr->funs_ptr = shared_func_ptr;
+
+    for(uint16_t i =0;i<map->size;i++){//we store the pointers and add the program begin
+        //*shared_func_ptr = (void*) (pos + (map->offsets+ sizeof(uint16_t)*i)); //i hope to god this works
+        shared_func_ptr++;
+    }
+
+    shared_func_ptr += map->size;
+    shared_libs_ptr++;
+    return 0;
+}
 
 
 int __start__(){
@@ -319,61 +347,105 @@ int __start__(){
 
    
  
-    //we wanna load the memory manager
+    //LOADING THE MEMORY MANAGER
     
     char name[11] = "MEMMNG  SYS";
     char map_name[11] = "MEMMNG  MAP";
     if(load_file(name,memmory_manager_address)){
-        printf(14); //failed to load file
+        prints("FAILED TO LOAD MEMORY MANAGER",30);
+        nl();
+    }
+    else{
+        prints("LOADED MEMORY MANAGER SUCCESFULLY",34);
+        nl();
     }
     if(start_kernel_programm(memmory_manager_address)){
-        printf(15); //failed to start mem mng
+        prints("FAILED TO START MEMORY MANAGER",31);
+        nl();
     }
-    if(load_map(map_name)){
-        printf(16);
+    else{
+        prints("STARTED MEMORY MANAGER SUCCESFULLY",35);
+        nl();
     }
-   
-    
-}
-
-void printf(int n){
-    if(n==0){printch('0');return;}
-    printf(n/10);
-    char tmpprint =((uint32_t)n%10)+48;
-    printch(tmpprint&0xFF); //48 is the offset of the char 0
-    n/=10;
-    
-}
-
-void printch(char c){ //i dont know it its needed to push, its for safety
-    asm("pushad \n"
-        "mov bh, 0x00 \n"
-        "mov al, [bp+8] ; +4 for ebx,  \n"
-        "mov ah, 0x0e \n"
-        "int 0x10 \n"
-        "popad \n"
-    );
-}
-
-
-void prints(char* ptr, size_t len){
-    for(int i =0;i<len;i++){
-        printch(*(ptr++));
+    if(load_kernel_map(map_name,memmory_manager_address)){
+        prints("FAILED TO LOAD MEMORY MANAGER MAP",34);
+        nl();;  
     }
-}
-
-char hex[16] = "0123456789ABCDEF";
-void dmph(char* ptr, size_t len){
-    for(int i =0;i<len;i++){
-        char high = (char)(hex[((*ptr)&0xFF)>>4]);
-        char low = (char)(hex[(*ptr)&0xF]);
-    
-        printch(high);
-        printch(low);
-        printch(' ');
-        ptr++;
+    else{
+        struct shared_lib* sh = get_shared_lib(&map_name);
+        init_MEMMNG(sh->funs_ptr);
+        prints("LOADED MEMORY MANAGER MAP",26);
+        nl();
     }
+
+    //LOADING THE FILE SYSTEM MANAGER
     
+    char name1[11] = "FILEMNG SYS";
+    char map_name1[11] = "FILEMNG MAP";
+    
+    void* file_manager_address = malloc(file_manager_size);
+    
+    if(load_file(name1,file_manager_address)){
+        prints("FAILED TO LOAD FILE MANAGER",28);
+        nl();
+    }
+    else{
+        prints("LOADED FILE MANAGER SUCCESFULLY",32);
+        nl();
+    }
+    if(start_kernel_programm(file_manager_address)){
+        prints("FAILED TO START FILE MANAGER",29);
+        nl();
+    }
+    else{
+        prints("STARTED FILE MANAGER SUCCESFULLY",33);
+        nl();
+    }
+    if(load_kernel_map(map_name1,file_manager_address)){
+        prints("FAILED TO LOAD FILE MANAGER MAP",32);
+        nl();;  
+    }
+    else{
+        struct shared_lib* sh = get_shared_lib(name);
+        init_MEMMNG(sh->funs_ptr);
+        prints("LOADED FILE MANAGER MAP",24);
+        nl();
+    }
+
+    //STARTING SHELL
+
+     char name2[11] = "SHELL   SYS";
+    char map_name2[11] = "SHELL   MAP";
+    
+    void* shell_address = malloc(file_manager_size);
+    
+    if(load_file(name2,shell_address)){
+        prints("FAILED TO LOAD SHELL",20);
+        nl();
+    }
+    else{
+        prints("LOADED SHELL SUCCESFULLY",24);
+        nl();
+    }
+    if(start_kernel_programm(shell_address)){
+        prints("FAILED TO START SHELL",21);
+        nl();
+    }
+    else{
+        prints("STARTED SHELL SUCCESFULLY",25);
+        nl();
+    }
+    /*
+    if(load_kernel_map(map_name2,file_manager_address)){ //TODOOOOO: this needs to be done before the shell is started man 
+        prints("FAILED TO LOAD SHELL MAP",32);
+        nl();;  
+    }
+    else{
+        struct shared_lib* sh = get_shared_lib(name);
+        init_MEMMNG(sh->funs_ptr);
+        prints("LOADED SHELL MAP",24);
+        nl();
+    }
+    */
+
 }
-
-
