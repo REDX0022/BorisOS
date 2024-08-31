@@ -28,3 +28,10 @@
 
 ## Strings ##
 - null terminated
+
+
+## How to run ## 
+i have forgot how to turn on this os
+- mount a vhdx to wsl
+- run wsl
+- run lin2.mk ig but its doesnt do anything
