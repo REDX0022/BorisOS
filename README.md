@@ -1,4 +1,4 @@
-### THIS SHOULD BE AN OPERATING SYSTEM ###
+### A SMALL OPERATING SYSTEM ###
 **Because of FAT16 limitations all flies and folcers should be named with UPPERCASE**
 
 ## BOOT ##
@@ -35,3 +35,8 @@ i have forgot how to turn on this os
 - mount a vhdx to wsl
 - run wsl
 - run lin2.mk ig but its doesnt do anything
+
+## Thing needed to run ##
+- wsl 2
+- Qemu
+- a hobby compiler SmallerC, it should be in the PATH variable
